@@ -99,9 +99,9 @@ sub dump
     $indent = '' unless defined $indent;
 
     print "${indent}Fritz::Service:\n";
-    print "${indent}serviceType     = " . $self->{serviceType} . "\n";
-    print "${indent}controlURL      = " . $self->{controlURL}  . "\n";
-    print "${indent}SCPDURL         = " . $self->{SCPDURL}     . "\n";
+    print "${indent}serviceType     = " . $self->serviceType . "\n";
+    print "${indent}controlURL      = " . $self->controlURL  . "\n";
+    print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
 }
 
 1;
