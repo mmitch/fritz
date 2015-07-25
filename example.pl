@@ -31,3 +31,7 @@ my $r = $s->call('GetSecurityPort');
 
 $r->dump();
 
+my $r = $s->call('GetInfo');
+
+$r->dump();
+

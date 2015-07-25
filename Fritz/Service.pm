@@ -95,16 +95,17 @@ sub call
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
     my $soap = SOAP::Lite->new(
-	proxy => $url,
-	uri    => $self->serviceType,
+	proxy    => $url,
+	uri      => $self->serviceType,
 	readable => 1 # TODO: remove this
 	);
 
+    # write proper error handler, SOAP::Lite just dies on transport error (eg. 401 Unauthorized)
     my $som = $soap->call($action);
 
     if ($som->fault)
     {
-	return Fritz::Error->new($som->faultstring);
+	return Fritz::Error->new($som->fault->faultstring);
     }
     else
     {
