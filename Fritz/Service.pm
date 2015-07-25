@@ -48,7 +48,7 @@ sub call
     my $self    = shift;
     my $method  = shift;
 
-    my $url = $self->fritz->device_base .':'. $self->fritz->discover_port . $self->controlURL;
+    my $url = $self->fritz->upnp_url . $self->controlURL;
 
     my $soap = SOAP::Lite->new(
 	proxy => $url,
@@ -72,7 +72,7 @@ sub get_SCPD
 {
     my $self    = shift;
 
-    my $url = $self->fritz->device_base . ':' . $self->fritz->discover_port . $self->SCPDURL;
+    my $url = $self->fritz->upnp_url . $self->SCPDURL;
 
     my $ua = LWP::UserAgent->new();
     my $response = $ua->get($url);

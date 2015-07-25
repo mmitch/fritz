@@ -8,29 +8,14 @@ use Fritz::Device;
 use Moo;
 use namespace::clean;
 
-has discover_base => ( is => 'ro' );
-has discover_port => ( is => 'ro', default => '49000' );
-has device_base   => ( is => 'ro', default => 'http://fritz.box' );
-has trdesc_path   => ( is => 'ro', default => 'tr64desc.xml' );
-
-sub BUILD
-{
-    my $self = shift;
-
-    if (not defined $self->discover_base)
-    {
-	$self->{discover_base} = $self->device_base; # or better set this attribute to 'rwp' instead of 'ro'?
-    }
-}
+has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
+has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );
 
 sub discover
 {
     my $self = shift;
 
-    my $url = sprintf('%s:%d/%s',
-		      $self->discover_base,
-		      $self->discover_port,
-		      $self->trdesc_path);
+    my $url = $self->upnp_url . $self->trdesc_path;
     
     my $ua = LWP::UserAgent->new();
     my $response = $ua->get($url);
@@ -56,10 +41,8 @@ sub dump
 
     print "${indent}Fritz:\n";
     $indent .= '  ';
-    print "${indent}device_base   = " . $self->device_base   . "\n";
-    print "${indent}discover_base = " . $self->discover_base . "\n";
-    print "${indent}discover_port = " . $self->discover_port . "\n";
-    print "${indent}trdesc_path   = " . $self->trdesc_path   . "\n";
+    print "${indent}upnp_url    = " . $self->upnp_url    . "\n";
+    print "${indent}trdesc_path = " . $self->trdesc_path . "\n";
 }
 
 1;
