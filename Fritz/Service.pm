@@ -1,12 +1,10 @@
 package Fritz::Service;
 
-# TODO: read SCDP, extract method names and check them on call()
-
 use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
-use XML::Simple;
 
-use Fritz::Response;
+use Fritz::Data::Text;
+use Fritz::Data::XML;
 
 use Moo;
 use namespace::clean;
@@ -16,6 +14,8 @@ with 'Fritz::NoError';
 has fritz        => ( is => 'ro' );
 
 has xmltree      => ( is => 'ro' );
+has scpd         => ( is => 'lazy' );
+has action_hash  => ( is => 'lazy' );
 
 use constant DEVICEINFO => 'urn:dslforum-org:service:DeviceInfo:1';
 
@@ -47,32 +47,7 @@ sub BUILD
     }
 }
 
-sub call
-{
-    my $self    = shift;
-    my $method  = shift;
-
-    my $url = $self->fritz->upnp_url . $self->controlURL;
-
-    my $soap = SOAP::Lite->new(
-	proxy => $url,
-	uri    => $self->serviceType,
-	readable => 1 # TODO: remove this
-	);
-
-    my $som = $soap->call('GetSecurityPort');
-
-    if ($som->fault)
-    {
-	return Fritz::Error->new($som->faultstring);
-    }
-    else
-    {
-	return Fritz::Response->new($som->result);
-    }
-}
-
-sub get_SCPD
+sub _build_scpd
 {
     my $self    = shift;
 
@@ -83,11 +58,57 @@ sub get_SCPD
 
     if ($response->is_success)
     {
-	return XMLin($response->decoded_content); # TODO: create SCPD class?
+	$self->{scpd} = Fritz::Data::XML->new($response->decoded_content);
     }
     else
     {
-	return Fritz::Error->new($response->status_line)
+	$self->{scpd} = Fritz::Error->new($response->status_line);
+    }
+}
+
+sub _build_action_hash
+{
+    my $self    = shift;
+
+    my $scpd = $self->scpd;
+
+    if ($scpd->error)
+    {
+	$self->{action_hash} = {};
+    }
+    else
+    {
+	$self->{action_hash} = $scpd->data->{actionList}->{action};
+    }
+}
+
+sub call
+{
+    my $self    = shift;
+    my $action  = shift;
+
+    if (! exists $self->action_hash->{$action})
+    {
+	return Fritz::Error->new("unknown action $action");
+    }
+
+    my $url = $self->fritz->upnp_url . $self->controlURL;
+
+    my $soap = SOAP::Lite->new(
+	proxy => $url,
+	uri    => $self->serviceType,
+	readable => 1 # TODO: remove this
+	);
+
+    my $som = $soap->call($action);
+
+    if ($som->fault)
+    {
+	return Fritz::Error->new($som->faultstring);
+    }
+    else
+    {
+	return Fritz::Data::Text->new($som->result);
     }
 }
 

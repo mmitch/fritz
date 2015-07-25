@@ -25,9 +25,9 @@ $s->dump();
 print "\n\n";
 
 #use Data::Dumper;
-#print Dumper( $s->get_SCPD() );
+#print Dumper( $s->scpd() );
 
-my $r = $s->call();
+my $r = $s->call('GetSecurityPort');
 
 $r->dump();
 
