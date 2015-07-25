@@ -1,8 +1,12 @@
 package Fritz::Service;
 
+# TODO: read SCDP, extract method names and check them on call()
+
 use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 use XML::Simple;
+
+use Fritz::Response;
 
 use Moo;
 use namespace::clean;
@@ -64,7 +68,7 @@ sub call
     }
     else
     {
-	return $som->result; # TODO: create result class?
+	return Fritz::Response->new($som->result);
     }
 }
 

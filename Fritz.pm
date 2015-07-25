@@ -2,6 +2,7 @@ package Fritz;
 
 use LWP::UserAgent;
 use XML::Simple;
+
 use Fritz::Error;
 use Fritz::Device;
 
