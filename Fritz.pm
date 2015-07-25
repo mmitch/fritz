@@ -37,7 +37,10 @@ sub discover
     
     if ($response->is_success)
     {
-	return Fritz::Device->new( xmltree => XMLin($response->decoded_content)->{device} );
+	return Fritz::Device->new(
+	    xmltree => XMLin($response->decoded_content)->{device},
+	    fritz   => $self
+	    );
     }
     else
     {

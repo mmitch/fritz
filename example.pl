@@ -24,3 +24,7 @@ my $s = $d->find_service( Fritz::Service::DEVICEINFO );
 $s->dump();
 print "\n\n";
 
+use Data::Dumper;
+#print Dumper( $s->get_SCPD() );
+print Dumper( $s->call() );
+

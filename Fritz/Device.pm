@@ -8,6 +8,8 @@ use namespace::clean;
 
 with 'Fritz::NoError';
 
+has fritz        => ( is => 'ro' );
+
 has xmltree      => ( is => 'ro' );
 
 has service_list => ( is => 'ro' );
@@ -52,13 +54,19 @@ sub BUILD
 	    my @services;
 	    foreach my $service (@{$xml->{serviceList}->{service}})
 	    {
-		push @services, Fritz::Service->new( xmltree => $service );
+		push @services, Fritz::Service->new(
+		    xmltree => $service,
+		    fritz   => $self->fritz
+		    );
 	    }
 	    $self->{service_list} = \@services;
 	}
 	else
 	{
-	    $self->{service_list} = [ Fritz::Service->new( $xml->{serviceList}->{service} ) ];
+	    $self->{service_list} = [ Fritz::Service->new(
+					  xmltree => $xml->{serviceList}->{service},
+					  fritz   => $self->fritz
+				      ) ];
 	}
     }
     else
@@ -73,13 +81,19 @@ sub BUILD
 	    my @devices;
 	    foreach my $device (@{$xml->{deviceList}->{device}})
 	    {
-		push @devices, Fritz::Device->new( xmltree => $device );
+		push @devices, Fritz::Device->new(
+		    xmltree => $device,
+		    fritz   => $self->fritz
+		    );
 	    }
 	    $self->{device_list} = \@devices;
 	}
 	else
 	{
-	    $self->{device_list} = [ Fritz::Device->new( $xml->{deviceList}->{device} ) ];
+	    $self->{device_list} = [ Fritz::Device->new(
+					 xmltree => $xml->{deviceList}->{device},
+					 fritz   => $self->fritz
+				     ) ];
 	}
     }
     else
