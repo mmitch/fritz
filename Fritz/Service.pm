@@ -3,6 +3,7 @@ package Fritz::Service;
 use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 
+use Fritz::Action;
 use Fritz::Data::Text;
 use Fritz::Data::XML;
 
@@ -36,7 +37,7 @@ sub BUILD
 {
     my $self = shift;
 
-    my $xml = $self->xmltree;
+    my $xml  = $self->xmltree;
 
     for my $attr (ATTRIBUTES)
     {
@@ -58,27 +59,33 @@ sub _build_scpd
 
     if ($response->is_success)
     {
-	$self->{scpd} = Fritz::Data::XML->new($response->decoded_content);
+	return Fritz::Data::XML->new($response->decoded_content);
     }
     else
     {
-	$self->{scpd} = Fritz::Error->new($response->status_line);
+	return Fritz::Error->new($response->status_line);
     }
 }
 
 sub _build_action_hash
 {
-    my $self    = shift;
+    my $self = shift;
 
     my $scpd = $self->scpd;
 
     if ($scpd->error)
     {
-	$self->{action_hash} = {};
+	return {};
+	# TODO: how to report this error? we return no object
     }
     else
     {
-	$self->{action_hash} = $scpd->data->{actionList}->{action};
+	my $hash = {};
+	foreach my $action (keys %{$scpd->data->{actionList}->{action}})
+	{
+	    $hash->{$action} = Fritz::Action->new($scpd->data->{actionList}->{action}->{$action});
+	}
+	return $hash;
     }
 }
 
@@ -86,6 +93,7 @@ sub call
 {
     my $self    = shift;
     my $action  = shift;
+    my %params  = (@_);
 
     if (! exists $self->action_hash->{$action})
     {
@@ -109,7 +117,7 @@ sub call
     }
     else
     {
-	return Fritz::Data::Text->new($som->result);
+	return Fritz::Data::Text->new($som->result); # TODO split into arguments, provide argument names (in hash)
     }
 }
 
