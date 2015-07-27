@@ -19,7 +19,7 @@ my $s = $d->find_service( 'urn:dslforum-org:service:WANDSLInterfaceConfig:1' );
 $s->dump();
 print "\n\n";
 
-my $s = $d->find_service( Fritz::Service::DEVICEINFO );
+$s = $d->find_service( Fritz::Service::DEVICEINFO );
 
 $s->dump();
 print "\n\n";
@@ -31,7 +31,7 @@ my $r = $s->call('GetSecurityPort');
 
 $r->dump();
 
-my $r = $s->call('GetInfo');
+$r = $s->call('GetInfo');
 
 $r->dump();
 
