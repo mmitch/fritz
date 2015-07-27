@@ -108,12 +108,19 @@ sub call
 	readable => 1 # TODO: remove this
 	);
 
-    # write proper error handler, SOAP::Lite just dies on transport error (eg. 401 Unauthorized)
-    my $som = $soap->call($action);
+    # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
+    my $som;
+    eval {
+	$som = $soap->call($action);
+    };
 
-    if ($som->fault)
+    if ($@)
     {
-	return Fritz::Error->new($som->fault->faultstring);
+	return Fritz::Error->new($@);
+    }
+    elsif ($som->fault)
+    {
+	return Fritz::Error->new($som->fault->faultcode . ' ' . $som->fault->faultstring);
     }
     else
     {
