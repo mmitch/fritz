@@ -81,9 +81,27 @@ sub _build_action_hash
     else
     {
 	my $hash = {};
-	foreach my $action (keys %{$scpd->data->{actionList}->{action}})
+	my $xml = $scpd->data->{actionList}->{action};
+	my @actions = keys %{$xml}; # TODO remove debugging
+
+	# weird things in XML parsing: if there is only one argument, the argument_list hash element vanishes!
+	# recreate it
+	if (@actions == 2
+	    and ref( $xml->{name} ) eq ''
+	    and ref( $xml->{argumentList} ) eq 'HASH')
 	{
-	    $hash->{$action} = Fritz::Action->new($scpd->data->{actionList}->{action}->{$action});
+	    @actions = ($xml->{name});
+	    $xml = {
+		$actions[0] => $xml
+	    };
+	}
+
+	foreach my $action (@actions)
+	{
+	    $hash->{$action} = Fritz::Action->new(
+		xmltree => $scpd->data->{actionList}->{action}->{$action},
+		name    => $action
+		);
 	}
 	return $hash;
     }
@@ -139,6 +157,16 @@ sub dump
     print "${indent}serviceType     = " . $self->serviceType . "\n";
     print "${indent}controlURL      = " . $self->controlURL  . "\n";
     print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
+
+    if ($self->action_hash)
+    {
+	print "${indent}actions         = {\n";
+	foreach my $action (values %{$self->action_hash})
+	{
+	    $action->dump($indent . '  ');
+	}
+	print "${indent}}\n";
+    }
 }
 
 1;
