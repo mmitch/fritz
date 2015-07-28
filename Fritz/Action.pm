@@ -3,9 +3,6 @@ package Fritz::Action;
 use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 
-use Fritz::Data::Text;
-use Fritz::Data::XML;
-
 use Moo;
 use namespace::clean;
 

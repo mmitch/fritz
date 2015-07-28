@@ -28,6 +28,13 @@ sub BUILD
     $self->{raw} = $self->data;
 }
 
+sub get
+{
+    my $self = shift;
+
+    return $self->data;
+}
+
 sub dump
 {
     my $self = shift;

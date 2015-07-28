@@ -4,7 +4,6 @@ use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 
 use Fritz::Action;
-use Fritz::Data::Text;
 use Fritz::Data::XML;
 
 use Moo;
@@ -109,14 +108,22 @@ sub _build_action_hash
 
 sub call
 {
-    my $self    = shift;
-    my $action  = shift;
-    my %params  = (@_);
+    my $self      = shift;
+    my $action    = shift;
+    my %call_args = (@_);
 
     if (! exists $self->action_hash->{$action})
     {
 	return Fritz::Error->new("unknown action $action");
     }
+
+    my $err = _hash_check(
+	\%call_args,
+	{ map { $_ => 0 } @{$self->action_hash->{$action}->args_in} },
+	'unknown input argument',
+	'missing input argument'
+	);
+    return $err if $err->error;
 
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
@@ -127,6 +134,7 @@ sub call
 	);
 
     # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
+    # TODO: send parameters
     my $som;
     eval {
 	$som = $soap->call($action);
@@ -142,7 +150,18 @@ sub call
     }
     else
     {
-	return Fritz::Data::Text->new($som->result); # TODO split into arguments, provide argument names (in hash)
+	# according to the docs, $som->paramsin returns an array of hashes.  I don't see this :-/
+	my $args_out = $som->body->{$action.'Response'};
+
+	$err = _hash_check(
+	    $args_out,
+	    { map { $_ => 0 } @{$self->action_hash->{$action}->args_out} },
+	    'unknown output argument',
+	    'missing output argument'
+	    );
+	return $err if $err->error;
+
+	return Fritz::Data->new($args_out);
     }
 }
 
@@ -167,6 +186,29 @@ sub dump
 	}
 	print "${indent}}\n";
     }
+}
+
+sub _hash_check
+{
+    my ($hash_a, $hash_b, $msg_a, $msg_b) = (@_);
+
+    foreach my $arg (keys %{$hash_a})
+    {
+	if (! exists $hash_b->{$arg})
+	{
+	    return Fritz::Error->new("$msg_a $arg");
+	}
+    }
+
+    foreach my $arg (keys %{$hash_b})
+    {
+	if (! exists $hash_a->{$arg})
+	{
+	    return Fritz::Error->new("$msg_b $arg");
+	}
+    }
+
+    return Fritz::Data->new();
 }
 
 1;

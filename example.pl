@@ -11,7 +11,7 @@ print "\n\n";
 
 my $d = $f->discover();
 
-$d->dump();
+#$d->dump();
 print "\n\n";
 
 my $s = $d->find_service( 'urn:dslforum-org:service:WANDSLInterfaceConfig:1' );
@@ -28,8 +28,8 @@ print "\n\n";
 #print Dumper( $s->scpd() );
 
 my $r = $s->call('GetSecurityPort');
-
-$r->dump();
+#$r->dump();
+print "the security port is " . $r->data->{'NewSecurityPort'} . "\n\n";
 
 $r = $s->call('GetInfo');
 
