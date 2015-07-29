@@ -168,12 +168,6 @@ sub call
 	}
     }
 
-    # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
-    # TODO: send parameters
-    eval {
-	$som = $soap->call($action, $auth);
-    };
-
     if ($@)
     {
 	return Fritz::Error->new($@);
