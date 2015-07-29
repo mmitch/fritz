@@ -1,5 +1,6 @@
 package Fritz::Service;
 
+use Digest::MD5 qw(md5_hex);
 use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 
@@ -127,17 +128,50 @@ sub call
 
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
+    use Data::Dumper;
+
     my $soap = SOAP::Lite->new(
 	proxy    => $url,
 	uri      => $self->serviceType,
-	readable => 1 # TODO: remove this
+	readable => 1, # TODO: remove this
+#	on_fault => sub { warn Dumper($_[0]); die 'XXX' },
 	);
+
+    # expect the call to need authentication, so prepare an initial request
+    my $auth = $self->_get_initial_auth;
 
     # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
     # TODO: send parameters
     my $som;
     eval {
-	$som = $soap->call($action);
+	$som = $soap->call($action, $auth);
+    };
+
+    # if we got an authentication error: fine!
+    # now we gots us a nonce and can retry
+    if (! @_
+	and exists $som->fault->{detail}->{UPnPError}->{errorCode}
+	and $som->{detail}->{UPnPError}->{errorCode} = 503)
+    {
+	if (defined $self->fritz->username
+	    and defined $self->fritz->password)
+	{
+	    $auth = $self->_get_real_auth($som->headers);
+
+	    eval {
+		$som = $soap->call($action, $auth);
+	    };
+	}
+	else
+	{
+	    return Fritz::Error->new("authentication needed, but no credentials given");
+	}
+    }
+
+    # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
+    # TODO: send parameters
+    eval {
+	$som = $soap->call($action, $auth);
     };
 
     if ($@)
@@ -146,12 +180,13 @@ sub call
     }
     elsif ($som->fault)
     {
-	return Fritz::Error->new($som->fault->faultcode . ' ' . $som->fault->faultstring);
+	return Fritz::Error->new($som->fault->{faultcode} . ' ' . $som->fault->{faultstring});
     }
     else
     {
 	# according to the docs, $som->paramsin returns an array of hashes.  I don't see this :-/
 	my $args_out = $som->body->{$action.'Response'};
+	$args_out = {} unless ref $args_out; # fix empty responses
 
 	$err = _hash_check(
 	    $args_out,
@@ -186,6 +221,55 @@ sub dump
 	}
 	print "${indent}}\n";
     }
+}
+
+sub _get_initial_auth
+{
+    my $self = shift;
+
+    my $userid = SOAP::Header->name('UserID')
+	->value($self->fritz->username);
+
+    return SOAP::Header
+	->name('h:InitChallenge')
+	->attr({'xmlns:h' => 'http://soap-authentication.org/digest/2001/10/',
+		's:mustUnderstand' => '1'})
+	->value(\$userid);
+
+
+}
+
+sub _get_real_auth
+{
+    my $self = shift;
+
+    my $parm = shift;
+
+    my $secret = md5_hex( join (':',
+				$self->fritz->username,
+				$parm->{Realm},
+				$self->fritz->password,
+			  ) );
+
+    my $auth = SOAP::Header->name('Auth')
+	->value(
+	md5_hex( $secret . ':' . $parm->{Nonce} )
+	);
+
+    my $nonce = SOAP::Header->name('Nonce')
+	->value($parm->{Nonce});
+
+    my $realm = SOAP::Header->name('Realm')
+	->value($parm->{Realm});
+
+    my $userid = SOAP::Header->name('UserID')
+	->value($self->fritz->username);
+
+    return SOAP::Header
+	->name('h:ClientAuth')
+	->attr({'xmlns:h' => 'http://soap-authentication.org/digest/2001/10/',
+		's:mustUnderstand' => '1'})
+	->value(\SOAP::Header->value($nonce, $auth, $userid, $realm));
 }
 
 sub _hash_check
