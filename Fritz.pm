@@ -1,7 +1,7 @@
 package Fritz;
 
 use LWP::UserAgent;
-use XML::Simple;
+use XML::Simple qw(:strict);
 
 use Fritz::Error;
 use Fritz::Device;
@@ -13,6 +13,7 @@ has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
 has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );
 has username      => ( is => 'ro');
 has password      => ( is => 'ro');
+has _xs           => ( is => 'ro', default => sub { return XML::Simple->new(ForceArray => 1, KeyAttr => []) }, init_arg => undef );
 
 sub discover
 {
@@ -26,7 +27,7 @@ sub discover
     if ($response->is_success)
     {
 	return Fritz::Device->new(
-	    xmltree => XMLin($response->decoded_content)->{device},
+	    xmltree => $self->_xs->parse_string($response->decoded_content)->{device}->[0],
 	    fritz   => $self
 	    );
     }

@@ -5,7 +5,7 @@ use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
 
 use Fritz::Action;
-use Fritz::Data::XML;
+use Fritz::Data;
 
 use Moo;
 use namespace::clean;
@@ -43,7 +43,7 @@ sub BUILD
     {
 	if (exists $xml->{$attr})
 	{
-	    $self->{$attr} = $xml->{$attr};
+	    $self->{$attr} = $xml->{$attr}->[0];
 	}
     }
 }
@@ -59,7 +59,9 @@ sub _build_scpd
 
     if ($response->is_success)
     {
-	return Fritz::Data::XML->new($response->decoded_content);
+	return Fritz::Data->new(
+	    $self->fritz->_xs->parse_string($response->decoded_content)
+	    );
     }
     else
     {
@@ -81,26 +83,12 @@ sub _build_action_hash
     else
     {
 	my $hash = {};
-	my $xml = $scpd->data->{actionList}->{action};
-	my @actions = keys %{$xml}; # TODO remove debugging
+	my $xml = $scpd->data->{actionList}->[0]->{action};
 
-	# weird things in XML parsing: if there is only one argument, the argument_list hash element vanishes!
-	# recreate it
-	if (@actions == 2
-	    and ref( $xml->{name} ) eq ''
-	    and ref( $xml->{argumentList} ) eq 'HASH')
+	foreach my $action (@{$xml})
 	{
-	    @actions = ($xml->{name});
-	    $xml = {
-		$actions[0] => $xml
-	    };
-	}
-
-	foreach my $action (@actions)
-	{
-	    $hash->{$action} = Fritz::Action->new(
-		xmltree => $scpd->data->{actionList}->{action}->{$action},
-		name    => $action
+	    $hash->{$action->{name}->[0]} = Fritz::Action->new(
+		xmltree => $action
 		);
 	}
 	return $hash;

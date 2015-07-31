@@ -43,58 +43,38 @@ sub BUILD
     {
 	if (exists $xml->{$attr})
 	{
-	    $self->{$attr} = $xml->{$attr};
+	    $self->{$attr} = $xml->{$attr}->[0];
 	}
     }
 
-    if (exists $xml->{serviceList}->{service})
+    if (exists $xml->{serviceList})
     {
-	if (ref $xml->{serviceList}->{service} eq 'ARRAY')
+	my @services;
+	foreach my $service (@{$xml->{serviceList}->[0]->{service}})
 	{
-	    my @services;
-	    foreach my $service (@{$xml->{serviceList}->{service}})
-	    {
-		push @services, Fritz::Service->new(
-		    xmltree => $service,
-		    fritz   => $self->fritz
-		    );
-	    }
-	    $self->{service_list} = \@services;
+	    push @services, Fritz::Service->new(
+		xmltree => $service,
+		fritz   => $self->fritz
+		);
 	}
-	else
-	{
-	    $self->{service_list} = [ Fritz::Service->new(
-					  xmltree => $xml->{serviceList}->{service},
-					  fritz   => $self->fritz
-				      ) ];
-	}
+	$self->{service_list} = \@services;
     }
     else
     {
 	$self->{service_list} = [];
     }
 
-    if (exists $xml->{deviceList}->{device})
+    if (exists $xml->{deviceList})
     {
-	if (ref $xml->{deviceList}->{device} eq 'ARRAY')
+	my @devices;
+	foreach my $device (@{$xml->{deviceList}->[0]->{device}})
 	{
-	    my @devices;
-	    foreach my $device (@{$xml->{deviceList}->{device}})
-	    {
-		push @devices, Fritz::Device->new(
-		    xmltree => $device,
-		    fritz   => $self->fritz
-		    );
-	    }
-	    $self->{device_list} = \@devices;
+	    push @devices, Fritz::Device->new(
+		xmltree => $device,
+		fritz   => $self->fritz
+		);
 	}
-	else
-	{
-	    $self->{device_list} = [ Fritz::Device->new(
-					 xmltree => $xml->{deviceList}->{device},
-					 fritz   => $self->fritz
-				     ) ];
-	}
+	$self->{device_list} = \@devices;
     }
     else
     {

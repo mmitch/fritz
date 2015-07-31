@@ -1,8 +1,5 @@
 package Fritz::Action;
 
-use LWP::UserAgent;
-use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
-
 use Moo;
 use namespace::clean;
 
@@ -34,31 +31,19 @@ sub BUILD
     $self->{args_out} = [];
 
     my $xml = $self->xmltree;
+    $self->{name} = $xml->{name}->[0];
 
-    # b0rk, XML tree is shaped differently when there is only one argument :/
-    # remedy this
-    # TODO: nearly the same code is in Fritz::Service - is one fix enough?
-    my @keys = keys %{$xml->{argumentList}->{argument}};
-    if (@keys == 3
-	and ref( $xml->{argumentList}->{argument}->{$keys[0]} ) eq '')
+    foreach my $arg (@{$xml->{argumentList}})
     {
-	my $name = $xml->{argumentList}->{argument}->{name};
-	$xml->{argumentList}->{argument} = {
-	    $name => $xml->{argumentList}->{argument}
-	};
-	@keys = ($name);
-    }
-
-    foreach my $arg (@keys)
-    {
-	my $dir = $xml->{argumentList}->{argument}->{$arg}->{direction};
+	my $a = $arg->{argument}->[0];
+	my $dir = $a->{direction}->[0];
 	if ($dir eq 'out')
 	{
-	    push @{$self->{args_out}}, $arg;
+	    push @{$self->{args_out}}, $a->{name}->[0];
 	}
 	elsif ($dir eq 'in')
 	{
-	    push @{$self->{args_in}}, $arg;
+	    push @{$self->{args_in}}, $a->{name}->[0];
 	}
 	else
 	{
