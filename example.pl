@@ -88,6 +88,36 @@ if (1 == 1)
     }
 }
 
+if (1 == 1)
+{
+    # get security port (boooring)
+    my $service = $d->find_service('DeviceInfo:1');
+    $service->errorcheck;
+    my $response = $service->call('GetSecurityPort');
+    $response->errorcheck;
+    my $port = $response->data->{NewSecurityPort};
+    print "security port is $port\n";
+
+    # now use the port for SSL!
+    # GetSecurityPort needs no username/password, so omit them
+    my $upnp_url = $f->upnp_url;
+    $upnp_url =~ s/http:/https:/;
+    $upnp_url =~ s/:49000/:$port/;
+    my $f_ssl = Fritz->new( upnp_url => $upnp_url );
+    $f_ssl->errorcheck;
+    my $d_ssl = $f_ssl->discover;
+    $d_ssl->errorcheck;
+    my $service_ssl = $d_ssl->find_service('DeviceInfo:1');
+    $service_ssl->errorcheck;
+    my $response_ssl = $service_ssl->call('GetSecurityPort');
+    $response_ssl->errorcheck;
+    my $port_ssl = $response_ssl->data->{NewSecurityPort};
+    print "security port over SSL is $port - it worked!\n";
+}
+
+#$r->dump();
+
+
 #my $s = $d->find_service( 'urn:dslforum-org:service:WANDSLInterfaceConfig:1' );
 #$s->dump();
 #print "\n\n";
@@ -100,9 +130,6 @@ if (1 == 1)
 
 #print Dumper( $s->scpd() );
 
-#$r = $s->call('GetSecurityPort');
-#$r->dump();
-#print "the security port is " . $r->data->{'NewSecurityPort'} . "\n\n";
 
 #$r = $s->call('GetInfo');
 

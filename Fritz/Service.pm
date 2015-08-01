@@ -1,7 +1,6 @@
 package Fritz::Service;
 
 use Digest::MD5 qw(md5_hex);
-use LWP::UserAgent;
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # TODO: remove
 
 use Data::Dumper; # TODO: remove
@@ -56,8 +55,7 @@ sub _build_scpd
 
     my $url = $self->fritz->upnp_url . $self->SCPDURL;
 
-    my $ua = LWP::UserAgent->new();
-    my $response = $ua->get($url);
+    my $response = $self->fritz->_ua->get($url);
 
     if ($response->is_success)
     {
@@ -125,7 +123,7 @@ sub call
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
     my $soap = SOAP::Lite->new(
-	proxy    => $url,
+	proxy    => [ $url, ssl_opts => [ $self->fritz->_ua->ssl_opts ] ], # copy SSL settings from Fritz::_ua LWP::UserAgent
 	uri      => $self->serviceType,
 	readable => 1, # TODO: remove this
 	);

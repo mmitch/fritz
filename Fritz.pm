@@ -16,6 +16,18 @@ has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );
 has username      => ( is => 'ro');
 has password      => ( is => 'ro');
 has _xs           => ( is => 'ro', default => sub { return XML::Simple->new(ForceArray => 1, KeyAttr => []) }, init_arg => undef );
+has _ua           => ( is => 'ro');
+
+sub BUILD
+{
+    my $self = shift;
+
+    my $ua = LWP::UserAgent->new();
+    # disable SSL certificate checks, FritzBox has no verifiable SSL certificate
+    $ua->ssl_opts(verify_hostname => 0 ,SSL_verify_mode => 0x00);
+
+    $self->{_ua} = $ua;
+}
 
 sub discover
 {
@@ -23,8 +35,7 @@ sub discover
 
     my $url = $self->upnp_url . $self->trdesc_path;
     
-    my $ua = LWP::UserAgent->new();
-    my $response = $ua->get($url);
+    my $response = $self->_ua->get($url);
     
     if ($response->is_success)
     {
