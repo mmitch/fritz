@@ -116,6 +116,12 @@ sub call
 	);
     return $err if $err->error;
 
+    my @args;
+    foreach my $arg (keys %call_args)
+    {
+	push @args, SOAP::Data->name($arg)->value($call_args{$arg});
+    }
+
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
     my $soap = SOAP::Lite->new(
@@ -131,7 +137,7 @@ sub call
     # TODO: send parameters
     my $som;
     eval {
-	$som = $soap->call($action, $auth);
+	$som = $soap->call($action, @args, $auth);
     };
 
     # if we got a 503 authentication error: fine!
@@ -147,7 +153,7 @@ sub call
 	    $auth = $self->_get_real_auth($som->headers);
 	    
 	    eval {
-		$som = $soap->call($action, $auth);
+		$som = $soap->call($action, @args, $auth);
 	    };
 	}
 	else
