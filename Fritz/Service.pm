@@ -2,7 +2,9 @@ package Fritz::Service;
 
 use Digest::MD5 qw(md5_hex);
 use LWP::UserAgent;
-use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ];
+use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # TODO: remove
+
+use Data::Dumper; # TODO: remove
 
 use Fritz::Action;
 use Fritz::Data;
@@ -132,18 +134,18 @@ sub call
 	$som = $soap->call($action, $auth);
     };
 
-    # if we got an authentication error: fine!
+    # if we got a 503 authentication error: fine!
     # now we gots us a nonce and can retry
     if (! $@
 	and $som->fault
 	and exists $som->fault->{detail}->{UPnPError}->{errorCode}
-	and $som->{detail}->{UPnPError}->{errorCode} = 503)
+	and $som->fault->{detail}->{UPnPError}->{errorCode} == 503)
     {
 	if (defined $self->fritz->username
 	    and defined $self->fritz->password)
 	{
 	    $auth = $self->_get_real_auth($som->headers);
-
+	    
 	    eval {
 		$som = $soap->call($action, $auth);
 	    };
@@ -160,7 +162,13 @@ sub call
     }
     elsif ($som->fault)
     {
-	return Fritz::Error->new($som->fault->{faultcode} . ' ' . $som->fault->{faultstring});
+	my @error = ($som->fault->{faultcode}, $som->fault->{faultstring});
+	if (exists $som->fault->{detail}->{UPnPError})
+	{
+	    push @error, $som->fault->{detail}->{UPnPError}->{errorCode};
+	    push @error, $som->fault->{detail}->{UPnPError}->{errorDescription};
+	}
+	return Fritz::Error->new(join ' ', @error);
     }
     else
     {
