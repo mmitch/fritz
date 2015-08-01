@@ -116,13 +116,10 @@ sub call
 
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
-    use Data::Dumper;
-
     my $soap = SOAP::Lite->new(
 	proxy    => $url,
 	uri      => $self->serviceType,
 	readable => 1, # TODO: remove this
-#	on_fault => sub { warn Dumper($_[0]); die 'XXX' },
 	);
 
     # expect the call to need authentication, so prepare an initial request
