@@ -134,7 +134,8 @@ sub call
 
     # if we got an authentication error: fine!
     # now we gots us a nonce and can retry
-    if (! @_
+    if (! $@
+	and $som->fault
 	and exists $som->fault->{detail}->{UPnPError}->{errorCode}
 	and $som->{detail}->{UPnPError}->{errorCode} = 503)
     {
