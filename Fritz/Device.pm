@@ -1,7 +1,8 @@
 package Fritz::Device;
 
-use Fritz::Service;
+use Fritz::Data;
 use Fritz::Error;
+use Fritz::Service;
 
 use Moo;
 use namespace::clean;
@@ -82,7 +83,7 @@ sub BUILD
     }
 }
 
-sub find_service
+sub get_service
 {
     my $self = shift;
     my $type = shift;
@@ -104,7 +105,59 @@ sub find_service
 	}
     }
     
-    return Fritz::Error->new('service not found' );
+    return Fritz::Error->new('service not found');
+}
+
+sub find_service
+{
+    my $self = shift;
+    my $type = shift;
+
+    foreach my $service (@{$self->service_list})
+    {
+	if ($service->serviceType =~ /$type/)
+	{
+	    return $service;
+	}
+    }
+
+    foreach my $device (@{$self->device_list})
+    {
+	my $service = $device->find_service($type);
+	if (! $service->error)
+	{
+	    return $service;
+	}
+    }
+
+    return Fritz::Error->new('service not found');
+}
+
+sub find_service_names
+{
+    my $self = shift;
+    my $type = shift;
+
+    my @found = ();
+
+    foreach my $service (@{$self->service_list})
+    {
+	if ($service->serviceType =~ /$type/)
+	{
+	    push @found, $service->serviceType;
+	}
+    }
+
+    foreach my $device (@{$self->device_list})
+    {
+	my $data = $device->find_service_names($type);
+	if (! $data->error)
+	{
+	    push @found, @{$data->raw};
+	}
+    }
+
+    return Fritz::Data->new(\@found);
 }
 
 sub find_device
