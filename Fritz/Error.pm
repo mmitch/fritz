@@ -23,4 +23,10 @@ sub dump
     print "Fritz::Error: " . $self->error . "\n";
 }
 
+sub errorcheck
+{
+    my $self = shift;
+    die "Fritz::Error: " . $self->error. "\n";
+}
+
 1;
