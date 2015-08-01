@@ -23,7 +23,7 @@ sub BUILD
     my $self = shift;
 
     my $ua = LWP::UserAgent->new();
-    # disable SSL certificate checks, FritzBox has no verifiable SSL certificate
+    # disable SSL certificate checks, Fritz!Box has no verifiable SSL certificate
     $ua->ssl_opts(verify_hostname => 0 ,SSL_verify_mode => 0x00);
 
     $self->{_ua} = $ua;
