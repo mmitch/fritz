@@ -9,6 +9,8 @@ use Fritz::Device;
 use Moo;
 use namespace::clean;
 
+with 'Fritz::NoError';
+
 has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
 has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );
 has username      => ( is => 'ro');
