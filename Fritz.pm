@@ -22,10 +22,15 @@ sub BUILD
 {
     my $self = shift;
 
+    # Depending on your SSL setup (propably which SSL modules LWP::UserAgent uses
+    # for transport), this is also needed to disable certificate checks.
+    # I have one machine that needs it and another that doesn't.
+    $ENV{HTTPS_DEBUG} = 1;
+    
     my $ua = LWP::UserAgent->new();
     # disable SSL certificate checks, Fritz!Box has no verifiable SSL certificate
     $ua->ssl_opts(verify_hostname => 0 ,SSL_verify_mode => 0x00);
-
+    
     $self->{_ua} = $ua;
 }
 
