@@ -11,20 +11,15 @@ use utf8;
 # get credentials (not checked in)
 my ($user, $pass);
 my $rcfile = $ENV{HOME}.'/.fritzrc';
-if (-r $rcfile)
-{
+if (-r $rcfile) {
     open FRITZRC, '<', $rcfile or die $!;
-    while (my $line = <FRITZRC>)
-    {
+    while (my $line = <FRITZRC>) {
 	chomp $line;
-	if ($line =~ /^(\S+)\s*=\s*(.*?)$/)
-	{
-	    if ($1 eq 'username')
-	    {
+	if ($line =~ /^(\S+)\s*=\s*(.*?)$/) {
+	    if ($1 eq 'username') {
 		$user = $2;
 	    }
-	    elsif ($1 eq 'password')
-	    {
+	    elsif ($1 eq 'password') {
 		$pass = $2
 	    }
 	}
@@ -44,14 +39,12 @@ my $d = $f->discover();
 #$d->dump();
 #print "\n\n";
 
-if (1 == 0)
-{
+if (1 == 0) {
     # get all connected WLAN devices
     my $services = $d->find_service_names('Configuration:');
     $services->errorcheck;
     print Dumper($services->data);
-    for my $serviceType (@{$services->data})
-    {
+    for my $serviceType (@{$services->data}) {
 	my $service = $d->get_service($serviceType);
 	$services->errorcheck;
 	my $response = $service->call('GetTotalAssociations');
@@ -61,8 +54,7 @@ if (1 == 0)
     }
 }
 
-if (1 == 1)
-{
+if (1 == 1) {
     ## list all known hosts
     my $service = $d->find_service('Hosts:1');
     $service->errorcheck;
@@ -70,8 +62,7 @@ if (1 == 1)
     $response->errorcheck;
     printf "number of hosts = %d\n", $response->data->{NewHostNumberOfEntries};
     printf "%3s  %-30s  %-15s  %-17s  %-10s  %-6s  %s\n", 'act', 'hostname', 'IP address', 'MAC address', 'interface', 'source', 'lease';
-    for my $host ( 0 .. $response->data->{NewHostNumberOfEntries} - 1)
-    {
+    for my $host ( 0 .. $response->data->{NewHostNumberOfEntries} - 1) {
 	$response = $service->call('GetGenericHostEntry', 'NewIndex' => $host);
 	$response->errorcheck;
 	my $d = $response->data;
@@ -87,8 +78,7 @@ if (1 == 1)
     }
 }
 
-if (1 == 1)
-{
+if (1 == 1) {
     # get security port (boooring)
     my $service = $d->find_service('DeviceInfo:1');
     $service->errorcheck;

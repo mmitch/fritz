@@ -7,8 +7,7 @@ has error => ( is => 'ro', default => 'generic error' );
 
 # prepend 'error => ' when called without hash
 # (when called with uneven list)
-sub BUILDARGS
-{
+sub BUILDARGS {
     my ( $class, @args ) = @_;
     
     unshift @args, "error" if @args % 2 == 1;
@@ -16,15 +15,13 @@ sub BUILDARGS
     return { @args };
 };
 
-sub dump
-{
+sub dump {
     my $self = shift;
 
     print "Fritz::Error: " . $self->error . "\n";
 }
 
-sub errorcheck
-{
+sub errorcheck {
     my $self = shift;
     die "Fritz::Error: " . $self->error. "\n";
 }

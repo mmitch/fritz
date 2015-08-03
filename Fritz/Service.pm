@@ -29,64 +29,53 @@ eventSubURL
 SCPDURL
 );
 
-for my $attr (ATTRIBUTES)
-{
+for my $attr (ATTRIBUTES) {
     has $attr => ( is => 'ro' );
 }
 
-sub BUILD
-{
+sub BUILD {
     my $self = shift;
 
     my $xml  = $self->xmltree;
 
-    for my $attr (ATTRIBUTES)
-    {
-	if (exists $xml->{$attr})
-	{
+    for my $attr (ATTRIBUTES) {
+	if (exists $xml->{$attr}) {
 	    $self->{$attr} = $xml->{$attr}->[0];
 	}
     }
 }
 
-sub _build_scpd
-{
-    my $self    = shift;
+sub _build_scpd {
+    my $self = shift;
 
-    my $url = $self->fritz->upnp_url . $self->SCPDURL;
+    my $url  = $self->fritz->upnp_url . $self->SCPDURL;
 
     my $response = $self->fritz->_ua->get($url);
 
-    if ($response->is_success)
-    {
+    if ($response->is_success) {
 	return Fritz::Data->new(
 	    $self->fritz->_xs->parse_string($response->decoded_content)
 	    );
     }
-    else
-    {
+    else {
 	return Fritz::Error->new($response->status_line);
     }
 }
 
-sub _build_action_hash
-{
+sub _build_action_hash {
     my $self = shift;
 
     my $scpd = $self->scpd;
 
-    if ($scpd->error)
-    {
+    if ($scpd->error) {
 	return {};
 	# TODO: how to report this error? we return no object
     }
-    else
-    {
+    else {
 	my $hash = {};
 	my $xml = $scpd->data->{actionList}->[0]->{action};
 
-	foreach my $action (@{$xml})
-	{
+	foreach my $action (@{$xml}) {
 	    $hash->{$action->{name}->[0]} = Fritz::Action->new(
 		xmltree => $action
 		);
@@ -95,14 +84,12 @@ sub _build_action_hash
     }
 }
 
-sub call
-{
+sub call {
     my $self      = shift;
     my $action    = shift;
     my %call_args = (@_);
 
-    if (! exists $self->action_hash->{$action})
-    {
+    if (! exists $self->action_hash->{$action}) {
 	return Fritz::Error->new("unknown action $action");
     }
 
@@ -115,8 +102,7 @@ sub call
     return $err if $err->error;
 
     my @args;
-    foreach my $arg (keys %call_args)
-    {
+    foreach my $arg (keys %call_args) {
 	push @args, SOAP::Data->name($arg)->value($call_args{$arg});
     }
 
@@ -143,39 +129,34 @@ sub call
     if (! $@
 	and $som->fault
 	and exists $som->fault->{detail}->{UPnPError}->{errorCode}
-	and $som->fault->{detail}->{UPnPError}->{errorCode} == 503)
-    {
+	and $som->fault->{detail}->{UPnPError}->{errorCode} == 503) {
+
 	if (defined $self->fritz->username
-	    and defined $self->fritz->password)
-	{
+	    and defined $self->fritz->password) {
+
 	    $auth = $self->_get_real_auth($som->headers);
-	    
+
 	    eval {
 		$som = $soap->call($action, @args, $auth);
 	    };
 	}
-	else
-	{
+	else {
 	    return Fritz::Error->new("authentication needed, but no credentials given");
 	}
     }
 
-    if ($@)
-    {
+    if ($@) {
 	return Fritz::Error->new($@);
     }
-    elsif ($som->fault)
-    {
+    elsif ($som->fault) {
 	my @error = ($som->fault->{faultcode}, $som->fault->{faultstring});
-	if (exists $som->fault->{detail}->{UPnPError})
-	{
+	if (exists $som->fault->{detail}->{UPnPError}) {
 	    push @error, $som->fault->{detail}->{UPnPError}->{errorCode};
 	    push @error, $som->fault->{detail}->{UPnPError}->{errorDescription};
 	}
 	return Fritz::Error->new(join ' ', @error);
     }
-    else
-    {
+    else {
 	# according to the docs, $som->paramsin returns an array of hashes.  I don't see this :-/
 	my $args_out = $som->body->{$action.'Response'};
 	$args_out = {} unless ref $args_out; # fix empty responses
@@ -192,8 +173,7 @@ sub call
     }
 }
 
-sub dump
-{
+sub dump {
     my $self = shift;
 
     my $indent = shift;
@@ -204,19 +184,16 @@ sub dump
     print "${indent}controlURL      = " . $self->controlURL  . "\n";
     print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
 
-    if ($self->action_hash)
-    {
+    if ($self->action_hash) {
 	print "${indent}actions         = {\n";
-	foreach my $action (values %{$self->action_hash})
-	{
+	foreach my $action (values %{$self->action_hash}) {
 	    $action->dump($indent . '  ');
 	}
 	print "${indent}}\n";
     }
 }
 
-sub _get_initial_auth
-{
+sub _get_initial_auth {
     my $self = shift;
 
     my $userid = SOAP::Header->name('UserID')
@@ -227,12 +204,9 @@ sub _get_initial_auth
 	->attr({'xmlns:h' => 'http://soap-authentication.org/digest/2001/10/',
 		's:mustUnderstand' => '1'})
 	->value(\$userid);
-
-
 }
 
-sub _get_real_auth
-{
+sub _get_real_auth {
     my $self = shift;
 
     my $parm = shift;
@@ -264,22 +238,17 @@ sub _get_real_auth
 	->value(\SOAP::Header->value($nonce, $auth, $userid, $realm));
 }
 
-sub _hash_check
-{
+sub _hash_check {
     my ($hash_a, $hash_b, $msg_a, $msg_b) = (@_);
 
-    foreach my $arg (keys %{$hash_a})
-    {
-	if (! exists $hash_b->{$arg})
-	{
+    foreach my $arg (keys %{$hash_a}) {
+	if (! exists $hash_b->{$arg}) {
 	    return Fritz::Error->new("$msg_a $arg");
 	}
     }
 
-    foreach my $arg (keys %{$hash_b})
-    {
-	if (! exists $hash_a->{$arg})
-	{
+    foreach my $arg (keys %{$hash_b}) {
+	if (! exists $hash_a->{$arg}) {
 	    return Fritz::Error->new("$msg_b $arg");
 	}
     }

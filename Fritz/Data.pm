@@ -12,8 +12,7 @@ has data => ( is => 'ro' );
 
 # prepend 'data => ' when called without hash
 # (when called with uneven list)
-sub BUILDARGS
-{
+sub BUILDARGS {
     my ( $class, @args ) = @_;
     
     unshift @args, "data" if @args % 2 == 1;
@@ -21,22 +20,19 @@ sub BUILDARGS
     return { @args };
 };
 
-sub BUILD
-{
+sub BUILD {
     my $self = shift;
 
     $self->{raw} = $self->data;
 }
 
-sub get
-{
+sub get {
     my $self = shift;
 
     return $self->data;
 }
 
-sub dump
-{
+sub dump {
     my $self = shift;
 
     my $indent = shift;

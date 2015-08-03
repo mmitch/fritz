@@ -5,8 +5,7 @@ use namespace::clean;
 
 has error => ( is => 'ro', default => 0 );
 
-sub errorcheck
-{
+sub errorcheck {
 }
 
 1;

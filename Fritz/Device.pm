@@ -29,30 +29,24 @@ UDN
 presentationURL
 );
 
-for my $attr (ATTRIBUTES)
-{
+for my $attr (ATTRIBUTES) {
     has $attr => ( is => 'ro' );
 }
 
-sub BUILD
-{
+sub BUILD {
     my $self = shift;
 
     my $xml = $self->xmltree;
 
-    for my $attr (ATTRIBUTES)
-    {
-	if (exists $xml->{$attr})
-	{
+    for my $attr (ATTRIBUTES) {
+	if (exists $xml->{$attr}) {
 	    $self->{$attr} = $xml->{$attr}->[0];
 	}
     }
 
-    if (exists $xml->{serviceList})
-    {
+    if (exists $xml->{serviceList}) {
 	my @services;
-	foreach my $service (@{$xml->{serviceList}->[0]->{service}})
-	{
+	foreach my $service (@{$xml->{serviceList}->[0]->{service}}) {
 	    push @services, Fritz::Service->new(
 		xmltree => $service,
 		fritz   => $self->fritz
@@ -60,16 +54,13 @@ sub BUILD
 	}
 	$self->{service_list} = \@services;
     }
-    else
-    {
+    else {
 	$self->{service_list} = [];
     }
 
-    if (exists $xml->{deviceList})
-    {
+    if (exists $xml->{deviceList}) {
 	my @devices;
-	foreach my $device (@{$xml->{deviceList}->[0]->{device}})
-	{
+	foreach my $device (@{$xml->{deviceList}->[0]->{device}}) {
 	    push @devices, Fritz::Device->new(
 		xmltree => $device,
 		fritz   => $self->fritz
@@ -77,30 +68,24 @@ sub BUILD
 	}
 	$self->{device_list} = \@devices;
     }
-    else
-    {
+    else {
 	$self->{device_list} = [];
     }
 }
 
-sub get_service
-{
+sub get_service {
     my $self = shift;
     my $type = shift;
 
-    foreach my $service (@{$self->service_list})
-    {
-	if ($service->serviceType eq $type)
-	{
+    foreach my $service (@{$self->service_list}) {
+	if ($service->serviceType eq $type) {
 	    return $service;
 	}
     }
 
-    foreach my $device (@{$self->device_list})
-    {
+    foreach my $device (@{$self->device_list}) {
 	my $service = $device->find_service($type);
-	if (! $service->error)
-	{
+	if (! $service->error) {
 	    return $service;
 	}
     }
@@ -108,24 +93,19 @@ sub get_service
     return Fritz::Error->new('service not found');
 }
 
-sub find_service
-{
+sub find_service {
     my $self = shift;
     my $type = shift;
 
-    foreach my $service (@{$self->service_list})
-    {
-	if ($service->serviceType =~ /$type/)
-	{
+    foreach my $service (@{$self->service_list}) {
+	if ($service->serviceType =~ /$type/) {
 	    return $service;
 	}
     }
 
-    foreach my $device (@{$self->device_list})
-    {
+    foreach my $device (@{$self->device_list}) {
 	my $service = $device->find_service($type);
-	if (! $service->error)
-	{
+	if (! $service->error) {
 	    return $service;
 	}
     }
@@ -133,26 +113,21 @@ sub find_service
     return Fritz::Error->new('service not found');
 }
 
-sub find_service_names
-{
+sub find_service_names {
     my $self = shift;
     my $type = shift;
 
     my @found = ();
 
-    foreach my $service (@{$self->service_list})
-    {
-	if ($service->serviceType =~ /$type/)
-	{
+    foreach my $service (@{$self->service_list}) {
+	if ($service->serviceType =~ /$type/) {
 	    push @found, $service->serviceType;
 	}
     }
 
-    foreach my $device (@{$self->device_list})
-    {
+    foreach my $device (@{$self->device_list}) {
 	my $data = $device->find_service_names($type);
-	if (! $data->error)
-	{
+	if (! $data->error) {
 	    push @found, @{$data->raw};
 	}
     }
@@ -160,24 +135,19 @@ sub find_service_names
     return Fritz::Data->new(\@found);
 }
 
-sub find_device
-{
+sub find_device {
     my $self = shift;
     my $type = shift;
 
-    foreach my $device (@{$self->device_list})
-    {
-	if ($device->deviceType eq $type)
-	{
+    foreach my $device (@{$self->device_list}) {
+	if ($device->deviceType eq $type) {
 	    return $device;
 	}
     }
     
-    foreach my $device (@{$self->device_list})
-    {
+    foreach my $device (@{$self->device_list}) {
 	my $device = $device->find_device($type);
-	if (! $device->error)
-	{
+	if (! $device->error) {
 	    return $device;
 	}
     }
@@ -185,8 +155,7 @@ sub find_device
     return Fritz::Error( error => 'device not found' );
 }
 
-sub dump
-{
+sub dump {
     my $self = shift;
 
     my $indent = shift;
@@ -197,21 +166,17 @@ sub dump
     print "${indent}modelName       = " . $self->modelName . "\n";
     print "${indent}presentationURL = " . $self->presentationURL . "\n" if defined $self->presentationURL;
 
-    if ($self->service_list)
-    {
+    if ($self->service_list) {
 	print "${indent}subservices    = {\n";
-	foreach my $service (@{$self->service_list})
-	{
+	foreach my $service (@{$self->service_list}) {
 	    $service->dump($indent . '  ');
 	}
 	print "${indent}}\n";
     }
 
-    if ($self->device_list)
-    {
+    if ($self->device_list) {
 	print "${indent}subdevices      = {\n";
-	foreach my $device (@{$self->device_list})
-	{
+	foreach my $device (@{$self->device_list}) {
 	    $device->dump($indent . '  ');
 	}
 	print "${indent}}\n";
