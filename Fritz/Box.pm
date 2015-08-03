@@ -18,8 +18,7 @@ has password      => ( is => 'ro');
 has _xs           => ( is => 'ro', default => sub { return XML::Simple->new(ForceArray => 1, KeyAttr => []) }, init_arg => undef );
 has _ua           => ( is => 'ro');
 
-sub BUILD
-{
+sub BUILD {
     my $self = shift;
 
     # Depending on your SSL setup (propably which SSL modules LWP::UserAgent uses
@@ -34,29 +33,25 @@ sub BUILD
     $self->{_ua} = $ua;
 }
 
-sub discover
-{
+sub discover {
     my $self = shift;
 
     my $url = $self->upnp_url . $self->trdesc_path;
     
     my $response = $self->_ua->get($url);
     
-    if ($response->is_success)
-    {
+    if ($response->is_success) {
 	return Fritz::Device->new(
 	    xmltree => $self->_xs->parse_string($response->decoded_content)->{device}->[0],
 	    fritz   => $self
 	    );
     }
-    else
-    {
+    else {
 	return Fritz::Error->new($response->status_line)
     }
 }
 
-sub dump
-{
+sub dump {
     my $self = shift;
     my $indent = shift;
     $indent = '' unless defined $indent;
