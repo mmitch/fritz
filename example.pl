@@ -39,6 +39,14 @@ my $d = $f->discover();
 #$d->dump();
 #print "\n\n";
 
+if (1 == 1) {
+    # get call list
+    my $service = $d->find_service('X_AVM-DE_OnTel:');
+    $service->errorcheck;
+    my $response = $service->call('GetCallList');
+    print $response->data->{NewCallListURL} . "\n";
+}
+
 if (1 == 0) {
     # get all connected WLAN devices
     my $services = $d->find_service_names('Configuration:');
