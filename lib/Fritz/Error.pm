@@ -1,4 +1,6 @@
 package Fritz::Error;
+use strict;
+use warnings;
 
 use Moo;
 use namespace::clean;

@@ -1,4 +1,6 @@
 package Fritz::NoError;
+use strict;
+use warnings;
 
 use Moo::Role;
 use namespace::clean;

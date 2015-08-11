@@ -1,4 +1,6 @@
 package Fritz::Action;
+use strict;
+use warnings;
 
 use Moo;
 use namespace::clean;

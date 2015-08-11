@@ -1,4 +1,6 @@
 package Fritz::Device;
+use strict;
+use warnings;
 
 use Fritz::Data;
 use Fritz::Error;

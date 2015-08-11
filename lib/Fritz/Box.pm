@@ -1,4 +1,6 @@
 package Fritz::Box;
+use strict;
+use warnings;
 
 use LWP::UserAgent;
 use XML::Simple qw(:strict);

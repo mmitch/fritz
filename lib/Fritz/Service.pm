@@ -1,4 +1,6 @@
 package Fritz::Service;
+use strict;
+use warnings;
 
 use Digest::MD5 qw(md5_hex);
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # TODO: remove
