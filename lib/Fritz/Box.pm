@@ -9,6 +9,8 @@ use Fritz::Device;
 use Moo;
 use namespace::clean;
 
+use version; our $VERSION = qv('0.0.1');
+
 with 'Fritz::NoError';
 
 has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );

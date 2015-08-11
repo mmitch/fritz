@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -I lib/
 use warnings;
 use strict;
 
@@ -40,6 +40,19 @@ my $d = $f->discover();
 #print "\n\n";
 
 if (1 == 1) {
+    # get call list
+    my $service = $d->find_service(':WANDSLLinkConfig:');
+    $service->errorcheck;
+    foreach my $action (keys %{$service->action_hash}) {
+	if ($action =~ /^Get/) {
+	    print "$action:\n";
+	    my $response = $service->call($action);
+	    print Dumper($response->data) . "\n";
+	}
+    }
+}
+
+if (1 == 0) {
     # get call list
     my $service = $d->find_service('X_AVM-DE_OnTel:');
     $service->errorcheck;
