@@ -19,12 +19,14 @@ has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
 has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );
 has username      => ( is => 'ro');
 has password      => ( is => 'ro');
-has _xs           => ( is => 'ro', default => sub { return XML::Simple->new(ForceArray => 1, KeyAttr => []) }, init_arg => undef );
-has _ua           => ( is => 'ro');
+has _xs           => ( is => 'lazy', init_arg => undef );
+has _ua           => ( is => 'lazy');
 
-sub BUILD {
-    my $self = shift;
+sub _build__xs {
+    return XML::Simple->new(ForceArray => 1, KeyAttr => []);
+}
 
+sub _build__ua {
     # Depending on your SSL setup (propably which SSL modules LWP::UserAgent uses
     # for transport), this is also needed to disable certificate checks.
     # I have one machine that needs it and another that doesn't.
@@ -34,7 +36,7 @@ sub BUILD {
     # disable SSL certificate checks, Fritz!Box has no verifiable SSL certificate
     $ua->ssl_opts(verify_hostname => 0 ,SSL_verify_mode => 0x00);
     
-    $self->{_ua} = $ua;
+    return $ua;
 }
 
 sub discover {

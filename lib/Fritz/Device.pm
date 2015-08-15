@@ -15,8 +15,8 @@ has fritz        => ( is => 'ro' );
 
 has xmltree      => ( is => 'ro' );
 
-has service_list => ( is => 'ro' );
-has device_list  => ( is => 'ro' );
+has service_list => ( is => 'lazy', init_arg => undef );
+has device_list  => ( is => 'lazy', init_arg => undef );
 
 use constant ATTRIBUTES => qw(
 deviceType
@@ -36,6 +36,7 @@ for my $attr (ATTRIBUTES) {
 }
 
 sub BUILD {
+    # FIXME convert this to lazy attributes - but how to generate them dynamically?
     my $self = shift;
 
     my $xml = $self->xmltree;
@@ -45,34 +46,40 @@ sub BUILD {
 	    $self->{$attr} = $xml->{$attr}->[0];
 	}
     }
+}
+
+sub _build_service_list {
+    my $self = shift;
+    my $xml  = $self->xmltree;
+    my @services;
 
     if (exists $xml->{serviceList}) {
-	my @services;
 	foreach my $service (@{$xml->{serviceList}->[0]->{service}}) {
 	    push @services, Fritz::Service->new(
 		xmltree => $service,
 		fritz   => $self->fritz
 		);
 	}
-	$self->{service_list} = \@services;
-    }
-    else {
-	$self->{service_list} = [];
     }
 
+    return \@services;
+}
+
+sub _build_device_list {
+    my $self = shift;
+    my $xml  = $self->xmltree;
+    my @devices;
+
     if (exists $xml->{deviceList}) {
-	my @devices;
 	foreach my $device (@{$xml->{deviceList}->[0]->{device}}) {
 	    push @devices, Fritz::Device->new(
 		xmltree => $device,
 		fritz   => $self->fritz
 		);
 	}
-	$self->{device_list} = \@devices;
     }
-    else {
-	$self->{device_list} = [];
-    }
+
+    return \@devices;
 }
 
 sub get_service {

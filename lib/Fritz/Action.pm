@@ -10,9 +10,9 @@ with 'Fritz::IsNoError';
 has fritz        => ( is => 'ro' );
 
 has xmltree      => ( is => 'ro' );
-has name         => ( is => 'ro' );
-has args_in      => ( is => 'ro' );
-has args_out     => ( is => 'ro' );
+has name         => ( is => 'lazy', init_arg => undef );
+has args_in      => ( is => 'lazy', init_arg => undef );
+has args_out     => ( is => 'lazy', init_arg => undef );
 
 # prepend 'xmltree => ' when called without hash
 # (when called with uneven list)
@@ -24,27 +24,37 @@ sub BUILDARGS {
     return { @args };
 };
 
-sub BUILD {
+sub _build_name {
     my $self = shift;
+    return $self->xmltree->{name}->[0];
+}
 
-    $self->{args_in}  = [];
-    $self->{args_out} = [];
+sub _build_args_in {
+    my $self = shift;
+    my @args;
 
-    my $xml = $self->xmltree;
-    $self->{name} = $xml->{name}->[0];
-
-    foreach my $arg (@{$xml->{argumentList}->[0]->{argument}}) {
-	my $dir = $arg->{direction}->[0];
-	if ($dir eq 'out') {
-	    push @{$self->{args_out}}, $arg->{name}->[0];
-	}
-	elsif ($dir eq 'in') {
-	    push @{$self->{args_in}}, $arg->{name}->[0];
-	}
-	else {
-	    # TODO throw error - but how?  we don't return an object
+    # TODO convert to grep
+    foreach my $arg (@{$self->xmltree->{argumentList}->[0]->{argument}}) {
+	if ($arg->{direction}->[0] eq 'in') {
+	    push @args, $arg->{name}->[0];
 	}
     }
+
+    return \@args;
+}
+
+sub _build_args_out {
+    my $self = shift;
+    my @args;
+
+    # TODO convert to grep
+    foreach my $arg (@{$self->xmltree->{argumentList}->[0]->{argument}}) {
+	if ($arg->{direction}->[0] eq 'out') {
+	    push @args, $arg->{name}->[0];
+	}
+    }
+
+    return \@args;
 }
 
 sub dump {

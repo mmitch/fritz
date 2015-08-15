@@ -36,6 +36,7 @@ for my $attr (ATTRIBUTES) {
 }
 
 sub BUILD {
+    # FIXME convert this to lazy attributes - but how to generate them dynamically?
     my $self = shift;
 
     my $xml  = $self->xmltree;
