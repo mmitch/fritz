@@ -36,7 +36,7 @@ my $upnp_url = $fritz->upnp_url;
 $upnp_url =~ s/http:/https:/;
 $upnp_url =~ s/:49000/:$port/;
 
-my $fritz_ssl = new_ok( Fritz::Box->new( upnp_url => $upnp_url ) );
+my $fritz_ssl = new_ok( 'Fritz::Box' => [ upnp_url => $upnp_url ] );
 is ($fritz_ssl->error, 0, 'get Fritz::Box instance for SSL');
 
 my $device_ssl = $fritz_ssl->discover();
