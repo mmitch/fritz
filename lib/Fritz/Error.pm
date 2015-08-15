@@ -10,7 +10,7 @@ use namespace::clean;
 
 =head1 NAME
 
-Fritz::Error - wraps an error during $TODO
+Fritz::Error - wraps any error from the L<Fritz> modules
 
 =head1 SYNOPSIS
 
@@ -46,7 +46,8 @@ object instead).
 
 =head2 error
 
-Contains the error message as a string.
+Contains the error message as a string.  Don't set this to anything
+resembling false or you will trick your tests.
 
 =cut
 
