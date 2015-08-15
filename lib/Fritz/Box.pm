@@ -13,7 +13,7 @@ use namespace::clean;
 
 use version; our $VERSION = qv('0.0.1');
 
-with 'Fritz::NoError';
+with 'Fritz::IsNoError';
 
 has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
 has trdesc_path   => ( is => 'ro', default => '/tr64desc.xml' );

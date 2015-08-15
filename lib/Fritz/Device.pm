@@ -9,7 +9,7 @@ use Fritz::Service;
 use Moo;
 use namespace::clean;
 
-with 'Fritz::NoError';
+with 'Fritz::IsNoError';
 
 has fritz        => ( is => 'ro' );
 

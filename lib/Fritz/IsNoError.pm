@@ -1,4 +1,4 @@
-package Fritz::NoError;
+package Fritz::IsNoError;
 use strict;
 use warnings;
 

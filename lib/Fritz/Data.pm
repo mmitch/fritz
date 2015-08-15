@@ -7,7 +7,7 @@ use Scalar::Util qw(blessed);
 use Moo;
 use namespace::clean;
 
-with 'Fritz::NoError';
+with 'Fritz::IsNoError';
 
 has raw  => ( is => 'ro', init_arg => undef );
 has data => ( is => 'ro' );
