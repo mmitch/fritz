@@ -9,7 +9,6 @@ use namespace::clean;
 
 with 'Fritz::IsNoError';
 
-has raw  => ( is => 'ro', init_arg => undef );
 has data => ( is => 'ro' );
 
 # prepend 'data => ' when called without hash
@@ -21,12 +20,6 @@ sub BUILDARGS {
     
     return { @args };
 };
-
-sub BUILD {
-    my $self = shift;
-
-    $self->{raw} = $self->data;
-}
 
 sub get {
     my $self = shift;
@@ -41,9 +34,9 @@ sub dump {
     $indent = '' unless defined $indent;
 
     print "${indent}" . blessed( $self ) . ":\n";
-    print "${indent}---raw data---\n";
-    print $self->raw . "\n";
-    print "--------------\n";
+    print "${indent}----data----\n";
+    print $self->data . "\n";
+    print "------------\n";
 }
 
 1;
