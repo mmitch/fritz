@@ -17,6 +17,7 @@ has xmltree      => ( is => 'ro' );
 
 has service_list => ( is => 'lazy', init_arg => undef );
 has device_list  => ( is => 'lazy', init_arg => undef );
+has attributes   => ( is => 'lazy', init_arg => undef );
 
 use constant ATTRIBUTES => qw(
 deviceType
@@ -31,21 +32,18 @@ UDN
 presentationURL
 );
 
-for my $attr (ATTRIBUTES) {
-    has $attr => ( is => 'ro' );
-}
-
-sub BUILD {
-    # FIXME convert this to lazy attributes - but how to generate them dynamically?
+sub _build_attributes {
     my $self = shift;
-
-    my $xml = $self->xmltree;
+    my $xml  = $self->xmltree;
+    my $attributes = {};
 
     for my $attr (ATTRIBUTES) {
 	if (exists $xml->{$attr}) {
-	    $self->{$attr} = $xml->{$attr}->[0];
+	    $attributes->{$attr} = $xml->{$attr}->[0];
 	}
     }
+
+    return $attributes;
 }
 
 sub _build_service_list {
