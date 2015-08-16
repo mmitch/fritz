@@ -170,8 +170,8 @@ sub dump {
 
     print "${indent}Fritz::Device:\n";
     $indent .= '  ';
-    print "${indent}modelName       = " . $self->modelName . "\n";
-    print "${indent}presentationURL = " . $self->presentationURL . "\n" if defined $self->presentationURL;
+    print "${indent}modelName       = " . $self->attributes->{modelName} . "\n";
+    print "${indent}presentationURL = " . $self->attributes->{presentationURL} . "\n" if defined $self->attributes->{presentationURL};
 
     if ($self->service_list) {
 	print "${indent}subservices    = {\n";
