@@ -16,36 +16,51 @@ use namespace::clean;
 with 'Fritz::IsNoError';
 
 has fritz        => ( is => 'ro' );
-
 has xmltree      => ( is => 'ro' );
-has scpd         => ( is => 'lazy' );
-has action_hash  => ( is => 'lazy' );
 
-use constant DEVICEINFO => 'urn:dslforum-org:service:DeviceInfo:1';
+has scpd         => ( is => 'lazy', init_arg => undef );
+has action_hash  => ( is => 'lazy', init_arg => undef );
+has serviceType  => ( is => 'lazy', init_arg => undef );
+has serviceId    => ( is => 'lazy', init_arg => undef );
+has controlURL   => ( is => 'lazy', init_arg => undef );
+has eventSubURL  => ( is => 'lazy', init_arg => undef );
+has SCPDURL      => ( is => 'lazy', init_arg => undef );
 
-use constant ATTRIBUTES => qw(
-serviceType
-serviceId
-controlURL
-eventSubURL
-SCPDURL
-);
-
-for my $attr (ATTRIBUTES) {
-    has $attr => ( is => 'ro' );
+sub _build_serviceType {
+    my $self = shift;
+    return $self->_build_an_attribute('serviceType');
 }
 
-sub BUILD {
-    # FIXME convert this to lazy attributes - but how to generate them dynamically?
+sub _build_serviceId {
     my $self = shift;
+    return $self->_build_an_attribute('serviceId');
+}
 
+sub _build_controlURL {
+    my $self = shift;
+    return $self->_build_an_attribute('controlURL');
+}
+
+sub _build_eventSubURL {
+    my $self = shift;
+    return $self->_build_an_attribute('eventSubURL');
+}
+
+sub _build_SCPDURL {
+    my $self = shift;
+    return $self->_build_an_attribute('SCPDURL');
+}
+
+sub _build_an_attribute {
+    my $self = shift;
+    my $attr = shift;
     my $xml  = $self->xmltree;
 
-    for my $attr (ATTRIBUTES) {
-	if (exists $xml->{$attr}) {
-	    $self->{$attr} = $xml->{$attr}->[0];
-	}
+    if (exists $xml->{$attr}) {
+	return $attr = $xml->{$attr}->[0];
     }
+
+    return undef;
 }
 
 sub _build_scpd {
