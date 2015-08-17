@@ -43,11 +43,11 @@ object instead).
 
 =head2 error
 
-Is set to C<0> to pass any C<if($obj-E<gt>error) { ... }> checks.
+Returns an empty string to pass any C<if($obj-E<gt>error) { ... }> checks.
 
 =cut
 
-has error => ( is => 'ro', default => 0 );
+has error => ( is => 'ro', default => '' );
 
 =head1 METHODS
 
