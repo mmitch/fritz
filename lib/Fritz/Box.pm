@@ -68,4 +68,20 @@ sub dump {
     print "${indent}trdesc_path = " . $self->trdesc_path . "\n";
 }
 
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
+Licensed under GNU GPL v2 or later.
+
+=head1 AUTHOR
+
+Christian Garbs <mitch@cgarbs.de>
+
+=head1 SEE ALSO
+
+See L<Fritz> for general information about this package, especially
+L<Fritz/INTERFACE> for links to the other classes.
+
+=cut
+
 1;

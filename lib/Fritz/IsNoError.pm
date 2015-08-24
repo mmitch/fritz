@@ -60,18 +60,20 @@ A no-op, so calling C<$obj-E<gt>errorcheck> just succeeds and carries on.
 sub errorcheck {
 }
 
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
+Licensed under GNU GPL v2 or later.
+
+=head1 AUTHOR
+
+Christian Garbs <mitch@cgarbs.de>
+
+=head1 SEE ALSO
+
+See L<Fritz> for general information about this package, especially
+L<Fritz/INTERFACE> for links to the other classes.
+
+=cut
+
 1;
-
-__END__
-
-=head1 SUPPORT
-
-See L<Fritz> for support and contact information.
-
-=head1 AUTHORS
-
-See L<Fritz> for authors.
-
-=head1 COPYRIGHT AND LICENSE
-
-See L<Fritz> for the copyright and license.
