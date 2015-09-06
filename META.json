@@ -1,0 +1,65 @@
+{
+   "abstract" : "AVM Fritz!Box interaction via TR-064",
+   "author" : [
+      "Christian Garbs <mitch@cgarbs.de>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Fritz-Box",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.4"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Digest::MD5" : "0",
+            "LWP::UserAgent" : "0",
+            "Moo" : "0",
+            "SOAP::Lite" : "0",
+            "XML::Simple" : "0",
+            "namespace::clean" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "Fritz::Action" : {
+         "file" : "lib/Fritz/Action.pm",
+         "version" : 0
+      },
+      "Fritz::Box" : {
+         "file" : "lib/Fritz/Box.pm",
+         "version" : "v0.0.1"
+      },
+      "Fritz::Data" : {
+         "file" : "lib/Fritz/Data.pm",
+         "version" : 0
+      },
+      "Fritz::Device" : {
+         "file" : "lib/Fritz/Device.pm",
+         "version" : 0
+      },
+      "Fritz::Error" : {
+         "file" : "lib/Fritz/Error.pm",
+         "version" : 0
+      },
+      "Fritz::IsNoError" : {
+         "file" : "lib/Fritz/IsNoError.pm",
+         "version" : 0
+      },
+      "Fritz::Service" : {
+         "file" : "lib/Fritz/Service.pm",
+         "version" : 0
+      }
+   },
+   "release_status" : "stable",
+   "version" : "v0.0.1"
+}

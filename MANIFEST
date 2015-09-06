@@ -1,0 +1,20 @@
+Build.PL
+lib/Fritz.pm
+lib/Fritz/Action.pm
+lib/Fritz/Box.pm
+lib/Fritz/Data.pm
+lib/Fritz/Device.pm
+lib/Fritz/Error.pm
+lib/Fritz/IsNoError.pm
+lib/Fritz/Service.pm
+MANIFEST			This list of files
+META.yml
+META.json
+README
+t/00.load.t
+t/fritz-ssl.t
+t/fritz.t
+t/perlcritic.t
+t/pod-coverage.t
+t/pod.t
+META.json
