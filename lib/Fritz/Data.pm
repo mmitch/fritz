@@ -9,7 +9,70 @@ use namespace::clean;
 
 with 'Fritz::IsNoError';
 
+=head1 NAME
+
+Fritz::Data - wraps response data from a L<Fritz::Service> call
+
+=head1 SYNOPSIS
+
+    my $fritz    = Fritz::Box->new();
+    my $device   = $fritz->discover();
+    my $service  = $device->find_service('DeviceInfo:1');
+    my $response = $service->call('GetSecurityPort');
+
+    # $response is Fritz::Data
+
+    printf "SSL communication port is %d\n",
+           $response->data->{NewSecurityPort};
+
+=head1 DESCRIPTION
+
+This class wraps the return data from a L<Fritz::Service> call.  This
+is only done for consistent error checks: L<Fritz::Data>
+USES/CONSUMES/WHADDYACALLIT the role L<Fritz::IsNoError>, so it is
+possible to check for errors during the service call with
+C<$response-E<gt>error> and C<$response-E<gt>errorcheck> (see
+L<Fritz::Error> for details).
+
+Apart from that the response data from the service call is passed
+through unaltered, so you have to know with which data type the
+services answers.
+
+=head1 ATTRIBUTES (read-only)
+
+=head2 data
+
+Returns the response data of the service call.  For lists and hashes,
+this will be a reference.
+
+=cut
+
 has data => ( is => 'ro' );
+
+=head2 error
+
+See L<Fritz::IsNoError/error>.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new L<Fritz::Data> object.  You propably don't have to call
+this method, it's mostly used internally.  Expects parameters in C<key
+=E<gt> value> form with the following keys:
+
+=over
+
+=item I<data>
+
+set the data to hold
+
+=back
+
+With only one parameter (in fact: any odd value of parameters), the
+first parameter is automatically mapped to I<data>.
+
+=cut
 
 # prepend 'data => ' when called without hash
 # (when called with uneven list)
@@ -21,11 +84,24 @@ sub BUILDARGS {
     return { @args };
 };
 
+=head2 get
+
+Kind of an alias for C<$response->data>: Returns the L<data|/data> attribute.
+
+=cut
+
 sub get {
     my $self = shift;
 
     return $self->data;
 }
+
+=head2 dump
+
+C<print()> some information about the object.  Useful for debugging
+purposes.  An optional parameter is used for indentation of the output.
+
+=cut
 
 sub dump {
     my $self = shift;
@@ -38,6 +114,10 @@ sub dump {
     print $self->data . "\n";
     print "------------\n";
 }
+
+=head2 errorcheck
+
+See L<Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 

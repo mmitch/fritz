@@ -95,7 +95,7 @@ sub errorcheck {
 
 =head2 dump
 
-C<print()> some information about the object.  Used for debugging
+C<print()> some information about the object.  Useful for debugging
 purposes.
 
 =cut

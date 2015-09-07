@@ -1,3 +1,7 @@
+package Fritz;
+use strict;
+use warnings;
+
 =head1 NAME
 
 Fritz - AVM Fritz!Box interaction via TR-064
@@ -85,6 +89,19 @@ Fritz!Box configuration.  If you want to call the VoIP services, it
 needs that permission as well.  Then use the I<username> and
 I<password> parameters to C<Fritz::Box->new()>.
 
+=head1 BUGS AND LIMITATIONS
+
+=head2 SSL
+
+A Fritz!Box does not generate 'valid' SSL certificates but self-signed
+ones.  Depending on your Perl setup, this will result in errors like
+C<certificate verification failed> when trying to discover
+L<Fritz::Device>s or L<Fritz::Service>s.  L<Fritz::Box> tries to set
+up a L<LWP::UserAgent> instance that ignores certificate errors, but
+more often than not this fails.  (Currently, this might even fail one
+time and work the next I<on the same system>!  Don't know what's going
+on there.)
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
@@ -111,3 +128,5 @@ Christian Garbs <mitch@cgarbs.de>
 L<AVM interface documentation|http://avm.de/service/schnittstellen/>
 
 =cut
+
+1;
