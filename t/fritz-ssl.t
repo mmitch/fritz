@@ -3,28 +3,31 @@ use Test::More;
 use warnings;
 use strict;
 
-BEGIN { use_ok ('Fritz::Box'); }
+use Fritz::Box;
+
+# check if a Fritz!Box is available - otherwise skip
+
+if (my $error = Fritz::Box->new()->discover->error) {
+    plan skip_all => 'no device found, further tests skipped: ' . $error;
+} else {
+    plan tests => 21;
+}
 
 # get normal port
 my $fritz = new_ok( 'Fritz::Box' );
+is( $fritz->error, '', 'get Fritz::Box instance');
 isa_ok( $fritz, 'Fritz::Box' );
-is( $fritz->error, 0, 'get Fritz::Box instance');
 
 my $device = $fritz->discover();
-if ($device->error) {
-    plan skip_all => 'no device found, further tests skipped: ' . $device->error;
-}
-else {
-    plan tests => 20;
-}
+is( $device->error, '', 'get Fritz::Device instance');
 isa_ok( $device, 'Fritz::Device' );
 
 my $service = $device->find_service('DeviceInfo:1');
-is( $service->error, 0, 'get DeviceInfo service');
+is( $service->error, '', 'get DeviceInfo service');
 isa_ok( $service, 'Fritz::Service' );
 
 my $response = $service->call('GetSecurityPort');
-is( $response->error, 0, 'call CatSecurityPort');
+is( $response->error, '', 'call CatSecurityPort');
 isa_ok( $response, 'Fritz::Data' );
 
 my $port = $response->data->{NewSecurityPort};
@@ -37,18 +40,19 @@ $upnp_url =~ s/http:/https:/;
 $upnp_url =~ s/:49000/:$port/;
 
 my $fritz_ssl = new_ok( 'Fritz::Box' => [ upnp_url => $upnp_url ] );
-is ($fritz_ssl->error, 0, 'get Fritz::Box instance for SSL');
+is ($fritz_ssl->error, '', 'get Fritz::Box instance for SSL');
+isa_ok( $fritz_ssl, 'Fritz::Box' );
 
 my $device_ssl = $fritz_ssl->discover();
-is( $device_ssl->error, 0, 'get Fritz::Device');
+is( $device_ssl->error, '', 'get Fritz::Device');
 isa_ok( $device_ssl, 'Fritz::Device' );
 
 my $service_ssl = $device_ssl->find_service('DeviceInfo:1');
-is( $service_ssl->error, 0, 'get DeviceInfo service via SSL');
+is( $service_ssl->error, '', 'get DeviceInfo service via SSL');
 isa_ok( $service_ssl, 'Fritz::Service' );
 
 my $response_ssl = $service_ssl->call('GetSecurityPort');
-is( $response_ssl->error, 0, 'call CatSecurityPort via SSL');
+is( $response_ssl->error, '', 'call CatSecurityPort via SSL');
 isa_ok( $response, 'Fritz::Data' );
 
 my $port_ssl = $response_ssl->data->{NewSecurityPort};
