@@ -40,7 +40,20 @@ my $d = $f->discover();
 #print "\n\n";
 
 if (1 == 1) {
-    # get call list
+    # get DSL information (CRC, data rates, ...)
+    my $service = $d->find_service(':WANDSLInterfaceConfig:');
+    $service->errorcheck;
+    foreach my $action (keys %{$service->action_hash}) {
+	if ($action =~ /^Get/) {
+	    print "$action:\n";
+	    my $response = $service->call($action);
+	    print Dumper($response->data) . "\n";
+	}
+    }
+}
+
+if (1 == 1) {
+    # get VCC configuration and ATM statistics
     my $service = $d->find_service(':WANDSLLinkConfig:');
     $service->errorcheck;
     foreach my $action (keys %{$service->action_hash}) {
