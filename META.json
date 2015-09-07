@@ -3,8 +3,8 @@
    "author" : [
       "Christian Garbs <mitch@cgarbs.de>"
    ],
-   "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Build version 0.421",
    "license" : [
       "unknown"
    ],
@@ -16,7 +16,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.4"
+            "Module::Build" : 0.4
          }
       },
       "runtime" : {
@@ -28,12 +28,18 @@
             "XML::Simple" : "0",
             "namespace::clean" : "0"
          }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0",
+            "Test::Perl::Critic" : "0"
+         }
       }
    },
    "provides" : {
       "Fritz::Action" : {
          "file" : "lib/Fritz/Action.pm",
-         "version" : 0
+         "version" : "0"
       },
       "Fritz::Box" : {
          "file" : "lib/Fritz/Box.pm",
@@ -41,23 +47,23 @@
       },
       "Fritz::Data" : {
          "file" : "lib/Fritz/Data.pm",
-         "version" : 0
+         "version" : "0"
       },
       "Fritz::Device" : {
          "file" : "lib/Fritz/Device.pm",
-         "version" : 0
+         "version" : "0"
       },
       "Fritz::Error" : {
          "file" : "lib/Fritz/Error.pm",
-         "version" : 0
+         "version" : "0"
       },
       "Fritz::IsNoError" : {
          "file" : "lib/Fritz/IsNoError.pm",
-         "version" : 0
+         "version" : "0"
       },
       "Fritz::Service" : {
          "file" : "lib/Fritz/Service.pm",
-         "version" : 0
+         "version" : "0"
       }
    },
    "release_status" : "stable",
