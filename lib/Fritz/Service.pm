@@ -56,11 +56,13 @@ sub _build_an_attribute {
     my $attr = shift;
     my $xml  = $self->xmltree;
 
+    my $val;
+
     if (exists $xml->{$attr}) {
-	return $attr = $xml->{$attr}->[0];
+	$val = $xml->{$attr}->[0];
     }
 
-    return undef;
+    return $val;
 }
 
 sub _build_scpd {
