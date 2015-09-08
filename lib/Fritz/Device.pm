@@ -224,7 +224,7 @@ sub get_service {
     }
 
     foreach my $device (@{$self->device_list}) {
-	my $service = $device->find_service($type);
+	my $service = $device->get_service($type);
 	if (! $service->error) {
 	    return $service;
 	}
