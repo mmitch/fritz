@@ -11,7 +11,7 @@ with 'Fritz::IsNoError';
 
 =head1 NAME
 
-Fritz::Data - wraps response data from a L<Fritz::Service> call
+Fritz::Data - wraps various response data 
 
 =head1 SYNOPSIS
 
@@ -21,9 +21,15 @@ Fritz::Data - wraps response data from a L<Fritz::Service> call
     my $response = $service->call('GetSecurityPort');
 
     # $response is Fritz::Data
-
     printf "SSL communication port is %d\n",
            $response->data->{NewSecurityPort};
+
+
+    my $service_list = $device->find_service_names('DeviceInfo:1');
+
+    # service_list is Fritz::Data
+    printf "%d services found\n",
+           scalar @{$service_list->data};
 
 =head1 DESCRIPTION
 
@@ -37,6 +43,10 @@ L<Fritz::Error> for details).
 Apart from that the response data from the service call is passed
 through unaltered, so you have to know with which data type the
 services answers.
+
+This wrapper class is also used in some other methods that return
+things that need to be error-checkable, like
+L<Fritz::Device/find_service_names>.
 
 =head1 ATTRIBUTES (read-only)
 
@@ -96,10 +106,11 @@ sub get {
     return $self->data;
 }
 
-=head2 dump
+=head2 dump(I<indent>)
 
 C<print()> some information about the object.  Useful for debugging
-purposes.  An optional parameter is used for indentation of the output.
+purposes.  The optional parameter I<indent> is used for indentation of
+the output by prepending it to every line.
 
 =cut
 

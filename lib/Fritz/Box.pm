@@ -163,10 +163,11 @@ sub discover {
     }
 }
 
-=head2 dump
+=head2 dump(I<indent>)
 
 C<print()> some information about the object.  Useful for debugging
-purposes.  An optional parameter is used for indentation of the output.
+purposes.  The optional parameter I<indent> is used for indentation of
+the output by prepending it to every line.
 
 =cut
 
