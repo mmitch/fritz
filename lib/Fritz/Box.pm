@@ -117,6 +117,10 @@ sub _build__ua {
     return $ua;
 }
 
+=head2 error
+
+See L<Fritz::IsNoError/error>.
+
 =head1 METHODS
 
 =head2 new
@@ -168,6 +172,10 @@ sub discover {
 C<print()> some information about the object.  Useful for debugging
 purposes.  The optional parameter I<indent> is used for indentation of
 the output by prepending it to every line.
+
+=head2 errorcheck
+
+See L<Fritz::IsNoError/errorcheck>.
 
 =cut
 

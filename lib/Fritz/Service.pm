@@ -15,41 +15,49 @@ use namespace::clean;
 
 with 'Fritz::IsNoError';
 
+=head1 NAME
+
+Fritz::Service - represents a TR064 service
+
+=head1 SYNOPSIS
+
+    my $fritz    = Fritz::Box->new();
+    my $device   = $fritz->discover();
+    my $service  = $device->get_service('DeviceInfo:1');
+
+    # call an action
+    my $response = $service->call('GetSecurityPort');
+
+    # show all data
+    $service->dump();
+
+=head1 DESCRIPTION
+
+This class represents a TR064 service belonging to a L<Fritz::Device>.
+A service consists of one or more L<Fritz::Action>s that interact with
+the underlying device.
+
+=head1 ATTRIBUTES (read-only)
+
+=head2 fritz
+
+A L<Fritz::Box> instance containing the current configuration
+information (device address, authentication etc.).
+
+=cut
+
 has fritz        => ( is => 'ro' );
+
+=head2 xmltree
+
+A complex hashref containing most information about this
+L<Fritz::Service>.  This is the parsed form of the TR064 XML which
+describes the service.  It contains nearly all information besides
+L</fritz> and L</scpd>.
+
+=cut
+
 has xmltree      => ( is => 'ro' );
-
-has scpd         => ( is => 'lazy', init_arg => undef );
-has action_hash  => ( is => 'lazy', init_arg => undef );
-has serviceType  => ( is => 'lazy', init_arg => undef );
-has serviceId    => ( is => 'lazy', init_arg => undef );
-has controlURL   => ( is => 'lazy', init_arg => undef );
-has eventSubURL  => ( is => 'lazy', init_arg => undef );
-has SCPDURL      => ( is => 'lazy', init_arg => undef );
-
-sub _build_serviceType {
-    my $self = shift;
-    return $self->_build_an_attribute('serviceType');
-}
-
-sub _build_serviceId {
-    my $self = shift;
-    return $self->_build_an_attribute('serviceId');
-}
-
-sub _build_controlURL {
-    my $self = shift;
-    return $self->_build_an_attribute('controlURL');
-}
-
-sub _build_eventSubURL {
-    my $self = shift;
-    return $self->_build_an_attribute('eventSubURL');
-}
-
-sub _build_SCPDURL {
-    my $self = shift;
-    return $self->_build_an_attribute('SCPDURL');
-}
 
 sub _build_an_attribute {
     my $self = shift;
@@ -64,6 +72,16 @@ sub _build_an_attribute {
 
     return $val;
 }
+
+=head2 scpd
+
+A complex hashref containing all information about this
+L<Fritz::Service>.  This is the parsed form of the XML available at
+L</SCPDURL> which describes the service and its L<Fritz::Action>s.
+
+=cut
+
+has scpd         => ( is => 'lazy', init_arg => undef );
 
 sub _build_scpd {
     my $self = shift;
@@ -81,6 +99,15 @@ sub _build_scpd {
 	return Fritz::Error->new($response->status_line);
     }
 }
+
+=head2 action_hash
+
+A hashref containing all L<Fritz::Action>s of this service indexed by
+their L<Fritz::Action/name>.
+
+=cut
+
+has action_hash  => ( is => 'lazy', init_arg => undef );
 
 sub _build_action_hash {
     my $self = shift;
@@ -103,6 +130,111 @@ sub _build_action_hash {
 	return $hash;
     }
 }
+
+=head2
+
+The I<serviceType> (string) of this service which is used by
+L<Fritz::Device> to look up services.
+
+=cut
+
+has serviceType  => ( is => 'lazy', init_arg => undef );
+
+sub _build_serviceType {
+    my $self = shift;
+    return $self->_build_an_attribute('serviceType');
+}
+
+=head2
+
+The I<serviceId> (string) of this service.
+
+=cut
+
+has serviceId    => ( is => 'lazy', init_arg => undef );
+
+sub _build_serviceId {
+    my $self = shift;
+    return $self->_build_an_attribute('serviceId');
+}
+
+=head2
+
+The I<controlURL> (URL string) of this service which is needed to
+L</call> any L<Fritz::Action>s of this serice.
+
+=cut
+
+has controlURL   => ( is => 'lazy', init_arg => undef );
+
+sub _build_controlURL {
+    my $self = shift;
+    return $self->_build_an_attribute('controlURL');
+}
+
+=head2
+
+The I<eventSubURL> (URL string) of this service for subscribing to or
+unsubscribing from events.
+
+=cut
+
+has eventSubURL  => ( is => 'lazy', init_arg => undef );
+
+sub _build_eventSubURL {
+    my $self = shift;
+    return $self->_build_an_attribute('eventSubURL');
+}
+
+=head2
+
+The URL of the SCPD file of this service where most of the other
+attributes are read from.
+
+=cut
+
+has SCPDURL      => ( is => 'lazy', init_arg => undef );
+
+sub _build_SCPDURL {
+    my $self = shift;
+    return $self->_build_an_attribute('SCPDURL');
+}
+
+=head2 error
+
+See L<Fritz::IsNoError/error>.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new L<Fritz::Service> object.  You propably don't have to call
+this method, it's mostly used internally.  Expects parameters in C<key
+=E<gt> value> form with the following keys:
+
+=over
+
+=item I<fritz>
+
+L<Fritz::Box> configuration object
+
+=item I<xmltree>
+
+service information in parsed XML format
+
+=back
+
+=head2 call(I<action_name [I<parameter> => I<value>] [...])
+
+Calls the L<Fritz::Action> named I<action_name> of this service.
+Response data from the service call is wrapped as L<Fritz::Data>.  If
+the action expects parameters, they must be passed as key=L<gt>value
+pairs.
+
+If no matching action is found, the parameters don't match the action
+or any other error occurs, a L<Fritz::Error> is returned.
+
+=cut
 
 sub call {
     my $self      = shift;
@@ -193,26 +325,6 @@ sub call {
     }
 }
 
-sub dump {
-    my $self = shift;
-
-    my $indent = shift;
-    $indent = '' unless defined $indent;
-
-    print "${indent}Fritz::Service:\n";
-    print "${indent}serviceType     = " . $self->serviceType . "\n";
-    print "${indent}controlURL      = " . $self->controlURL  . "\n";
-    print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
-
-    if ($self->action_hash) {
-	print "${indent}actions         = {\n";
-	foreach my $action (values %{$self->action_hash}) {
-	    $action->dump($indent . '  ');
-	}
-	print "${indent}}\n";
-    }
-}
-
 sub _get_initial_auth {
     my $self = shift;
 
@@ -275,6 +387,41 @@ sub _hash_check {
 
     return Fritz::Data->new();
 }
+
+=head2 dump(I<indent>)
+
+C<print()> some information about the object.  Useful for debugging
+purposes.  The optional parameter I<indent> is used for indentation of
+the output by prepending it to every line.
+
+Recursively descends into actions, so dumping a service also shows all
+its actions as well.
+
+=cut
+
+sub dump {
+    my $self = shift;
+
+    my $indent = shift;
+    $indent = '' unless defined $indent;
+
+    print "${indent}Fritz::Service:\n";
+    print "${indent}serviceType     = " . $self->serviceType . "\n";
+    print "${indent}controlURL      = " . $self->controlURL  . "\n";
+    print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
+
+    if ($self->action_hash) {
+	print "${indent}actions         = {\n";
+	foreach my $action (values %{$self->action_hash}) {
+	    $action->dump($indent . '  ');
+	}
+	print "${indent}}\n";
+    }
+}
+
+=head2 errorcheck
+
+See L<Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 

@@ -55,8 +55,8 @@ has fritz        => ( is => 'ro' );
 =head2 xmltree
 
 A complex hashref containing all information about this
-L<Fritz::Device>.  This is the parsed form of the XML which describes
-the device.
+L<Fritz::Device>.  This is the parsed form of the TR064 XML which
+describes the device, it's subdevices and L<Fritz::Service>s.
 
 =cut
 
@@ -372,6 +372,10 @@ sub dump {
 	print "${indent}}\n";
     }
 }
+
+=head2 errorcheck
+
+See L<Fritz::IsNoError/errorcheck>.
 
 =head1 BUGS AND LIMITATIONS
 

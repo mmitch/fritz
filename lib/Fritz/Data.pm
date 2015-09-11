@@ -34,11 +34,10 @@ Fritz::Data - wraps various response data
 =head1 DESCRIPTION
 
 This class wraps the return data from a L<Fritz::Service> call.  This
-is only done for consistent error checks: L<Fritz::Data>
-USES/CONSUMES/WHADDYACALLIT the role L<Fritz::IsNoError>, so it is
-possible to check for errors during the service call with
-C<$response-E<gt>error> and C<$response-E<gt>errorcheck> (see
-L<Fritz::Error> for details).
+is only done for consistent error checks: L<Fritz::Data> does the role
+L<Fritz::IsNoError>, so it is possible to check for errors during the
+service call with C<$response-E<gt>error> and
+C<$response-E<gt>errorcheck> (see L<Fritz::Error> for details).
 
 Apart from that the response data from the service call is passed
 through unaltered, so you have to know with which data type the

@@ -102,6 +102,12 @@ more often than not this fails.  (Currently, this might even fail one
 time and work the next I<on the same system>!  Don't know what's going
 on there.)
 
+=head2 event subscriptions
+
+Apart from exposing the L<eventSubURL|Fritz::Service/eventSubURL> of a
+L<Fritz::Service> there is currently no support for event
+subscriptions.
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
