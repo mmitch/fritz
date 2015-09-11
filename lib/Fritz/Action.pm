@@ -19,24 +19,16 @@ Fritz::Action - represents a TR064 action
     my $action   = $device->action_hash('GetSecurityPort');
 
     # show all data
-    $service->dump();
+    $action->dump();
 
 =head1 DESCRIPTION
 
 This class represents a TR064 action belonging to a L<Fritz::Service>.
-An action is a rather boring object containing some data on parameters.
-To call (execute) an action, use L<Fritz::Service/call>.
+An action is a rather boring object containing the input/output
+parameter names as well as the action name.  To call (execute) an
+action, use L<Fritz::Service/call>.
 
 =head1 ATTRIBUTES (read-only)
-
-=head2 fritz
-
-A L<Fritz::Box> instance containing the current configuration
-information (device address, authentication etc.).
-
-=cut
-
-has fritz        => ( is => 'ro' );
 
 =head2 xmltree
 
@@ -122,10 +114,6 @@ this method, it's mostly used internally.  Expects parameters in C<key
 =E<gt> value> form with the following keys:
 
 =over
-
-=item I<fritz>
-
-L<Fritz::Box> configuration object
 
 =item I<xmltree>
 
