@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<root xmlns="urn:dslforum-org:device-1-0">
+  <device>
+    <deviceType>FakeDevice:1</deviceType>
+    <friendlyName>UnitTest Unit</friendlyName>
+    <manufacturer>fake</manufacturer>
+    <manufacturerURL>example.org</manufacturerURL>
+    <modelDescription>fake model description</modelDescription>
+    <modelName>fake model name</modelName>
+    <modelNumber>fake model number</modelNumber>
+    <modelURL>example.org</modelURL>
+    <serviceList>
+      <service>
+	<serviceType>fakeService:1</serviceType>
+	<serviceId>fakeService1</serviceId>
+	<controlURL>/upnp/control/deviceinfo</controlURL>
+	<eventSubURL>/upnp/control/deviceinfo</eventSubURL>
+	<SCPDURL>/fakeSCPD.xml</SCPDURL>
+      </service>
+    </serviceList>
+    <deviceList>
+      <device>
+	<deviceType>FakeSubDevice:1</deviceType>
+	<friendlyName>UnitTest Unit Subdevice</friendlyName>
+	<manufacturer>fake</manufacturer>
+	<manufacturerURL>example.org</manufacturerURL>
+	<modelDescription>fake model description - subdevice</modelDescription>
+	<modelName>fake model name - subdevice</modelName>
+	<modelNumber>fake model number - subdevice</modelNumber>
+	<modelURL>example.org</modelURL>
+	<serviceList>
+	  <service>
+	    <serviceType>fakeService:1</serviceType>
+	    <serviceId>fakeService2</serviceId>
+	    <controlURL>/upnp/control/deviceinfo</controlURL>
+	    <eventSubURL>/upnp/control/deviceinfo</eventSubURL>
+	    <SCPDURL>/fakeSCPD.xml</SCPDURL>
+	  </service>
+	</serviceList>
+      </device>
+    </deviceList>
+    <presentationURL>http://localhost</presentationURL>
+  </device>
+</root>
