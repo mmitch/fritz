@@ -31,4 +31,4 @@ is( $response->error, '', 'call CatSecurityPort');
 isa_ok( $response, 'Fritz::Data' );
 
 my $port = $response->data->{NewSecurityPort};
-ok( $port > 0, 'get port number');
+cmp_ok( $port,  '>', 0, 'get port number');

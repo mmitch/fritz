@@ -28,7 +28,7 @@ my $response = $service->call('GetSecurityPort');
 is( $response->error, '', 'call CatSecurityPort');
 
 my $port = $response->data->{NewSecurityPort};
-ok( $port > 0, 'get port number');
+cmp_ok( $port, '>', 0, 'get port number');
 
 
 # now use the port to call the same service via SSL
@@ -53,6 +53,6 @@ is( $response_ssl->error, '', 'call CatSecurityPort via SSL');
 isa_ok( $response, 'Fritz::Data' );
 
 my $port_ssl = $response_ssl->data->{NewSecurityPort};
-ok( $port_ssl > 0, 'get port number');
+cmp_ok( $port_ssl, '>', 0, 'get port number');
 
 is( $port, $port_ssl, 'port number comparison');
