@@ -62,7 +62,7 @@ describes the device, it's subdevices and L<Fritz::Service>s.
 
 has xmltree      => ( is => 'ro' );
 
-=head2
+=head2 service_list
 
 An arrayref of all L<Fritz::Service>s that are available on this
 device.
@@ -88,7 +88,7 @@ sub _build_service_list {
     return \@services;
 }
 
-=head2
+=head2 device_list
 
 An arrayref of all subdevices (L<Fritz::Device>) that are available on
 this device.
@@ -114,7 +114,7 @@ sub _build_device_list {
     return \@devices;
 }
 
-=head2
+=head2 attributes
 
 A hashref that contains the most important information from the XML
 device description.  This allows easier access than via L</xmltree>.
