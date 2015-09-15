@@ -4,18 +4,19 @@
     <deviceType>FakeDevice:1</deviceType>
     <friendlyName>UnitTest Unit</friendlyName>
     <manufacturer>fake</manufacturer>
-    <manufacturerURL>example.org</manufacturerURL>
+    <manufacturerURL>http://example.org/1</manufacturerURL>
     <modelDescription>fake model description</modelDescription>
     <modelName>fake model name</modelName>
     <modelNumber>fake model number</modelNumber>
-    <modelURL>example.org</modelURL>
+    <modelURL>http://example.org/2</modelURL>
+    <UDN>uuid:1</UDN>
     <serviceList>
       <service>
-	<serviceType>fakeService:1</serviceType>
+	<serviceType>FakeService:1</serviceType>
 	<serviceId>fakeService1</serviceId>
 	<controlURL>/upnp/control/deviceinfo</controlURL>
 	<eventSubURL>/upnp/control/deviceinfo</eventSubURL>
-	<SCPDURL>/fakeSCPD.xml</SCPDURL>
+	<SCPDURL>fakeSCPD.xml</SCPDURL>
       </service>
     </serviceList>
     <deviceList>
@@ -23,18 +24,19 @@
 	<deviceType>FakeSubDevice:1</deviceType>
 	<friendlyName>UnitTest Unit Subdevice</friendlyName>
 	<manufacturer>fake</manufacturer>
-	<manufacturerURL>example.org</manufacturerURL>
+	<manufacturerURL>http://example.org/3</manufacturerURL>
 	<modelDescription>fake model description - subdevice</modelDescription>
 	<modelName>fake model name - subdevice</modelName>
 	<modelNumber>fake model number - subdevice</modelNumber>
-	<modelURL>example.org</modelURL>
+	<modelURL>http://example.org/4</modelURL>
+	<UDN>uuid:2</UDN>
 	<serviceList>
 	  <service>
-	    <serviceType>fakeService:1</serviceType>
+	    <serviceType>FakeService:1</serviceType>
 	    <serviceId>fakeService2</serviceId>
 	    <controlURL>/upnp/control/deviceinfo</controlURL>
 	    <eventSubURL>/upnp/control/deviceinfo</eventSubURL>
-	    <SCPDURL>/fakeSCPD.xml</SCPDURL>
+	    <SCPDURL>fakeSCPD.xml</SCPDURL>
 	  </service>
 	</serviceList>
       </device>
