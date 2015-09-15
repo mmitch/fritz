@@ -286,14 +286,14 @@ sub find_service_names {
 
     foreach my $service (@{$self->service_list}) {
 	if ($service->serviceType =~ /$type/) {
-	    push @found, $service->serviceType;
+	    push @found, $service;
 	}
     }
 
     foreach my $device (@{$self->device_list}) {
 	my $data = $device->find_service_names($type);
 	if (! $data->error) {
-	    push @found, @{$data->raw};
+	    push @found, @{$data->data};
 	}
     }
 
