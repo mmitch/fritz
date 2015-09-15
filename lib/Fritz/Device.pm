@@ -318,7 +318,7 @@ sub find_device {
     my $type = shift;
 
     foreach my $device (@{$self->device_list}) {
-	if ($device->deviceType eq $type) {
+	if ($device->attributes->{deviceType} eq $type) {
 	    return $device;
 	}
     }
@@ -330,7 +330,7 @@ sub find_device {
 	}
     }
     
-    return Fritz::Error( error => 'device not found' );
+    return Fritz::Error->new( 'device not found' );
 }
 
 =head2 dump(I<indent>)
