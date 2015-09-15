@@ -1,4 +1,5 @@
 Build.PL
+Changes
 lib/Fritz.pm
 lib/Fritz/Action.pm
 lib/Fritz/Box.pm
