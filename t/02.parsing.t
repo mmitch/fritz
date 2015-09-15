@@ -151,19 +151,13 @@ for my $var (keys %service_vars) {
     is( $service->$var, $service_vars{$var}, "check $var" );
 }
 
-TODO : {
-
-    todo_skip 'this test does not work yet, getting the local SCPD file seems tricky', 2;
-    
-    ### overwrite SCPDURL with location of test file
-    ### this is kind of horrible, but we need some introspecty things :/
-    $service->{SCPDURL} = 'file://' . $scpd_file;
-    my %actions = %{$service->action_hash};
-    is ( scalar keys %actions, 1, 'action count' );
-    my $action = (values %actions)[0];
-    isa_ok( $action, 'Fritz::Action', 'action type' );
-    
-}
+# overwrite SCPDURL with location of test file!
+$service->_set_SCPDURL($scpd_file);
+my %actions = %{$service->action_hash};
+is ( scalar keys %actions, 1, 'action count' );
+my $action = (values %actions)[0];
+isa_ok( $action, 'Fritz::Action', 'action type' );
+## TODO: more tests
 
 # check service on subdevice
 note('=== check service on subdevice');
@@ -178,3 +172,5 @@ $service = $subdevice->get_service('FakeService:1');
 for my $var (keys %service_vars) {
     is( $service->$var, $service_vars{$var}, "check $var" );
 }
+
+## TODO: Action tests
