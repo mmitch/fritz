@@ -3,10 +3,10 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name         => 'Fritz::Box',
+    module_name         => 'Fritz',
     dist_license        => 'gpl_2',
     dist_author         => 'Christian Garbs <mitch@cgarbs.de>',
-    dist_version_from   => 'lib/Fritz/Box.pm',
+    dist_version_from   => 'lib/Fritz.pm',
     dist_abstract       => 'AVM Fritz!Box interaction via TR-064',
     configure_requires => {
 	'Module::Build' => 0.40,
@@ -23,7 +23,7 @@ my $builder = Module::Build->new(
 	'Test::More'         => 0,
 	'Test::Perl::Critic' => 0,
     },
-    add_to_cleanup      => [ 'Fritz-Box-*' ],
+    add_to_cleanup      => [ 'Fritz-*' ],
 );
 
 $builder->create_build_script();

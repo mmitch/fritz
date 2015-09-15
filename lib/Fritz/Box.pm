@@ -11,8 +11,6 @@ use Fritz::Device;
 use Moo;
 use namespace::clean;
 
-use version; our $VERSION = qv('0.0.1');
-
 with 'Fritz::IsNoError';
 
 =head1 NAME

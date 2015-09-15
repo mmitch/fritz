@@ -1,7 +1,7 @@
 use Test::More tests => 1;
 
 BEGIN {
-use_ok( 'Fritz::Box' );
+use_ok( 'Fritz' );
 }
 
-diag( "Testing Fritz::Box $Fritz::Box::VERSION" );
+diag( "Testing Fritz $Fritz::VERSION" );

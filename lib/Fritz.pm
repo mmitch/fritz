@@ -2,13 +2,15 @@ package Fritz;
 use strict;
 use warnings;
 
+use version; our $VERSION = qv('v0.0.1');
+
 =head1 NAME
 
 Fritz - AVM Fritz!Box interaction via TR-064
 
 =head1 VERSION
 
-0.0.1
+v0.0.1
 
 =head1 SYNOPSIS
 
