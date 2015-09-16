@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 65;
+use Test::More tests => 77;
 use warnings;
 use strict;
 
@@ -151,13 +151,20 @@ for my $var (keys %service_vars) {
     is( $service->$var, $service_vars{$var}, "check $var" );
 }
 
-# overwrite SCPDURL with location of test file!
-$service->_set_SCPDURL($scpd_file);
+$service->_set_SCPDURL($scpd_file); # overwrite SCPDURL with computed location of test file
+
 my %actions = %{$service->action_hash};
-is ( scalar keys %actions, 1, 'action count' );
+is( scalar keys %actions, 1, 'action count' );
 my $action = (values %actions)[0];
 isa_ok( $action, 'Fritz::Action', 'action type' );
-## TODO: more tests
+is( $action->name, 'SomeService', 'action name' );
+my @args = @{$action->args_in};
+is( scalar @args, 1, 'args_in count' );
+is( $args[0], 'InputArgument', 'args_in[0] name' );
+@args = @{$action->args_out};
+is( scalar @args, 1, 'args_out count' );
+is( $args[0], 'OutputArgument', 'args_out[0] name' );
+
 
 # check service on subdevice
 note('=== check service on subdevice');
@@ -173,4 +180,16 @@ for my $var (keys %service_vars) {
     is( $service->$var, $service_vars{$var}, "check $var" );
 }
 
-## TODO: Action tests
+$service->_set_SCPDURL($scpd_file); # overwrite SCPDURL with computed location of test file
+
+%actions = %{$service->action_hash};
+is( scalar keys %actions, 1, 'action count' );
+$action = (values %actions)[0];
+isa_ok( $action, 'Fritz::Action', 'action type' );
+is( $action->name, 'SomeService', 'action name' );
+@args = @{$action->args_in};
+is( scalar @args, 1, 'args_in count' );
+is( $args[0], 'InputArgument', 'args_in[0] name' );
+@args = @{$action->args_out};
+is( scalar @args, 1, 'args_out count' );
+is( $args[0], 'OutputArgument', 'args_out[0] name' );
