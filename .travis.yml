@@ -1,6 +1,18 @@
 language: perl
+
 perl:
   - "5.20"
   - "5.18"
   - "5.16"
   - "5.14"
+
+before_script:
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov
+
+script:
+  - perl Build.PL
+  - ./Build build
+  - cover -test
+
+after_success:
+  - cover -report codecov
