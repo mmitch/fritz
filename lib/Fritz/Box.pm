@@ -115,6 +115,17 @@ sub _build__ua {
     return $ua;
 }
 
+# internal SSL attributes for SOAP::Lite instances (lazy)
+has _sslopts      => ( is => 'lazy' );
+
+sub _build__sslopts {
+    my $self = shift;
+
+    # use the SSL options from the LWP::UserAgent instance
+    # copy ALL keys including undefined values
+    return [ map { $_ => $self->_ua->ssl_opts($_) } $self->_ua->ssl_opts ];
+}
+
 =head2 error
 
 See L<Fritz::IsNoError/error>.
