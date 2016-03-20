@@ -79,7 +79,7 @@ Sets the username to use for authentication against a device.
 
 =cut
 
-has username      => ( is => 'ro');
+has username      => ( is => 'ro' );
 
 =head2 password
 
@@ -89,7 +89,7 @@ Sets the password to use for authentication against a device.
 
 =cut
 
-has password      => ( is => 'ro');
+has password      => ( is => 'ro' );
 
 # internal XML::Simple instance (lazy)
 has _xs           => ( is => 'lazy', init_arg => undef );
@@ -100,7 +100,7 @@ sub _build__xs {
 
 # internal LWP::UserAgent instance (lazy)
 # overwriting the default might be handy for setting proxy variables or the like
-has _ua           => ( is => 'lazy');
+has _ua           => ( is => 'lazy' );
 
 sub _build__ua {
     # Depending on your SSL setup (propably which SSL modules LWP::UserAgent uses
