@@ -39,7 +39,7 @@ my $d = $f->discover();
 #$d->dump();
 #print "\n\n";
 
-if (1 == 1) {
+if (1 == 0) {
     # get DSL information (CRC, data rates, ...)
     my $service = $d->find_service(':WANDSLInterfaceConfig:');
     $service->errorcheck;
@@ -52,7 +52,7 @@ if (1 == 1) {
     }
 }
 
-if (1 == 1) {
+if (1 == 0) {
     # get VCC configuration and ATM statistics
     my $service = $d->find_service(':WANDSLLinkConfig:');
     $service->errorcheck;
@@ -88,7 +88,7 @@ if (1 == 0) {
     }
 }
 
-if (1 == 1) {
+if (1 == 0) {
     ## list all known hosts
     my $service = $d->find_service('Hosts:1');
     $service->errorcheck;
