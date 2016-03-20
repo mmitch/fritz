@@ -260,8 +260,9 @@ sub call {
 
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
+    my $ssl = [ map { $_ => $self->fritz->_ua->ssl_opts($_) } $self->fritz->_ua->ssl_opts ];
     my $soap = SOAP::Lite->new(
-	proxy    => [ $url, ssl_opts => [ $self->fritz->_ua->ssl_opts ] ], # copy SSL settings from Fritz::_ua LWP::UserAgent
+	proxy    => [ $url, ssl_opts => $ssl ], # copy SSL settings from Fritz::_ua LWP::UserAgent
 	uri      => $self->serviceType,
 	readable => 1, # TODO: remove this
 	);
