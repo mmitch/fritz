@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 21;
+use Test::More tests => 23;
 use warnings;
 use strict;
 
@@ -7,6 +7,9 @@ use Test::Mock::LWP::Dispatch;
 use HTTP::Response;
 
 BEGIN { use_ok('Fritz::Box') };
+
+
+### public tests
 
 # new()
 my $box = new_ok( 'Fritz::Box' );
@@ -52,6 +55,16 @@ $box->_ua->map('http://example.org:123/tr64', get_fake_device_response());
 isa_ok( $box->discover(), 'Fritz::Device' , 'get Fritz::Device on mocked connect with nonstandard URL' );
 
 
+### internal tests
+
+# _sslopts
+$box = new_ok( 'Fritz::Box' );
+is_deeply( [ sort keys { @{$box->_sslopts} } ], [ sort $box->_ua->ssl_opts ], 'SSL option keys' );
+
+# dump() #TODO
+
+
+### helper methods
 
 # prepare a fake device structure
 sub get_fake_device_response
