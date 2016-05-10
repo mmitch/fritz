@@ -9,7 +9,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Fritz.pm',
     dist_abstract       => 'AVM Fritz!Box interaction via TR-064',
     configure_requires => {
-	'Module::Build' => 0.40,
+	'Module::Build' => '0.4004',
     },
     requires => {
 	'Digest::MD5'      => 0,
