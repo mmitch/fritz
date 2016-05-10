@@ -3,39 +3,36 @@ abstract: 'AVM Fritz!Box interaction via TR-064'
 author:
   - 'Christian Garbs <mitch@cgarbs.de>'
 build_requires:
+  Test::Mock::LWP::Dispatch: '0'
   Test::More: '0'
   Test::Perl::Critic: '0'
 configure_requires:
-  Module::Build: '0.4'
-dynamic_config: 0
-generated_by: 'Module::Build version 0.421, CPAN::Meta::Converter version 2.142690'
+  Module::Build: '0.4004'
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4216, CPAN::Meta::Converter version 2.150005'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
-name: Fritz-Box
+name: Fritz
 provides:
+  Fritz:
+    file: lib/Fritz.pm
+    version: v0.0.1
   Fritz::Action:
     file: lib/Fritz/Action.pm
-    version: '0'
   Fritz::Box:
     file: lib/Fritz/Box.pm
-    version: v0.0.1
   Fritz::Data:
     file: lib/Fritz/Data.pm
-    version: '0'
   Fritz::Device:
     file: lib/Fritz/Device.pm
-    version: '0'
   Fritz::Error:
     file: lib/Fritz/Error.pm
-    version: '0'
   Fritz::IsNoError:
     file: lib/Fritz/IsNoError.pm
-    version: '0'
   Fritz::Service:
     file: lib/Fritz/Service.pm
-    version: '0'
 requires:
   Digest::MD5: '0'
   LWP::UserAgent: '0'
@@ -44,3 +41,4 @@ requires:
   XML::Simple: '0'
   namespace::clean: '0'
 version: v0.0.1
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

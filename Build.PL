@@ -20,10 +20,11 @@ my $builder = Module::Build->new(
 	'namespace::clean' => 0,
     },
     test_requires => {
-	'Test::More'         => 0,
-	'Test::Perl::Critic' => 0,
+	'Test::More'                => 0,
+	'Test::Perl::Critic'        => 0,
+	'Test::Mock::LWP::Dispatch' => 0,
     },
-    add_to_cleanup      => [ 'Fritz-*' ],
+    add_to_cleanup => [ 'Fritz-*' ],
 );
 
 $builder->create_build_script();

@@ -3,8 +3,8 @@
    "author" : [
       "Christian Garbs <mitch@cgarbs.de>"
    ],
-   "dynamic_config" : 0,
-   "generated_by" : "Module::Build version 0.421",
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4216",
    "license" : [
       "unknown"
    ],
@@ -12,11 +12,11 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "Fritz-Box",
+   "name" : "Fritz",
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build" : 0.4
+            "Module::Build" : "0.4004"
          }
       },
       "runtime" : {
@@ -31,41 +31,40 @@
       },
       "test" : {
          "requires" : {
+            "Test::Mock::LWP::Dispatch" : "0",
             "Test::More" : "0",
             "Test::Perl::Critic" : "0"
          }
       }
    },
    "provides" : {
-      "Fritz::Action" : {
-         "file" : "lib/Fritz/Action.pm",
-         "version" : "0"
-      },
-      "Fritz::Box" : {
-         "file" : "lib/Fritz/Box.pm",
+      "Fritz" : {
+         "file" : "lib/Fritz.pm",
          "version" : "v0.0.1"
       },
+      "Fritz::Action" : {
+         "file" : "lib/Fritz/Action.pm"
+      },
+      "Fritz::Box" : {
+         "file" : "lib/Fritz/Box.pm"
+      },
       "Fritz::Data" : {
-         "file" : "lib/Fritz/Data.pm",
-         "version" : "0"
+         "file" : "lib/Fritz/Data.pm"
       },
       "Fritz::Device" : {
-         "file" : "lib/Fritz/Device.pm",
-         "version" : "0"
+         "file" : "lib/Fritz/Device.pm"
       },
       "Fritz::Error" : {
-         "file" : "lib/Fritz/Error.pm",
-         "version" : "0"
+         "file" : "lib/Fritz/Error.pm"
       },
       "Fritz::IsNoError" : {
-         "file" : "lib/Fritz/IsNoError.pm",
-         "version" : "0"
+         "file" : "lib/Fritz/IsNoError.pm"
       },
       "Fritz::Service" : {
-         "file" : "lib/Fritz/Service.pm",
-         "version" : "0"
+         "file" : "lib/Fritz/Service.pm"
       }
    },
    "release_status" : "stable",
-   "version" : "v0.0.1"
+   "version" : "v0.0.1",
+   "x_serialization_backend" : "JSON::PP version 2.27300"
 }
