@@ -15,4 +15,4 @@ script:
   - cover -test
 
 after_success:
-  - [ $TRAVIS_PERL_VERSION = '5.20' ] && cover -report codecov
+  - test $TRAVIS_PERL_VERSION = '5.20' && cover -report codecov
