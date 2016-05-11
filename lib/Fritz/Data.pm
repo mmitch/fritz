@@ -107,9 +107,10 @@ sub get {
 
 =head2 dump(I<indent>)
 
-C<print()> some information about the object.  Useful for debugging
-purposes.  The optional parameter I<indent> is used for indentation of
-the output by prepending it to every line.
+Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter I<indent> is used for indentation of the output by
+prepending it to every line.
 
 =cut
 
@@ -119,10 +120,12 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    print "${indent}" . blessed( $self ) . ":\n";
-    print "${indent}----data----\n";
-    print $self->data . "\n";
-    print "------------\n";
+    my $text = "${indent}" . blessed( $self ) . ":\n";
+    $text .= "${indent}----data----\n";
+    $text .= $self->data . "\n";
+    $text .= "------------\n";
+
+    return $text;
 }
 
 =head2 errorcheck

@@ -178,13 +178,10 @@ sub discover {
 
 =head2 dump(I<indent>)
 
-C<print()> some information about the object.  Useful for debugging
-purposes.  The optional parameter I<indent> is used for indentation of
-the output by prepending it to every line.
-
-=head2 errorcheck
-
-See L<Fritz::IsNoError/errorcheck>.
+Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter I<indent> is used for indentation of the output by
+prepending it to every line.
 
 =cut
 
@@ -193,11 +190,17 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    print "${indent}Fritz:\n";
+    my $text = "${indent}Fritz:\n";
     $indent .= '  ';
-    print "${indent}upnp_url    = " . $self->upnp_url    . "\n";
-    print "${indent}trdesc_path = " . $self->trdesc_path . "\n";
+    $text .= "${indent}upnp_url    = " . $self->upnp_url    . "\n";
+    $text .= "${indent}trdesc_path = " . $self->trdesc_path . "\n";
+
+    return $text;
 }
+
+=head2 errorcheck
+
+See L<Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 

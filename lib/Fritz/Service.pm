@@ -390,9 +390,10 @@ sub _hash_check {
 
 =head2 dump(I<indent>)
 
-C<print()> some information about the object.  Useful for debugging
-purposes.  The optional parameter I<indent> is used for indentation of
-the output by prepending it to every line.
+Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter I<indent> is used for indentation of the output by
+prepending it to every line.
 
 Recursively descends into actions, so dumping a service also shows all
 its actions as well.
@@ -405,17 +406,17 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    print "${indent}Fritz::Service:\n";
-    print "${indent}serviceType     = " . $self->serviceType . "\n";
-    print "${indent}controlURL      = " . $self->controlURL  . "\n";
-    print "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
+    my $text = "${indent}Fritz::Service:\n";
+    $text .= "${indent}serviceType     = " . $self->serviceType . "\n";
+    $text .= "${indent}controlURL      = " . $self->controlURL  . "\n";
+    $text .= "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
 
     if ($self->action_hash) {
-	print "${indent}actions         = {\n";
+	$text .= "${indent}actions         = {\n";
 	foreach my $action (values %{$self->action_hash}) {
-	    $action->dump($indent . '  ');
+	    $text .= $action->dump($indent . '  ');
 	}
-	print "${indent}}\n";
+	$text .= "${indent}}\n";
     }
 }
 

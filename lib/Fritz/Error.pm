@@ -95,15 +95,15 @@ sub errorcheck {
 
 =head2 dump
 
-C<print()> some information about the object.  Useful for debugging
-purposes.
+Returns some preformatted information about the object.  Useful for
+debugging purposes, printing or logging.
 
 =cut
 
 sub dump {
     my $self = shift;
 
-    print "Fritz::Error: " . $self->error . "\n";
+    return "Fritz::Error: " . $self->error . "\n";
 }
 
 =head1 LICENSE AND COPYRIGHT

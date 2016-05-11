@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 7;
+use Test::More tests => 8;
 use warnings;
 use strict;
 
@@ -65,7 +65,19 @@ subtest 'check _sslopts' => sub {
     is_deeply( [ sort keys { @{$box->_sslopts} } ], [ sort $box->_ua->ssl_opts ], 'SSL option keys' );
 };
 
-# dump() #TODO
+subtest 'check dump()' => sub {
+    my $box = new_ok( 'Fritz::Box' );
+    my $dump = $box->dump('xxx');
+
+    foreach my $line (split /\n/, $dump) {
+	like( $line, qr/^xxx/, 'line starts with given indent' );
+    }
+
+    my $upnp_url = $box->upnp_url;
+    like( $dump, qr/$upnp_url/, 'upnp_url is dumped' );
+    my $trdesc_path = $box->trdesc_path;
+    like( $dump, qr/$trdesc_path/, 'trdesc_path is dumped' );
+};
 
 
 ### helper methods

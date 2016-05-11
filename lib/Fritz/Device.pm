@@ -335,9 +335,10 @@ sub find_device {
 
 =head2 dump(I<indent>)
 
-C<print()> some information about the object.  Useful for debugging
-purposes.  The optional parameter I<indent> is used for indentation of
-the output by prepending it to every line.
+Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter I<indent> is used for indentation of the output by
+prepending it to every line.
 
 Recursively descends into subdevices and services, so dumping the root
 device of a L<Fritz::Box/discover> should show everything that is
@@ -351,26 +352,28 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    print "${indent}Fritz::Device:\n";
+    my $text = "${indent}Fritz::Device:\n";
     $indent .= '  ';
-    print "${indent}modelName       = " . $self->attributes->{modelName} . "\n";
-    print "${indent}presentationURL = " . $self->attributes->{presentationURL} . "\n" if defined $self->attributes->{presentationURL};
+    $text .= "${indent}modelName       = " . $self->attributes->{modelName} . "\n";
+    $text .= "${indent}presentationURL = " . $self->attributes->{presentationURL} . "\n" if defined $self->attributes->{presentationURL};
 
     if ($self->service_list) {
-	print "${indent}subservices    = {\n";
+	$text .= "${indent}subservices    = {\n";
 	foreach my $service (@{$self->service_list}) {
-	    $service->dump($indent . '  ');
+	    $text .= $service->dump($indent . '  ');
 	}
-	print "${indent}}\n";
+	$text .= "${indent}}\n";
     }
 
     if ($self->device_list) {
-	print "${indent}subdevices      = {\n";
+	$text .= "${indent}subdevices      = {\n";
 	foreach my $device (@{$self->device_list}) {
-	    $device->dump($indent . '  ');
+	    $text .= $device->dump($indent . '  ');
 	}
-	print "${indent}}\n";
+	$text .= "${indent}}\n";
     }
+
+    return $text;
 }
 
 =head2 errorcheck

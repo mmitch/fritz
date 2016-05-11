@@ -32,12 +32,10 @@ my $f = Fritz::Box->new(
     password => $pass
     );
 
-#$f->dump();
-#print "\n\n";
+#print $f->dump() . "\n\n";
 
 my $d = $f->discover();
-#$d->dump();
-#print "\n\n";
+#print $d->dump() . "\n\n";
 
 if (1 == 0) {
     # get DSL information (CRC, data rates, ...)
@@ -138,16 +136,14 @@ if (1 == 1) {
     print "security port over SSL is $port - it worked!\n";
 }
 
-#$r->dump();
+#print $r->dump();
 
 
 #my $s = $d->find_service( 'urn:dslforum-org:service:WANDSLInterfaceConfig:1' );
-#$s->dump();
-#print "\n\n";
+#print $s->dump() . "\n\n";
 
 #$s = $d->find_service( Fritz::Service::DEVICEINFO );
-#$s->dump();
-#print "\n\n";
+#print $s->dump() . "\n\n";
 
 #my $r;
 
