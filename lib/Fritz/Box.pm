@@ -190,7 +190,7 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    my $text = "${indent}Fritz:\n";
+    my $text = "${indent}Fritz::Box:\n";
     $indent .= '  ';
     $text .= "${indent}upnp_url    = " . $self->upnp_url    . "\n";
     $text .= "${indent}trdesc_path = " . $self->trdesc_path . "\n";
