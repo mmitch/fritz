@@ -69,6 +69,8 @@ subtest 'check dump()' => sub {
     my $box = new_ok( 'Fritz::Box' );
     my $dump = $box->dump('xxx');
 
+    like( $dump, qr/Fritz::Box/, 'class name is dumped' );
+
     foreach my $line (split /\n/, $dump) {
 	like( $line, qr/^xxx/, 'line starts with given indent' );
     }

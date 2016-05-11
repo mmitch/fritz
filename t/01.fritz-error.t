@@ -16,6 +16,7 @@ subtest 'check new()' => sub {
     
 subtest 'check dump' => sub {
     my $error = new_ok( 'Fritz::Error', [ 'SOME_OTHER_ERROR' ] );
-    isa_ok( $error, 'Fritz::Error' );
-    like( $error->dump(), qr/SOME_OTHER_ERROR/, 'errortext ist dumped' );
+    my $dump = $error->dump();
+    like( $dump, qr/Fritz::Error/, 'class name is dumped' );
+    like( $dump, qr/SOME_OTHER_ERROR/, 'errortext is dumped' );
 };
