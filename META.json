@@ -31,6 +31,7 @@
       },
       "test" : {
          "requires" : {
+            "Test::Exception" : "0",
             "Test::Mock::LWP::Dispatch" : "0",
             "Test::More" : "0",
             "Test::Perl::Critic" : "0"
