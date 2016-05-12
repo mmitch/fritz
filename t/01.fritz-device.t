@@ -115,7 +115,7 @@ for my $key (keys %{$xmltree}) {
 
 # helper methods
 
-sub get_xmltree_tree()
+sub get_xmltree_tree
 {
     return {
 	'serviceList' => [
@@ -135,7 +135,7 @@ sub get_xmltree_tree()
     }
 }
 
-sub get_xmltree_device()
+sub get_xmltree_device
 {
     return {
 	'deviceType' => [ 'DEV_TYPE' ],
