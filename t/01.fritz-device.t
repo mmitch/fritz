@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 43;
+use Test::More tests => 8;
 use warnings;
 use strict;
 
@@ -7,9 +7,9 @@ use Fritz::Box;
 
 BEGIN { use_ok('Fritz::Device') };
 
-# public methods
+### public tests
 
-subtest 'check fritz getter' => sub {
+subtest 'check fritz getter, set via new()' => sub {
     # given
     my $fritz = Fritz::Box->new();
     my $device = new_ok( 'Fritz::Device', [ fritz => $fritz, xmltree => undef ] );
@@ -21,7 +21,7 @@ subtest 'check fritz getter' => sub {
     is( $result, $fritz, 'get fritz' );
 };
 
-subtest 'check xmltree getter' => sub {
+subtest 'check xmltree getter, set via new()' => sub {
     # given
     my $xmltree = [ some => 'thing' ];
     my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
@@ -64,80 +64,40 @@ subtest 'check service_list getter and converter' => sub {
     is( scalar @{$device->device_list}, 0, 'device_list is empty' );
 };
 
-
-# private methods
-
-# new() with named parameters, xmltree with devices/services
-my $device = new_ok( 'Fritz::Device', [ fritz => 'fake', xmltree => get_xmltree_tree() ] );
-is( $device->error, '', 'get Fritz::Device instance');
-isa_ok( $device, 'Fritz::Device' );
-
-is( $device->fritz, 'fake', 'Fritz::Device->fritz' );
-
-is( ref $device->device_list, 'ARRAY', 'Fritz::Device->device_list type'  );
-my @device_list = @{$device->device_list};
-is( scalar @device_list, 2, 'Fritz::Device->device_list count' );
-isa_ok( $device_list[0], 'Fritz::Device', 'Fritz::Device->device_list[0]' );
-isa_ok( $device_list[1], 'Fritz::Device', 'Fritz::Device->device_list[1]' );
-
-is( ref $device->attributes, 'HASH', 'Fritz::Device->attributes type'  );
-for my $key (keys %{get_xmltree_device()}) {
-    next if $key =~ /^fake/;
-    ok( ! exists $device->attributes->{$key}, "Fritz::Device->attributes->{$key} does not exist" );
-}
-
-# new() with named parameters, xmltree with information
-my $xmltree = get_xmltree_device();
-$device = new_ok( 'Fritz::Device', [ fritz => 'fake', xmltree => $xmltree ] );
-is( $device->error, '', 'get Fritz::Device instance');
-isa_ok( $device, 'Fritz::Device' );
-
-is( $device->fritz, 'fake', 'Fritz::Device->fritz' );
-
-is( ref $device->service_list, 'ARRAY', 'Fritz::Device->service_list type'  );
-my @service_list = @{$device->service_list};
-is( scalar @service_list, 0, 'Fritz::Device->service_list count' );
-
-is( ref $device->device_list, 'ARRAY', 'Fritz::Device->device_list type'  );
-@device_list = @{$device->device_list};
-is( scalar @device_list, 0, 'Fritz::Device->device_list count' );
-
-is( ref $device->attributes, 'HASH', 'Fritz::Device->attributes type'  );
-for my $key (keys %{$xmltree}) {
-    next if $key =~ /^fake/;
-    is( $device->attributes->{$key}, $xmltree->{$key}->[0], "Fritz::Device->attributes->{$key}" );
-}
-for my $key (keys %{$xmltree}) {
-    next unless $key =~ /^fake/;
-    ok( ! exists $device->attributes->{$key}, "Fritz::Device->attributes->{$key} does not exist" );
-}
-
-
-# helper methods
-
-sub get_xmltree_tree
-{
-    return {
-	'serviceList' => [
-	    { 'service' => [
-		  'FAKE_SERVICE_1',
-		  'FAKE_SERVICE_2'
-		  ]
-	    }
-	    ],
+subtest 'check device_list getter and converter' => sub {
+    # given
+    my $fritz = Fritz::Box->new();
+    my $xmltree = {
 	'deviceList' => [
 	    { 'device' => [
-		  'FAKE_SUBDEVICE_1',
-		  'FAKE_SUBDEVICE_2'
+		  'FAKE_SUBDEVICE_0',
+		  'FAKE_SUBDEVICE_1'
 		  ]
 	    }
-	    ],
-    }
-}
+	    ]
+    };
+    my $device = new_ok( 'Fritz::Device', [ fritz => $fritz, xmltree => $xmltree ] );
 
-sub get_xmltree_device
-{
-    return {
+    # when
+    my $result = $device->device_list;
+
+    # then
+    is( ref $device->device_list, 'ARRAY', 'device_list yields arrayref'  );
+    my @device_list = @{$device->device_list};
+    is( scalar @device_list, 2, 'device_list length' );
+    foreach my $i ( 0, 1 ) {
+	my $device = $device_list[$i];
+	isa_ok( $device, 'Fritz::Device', "device_list[$i] class" );
+	is( $device->fritz, $fritz, "device_list[$i]->fritz" );
+	is( $device->xmltree, "FAKE_SUBDEVICE_$i", "device_list[$i]->xmltree" );
+    }
+
+    is( scalar @{$device->service_list}, 0, 'service_list is empty' );
+};
+
+subtest 'check attribute getters' => sub {
+    # given
+    my $xmltree = {
 	'deviceType' => [ 'DEV_TYPE' ],
 	'friendlyName' => [ 'F_NAME' ],
 	'manufacturer' => [ 'MAN' ],
@@ -149,7 +109,59 @@ sub get_xmltree_device
 	'UDN' => [ 'UDN' ],
 	'presentationURL' => [ 'P_URL' ],
 	'fake_key' => [ 'does_not_exist' ]
-    }
-}
+    };
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
 
+    foreach my $key (keys %{$xmltree}) {
+	# when
+	my $result = $device->attributes->{$key};
+
+	if ($key =~ /^fake/) {
+	    is( $result, undef, "attributes->{$key} is undefined" );
+	    ok( ! exists $device->attributes->{$key}, "attributes->{$key} does not exist" );
+	} else {
+	    is( $result, $xmltree->{$key}->[0], "attributes->{$key} content" );
+	}    
+    }
+};
+
+subtest 'check Fritz::IsNoError role' => sub {
+    # given
+
+    # when
+    my $device = new_ok( 'Fritz::Device' );
+
+    # then
+    ok( $device->does('Fritz::IsNoError'), 'does Fritz::IsNoError role' );
+};
+
+# TODO: check get_service(name) -> success
+# TODO: check get_service(name) -> fail with Fritz::Error
+
+# TODO: check find_service(regexp) -> success
+# TODO: check find_service(regexp) -> fail with Fritz::Error
+
+# TODO: check find_service_names(regexp) -> success
+# TODO: check find_service_names(regexp) -> fail with Fritz::Error
+
+# TODO: check find_device(regexp) -> success
+# TODO: check find_device(regexp) -> fail with Fritz::Error
+
+
+### internal tests
+
+subtest 'check new()' => sub {
+    # given
+
+    # when
+    my $device = new_ok( 'Fritz::Device' );
+
+    # then
+    isa_ok( $device, 'Fritz::Device' );
+};
+
+# TODO: check dump()
+
+
+### helper methods
 
