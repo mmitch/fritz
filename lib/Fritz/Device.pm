@@ -7,7 +7,6 @@ use Fritz::Error;
 use Fritz::Service;
 
 use Moo;
-use namespace::clean;
 
 with 'Fritz::IsNoError';
 

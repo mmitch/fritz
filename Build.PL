@@ -17,7 +17,6 @@ my $builder = Module::Build->new(
 	'Moo'              => 0,
 	'SOAP::Lite'       => 0,
 	'XML::Simple'      => 0,
-	'namespace::clean' => 0,
     },
     test_requires => {
 	'Test::Exception'           => 0,

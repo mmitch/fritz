@@ -9,7 +9,6 @@ use Fritz::Error;
 use Fritz::Device;
 
 use Moo;
-use namespace::clean;
 
 with 'Fritz::IsNoError';
 

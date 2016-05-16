@@ -11,7 +11,6 @@ use Fritz::Action;
 use Fritz::Data;
 
 use Moo;
-use namespace::clean;
 
 with 'Fritz::IsNoError';
 

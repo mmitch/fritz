@@ -5,7 +5,6 @@ use warnings;
 use Scalar::Util qw(blessed);
 
 use Moo;
-use namespace::clean;
 
 with 'Fritz::IsNoError';
 

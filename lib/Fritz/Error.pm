@@ -6,7 +6,6 @@ use warnings;
 #       Fritz::Error->new an immediately fatal error?
 
 use Moo;
-use namespace::clean;
 
 =head1 NAME
 

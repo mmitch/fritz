@@ -4,7 +4,7 @@
       "Christian Garbs <mitch@cgarbs.de>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4216",
+   "generated_by" : "Module::Build version 0.4218",
    "license" : [
       "unknown"
    ],
@@ -25,8 +25,7 @@
             "LWP::UserAgent" : "0",
             "Moo" : "0",
             "SOAP::Lite" : "0",
-            "XML::Simple" : "0",
-            "namespace::clean" : "0"
+            "XML::Simple" : "0"
          }
       },
       "test" : {
@@ -67,5 +66,5 @@
    },
    "release_status" : "stable",
    "version" : "v0.0.1",
-   "x_serialization_backend" : "JSON::PP version 2.27300"
+   "x_serialization_backend" : "JSON::PP version 2.27202"
 }

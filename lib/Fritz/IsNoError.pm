@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Moo::Role;
-use namespace::clean;
 
 =head1 NAME
 
