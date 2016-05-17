@@ -7,6 +7,12 @@ use Test::Exception;
 
 BEGIN { use_ok('Fritz::IsNoError') };
 
+# a role has no constructor, so we need a dummy class
+{
+    package Fritz::IsNoError::Stub;
+    use Moo;
+    with 'Fritz::IsNoError';
+}
 
 ### public tests
 
@@ -14,7 +20,7 @@ subtest 'check stub role' => sub {
     # given
 
     # when
-    my $obj = get_stub();
+    my $obj = Fritz::IsNoError::Stub->new;
 
     # then
     ok( $obj->does('Fritz::IsNoError'), 'does Fritz::IsNoError role' );
@@ -22,7 +28,7 @@ subtest 'check stub role' => sub {
 
 subtest 'check error getter' => sub {
     # given
-    my $obj = get_stub();
+    my $obj = Fritz::IsNoError::Stub->new;
 
     # when
     my $result = $obj->error;
@@ -33,7 +39,7 @@ subtest 'check error getter' => sub {
 
 subtest 'check errorcheck()' => sub {
     # given
-    my $obj = get_stub();
+    my $obj = Fritz::IsNoError::Stub->new;
 
     # when/then
     lives_ok( sub { $obj->errorcheck() }, 'errorcheck() does not die' );
@@ -41,15 +47,3 @@ subtest 'check errorcheck()' => sub {
 
 
 ### helper methods
-
-sub get_stub
-{
-    # a role has no constructor, so we need a dummy class
-    {
-	package Fritz::IsNoError::Stub;
-	use Moo;
-	with 'Fritz::IsNoError';
-    }
-
-    return Fritz::IsNoError::Stub->new;
-}
