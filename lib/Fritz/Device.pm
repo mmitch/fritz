@@ -273,7 +273,8 @@ Searches recursively through all subdevices in the order they are
 listed in the device XML, depth first.
 
 The resulting arrayref is wrapped in a L<Fritz::Data> to allow L<error
-checking|Fritz::IsNoError>.
+checking|Fritz::IsNoError>.  (Although no error should ever occur, an
+an empty list is returned if nothing matched.)
 
 =cut
 
@@ -388,7 +389,7 @@ the service methods and add the missing variants.
 
 B<TODO:> Rename L</find_service_names> to something like
 L</find_all_service> as it's basically L</find_service> with multiple
-results.
+results.  It does not return service names but services.
 
 =head1 LICENSE AND COPYRIGHT
 
