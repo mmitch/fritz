@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 8;
+use Test::More tests => 20;
 use warnings;
 use strict;
 
@@ -135,17 +135,168 @@ subtest 'check Fritz::IsNoError role' => sub {
     ok( $device->does('Fritz::IsNoError'), 'does Fritz::IsNoError role' );
 };
 
-# TODO: check get_service(name) -> success
-# TODO: check get_service(name) -> fail with Fritz::Error
+## get_service()
 
-# TODO: check find_service(regexp) -> success
-# TODO: check find_service(regexp) -> fail with Fritz::Error
+subtest 'check get_service() w/success' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $service_type = 'FAKE_SERVICE_0';
+    
+    # when
+    my $service = $device->get_service($service_type);
 
-# TODO: check find_service_names(regexp) -> success
-# TODO: check find_service_names(regexp) -> fail with Fritz::Error
+    # then
+    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    is( $service->serviceType, $service_type, 'serviceType matches' );
+};
 
-# TODO: check find_device(regexp) -> success
-# TODO: check find_device(regexp) -> fail with Fritz::Error
+subtest 'check get_service() w/recursion' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $service_type = 'FAKE_SERVICE_3';
+    
+    # when
+    my $service = $device->get_service($service_type);
+
+    # then
+    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    is( $service->serviceType, $service_type, 'serviceType matches' );
+};
+
+subtest 'check get_service() w/not found' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $service_type = 'FAKE_SERVICE_x';
+    
+    # when
+    my $error = $device->get_service($service_type);
+
+    # then
+    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    like( $error->error, qr/not found/, 'error text as expected' );
+};
+
+## find_service()
+
+subtest 'check find_service() w/success' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $service_type = 'FAKE_SERVICE_0';
+    
+    # when
+    my $service = $device->find_service('SERVICE.0');
+
+    # then
+    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    is( $service->serviceType, $service_type, 'serviceType matches' );
+};
+
+subtest 'check find_service() w/recursion' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $service_type = 'FAKE_SERVICE_3';
+    
+    # when
+    my $service = $device->find_service('S[A-Z]+_3');
+
+    # then
+    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    is( $service->serviceType, $service_type, 'serviceType matches' );
+};
+
+subtest 'check find_service() w/not found' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    
+    # when
+    my $error = $device->find_service('^$');
+
+    # then
+    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    like( $error->error, qr/not found/, 'error text as expected' );
+};
+
+## find_service_names()
+
+subtest 'check find_service_names() w/succeed' => sub {
+    # given 
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+
+    # when
+    my $data = $device->find_service_names('[1-5]');
+
+    # then
+    isa_ok( $data, 'Fritz::Data', 'response is Fritz::Data' );
+    isa_ok( $data->data, 'ARRAY', 'data->data' );
+
+    my @actual_types = map { $_->serviceType } @{$data->data};
+    my @expected_types = qw( FAKE_SERVICE_1 FAKE_SERVICE_2 FAKE_SERVICE_3 FAKE_SERVICE_4 );
+    is_deeply ( \@actual_types, \@expected_types, 'list contents' );
+};
+
+subtest 'check find_service_names() w/not found' => sub {
+    # given 
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+
+    # when
+    my $data = $device->find_service_names('12345');
+
+    # then
+    isa_ok( $data, 'Fritz::Data', 'response is Fritz::Data' );
+    isa_ok( $data->data, 'ARRAY', 'data->data' );
+    is ( scalar @{$data->data}, 0, 'empty result' );
+};
+
+## find_device()
+
+subtest 'check find_device() w/success' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $device_type = 'SUBDEVICE_C';
+    
+    # when
+    my $device = $device->find_device($device_type);
+
+    # then
+    isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
+    is( $device->attributes->{deviceType}, $device_type, 'serviceType matches' );
+};
+
+subtest 'check find_device() w/recursion' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $device_type = 'SUBDEVICE_B';
+    
+    # when
+    my $device = $device->find_device($device_type);
+
+    # then
+    isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
+    is( $device->attributes->{deviceType}, $device_type, 'serviceType matches' );
+};
+
+subtest 'check find_device() w/not found' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    
+    # when
+    my $error = $device->find_device('not found');
+
+    # then
+    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    like( $error->error, qr/not found/, 'error text as expected' );
+};
 
 
 ### internal tests
@@ -160,8 +311,88 @@ subtest 'check new()' => sub {
     isa_ok( $device, 'Fritz::Device' );
 };
 
-# TODO: check dump()
+subtest 'check dump()' => sub {
+    # TODO: don't test Fritz::Service::dump(), use a mock.  Fritz::Box instance can go, too
+
+    # given
+    my $xmltree = {
+	'modelName' => [ 'SOME_MODEL_NAME' ],
+	'presentationURL' => [ 'SOME_PRESENTATION_URL' ],
+	'serviceList' => [
+	    { 'service' => [
+		  {'serviceType' => [ 'SOME_SERVICE_TYPE' ],
+		   'controlURL' => [ 'SOME_CONTROL_URL' ],
+		   'SCPDURL' => [ 'SOME_SCPD_URL' ],
+		  }
+		  ],
+	    }
+	    ],
+    };
+    my $fritz = new_ok( 'Fritz::Box' );
+    my $device = new_ok( 'Fritz::Device', [ fritz => $fritz, xmltree => $xmltree ] );
+
+    # when
+    my $dump = $device->dump('xxx');
+
+    foreach my $line (split /\n/, $dump) {
+	like( $line, qr/^xxx(Fritz|  )/, 'line starts as expected' );
+    }
+
+    like( $dump, qr/^xxxFritz::Device/sm, 'class name is dumped' );
+    my $model_name = $device->attributes->{modelName};
+    like( $dump, qr/$model_name/, 'modelName is dumped' );
+    my $presentation_url = $device->attributes->{presentationURL};
+    like( $dump, qr/$presentation_url/, 'presentationURL is dumped' );
+    like( $dump, qr/^xxx    Fritz::Service/sm, 'service is dumped' );
+};
 
 
 ### helper methods
 
+sub get_xmltree
+{
+    my $xmltree = {
+	'serviceList' => [
+	    { 'deviceType' => [ 'MAIN_DEVICE' ],
+	      'service' => [
+		  { serviceType => [ 'FAKE_SERVICE_0' ] },
+		  { serviceType => [ 'FAKE_SERVICE_1' ] }
+		  ]
+	    }
+	    ],
+	'deviceList' => [
+	    { 'device' => [
+		  { 'deviceType' => [ 'SUBDEVICE_A' ],
+		    'serviceList' => [
+			{ 'service' => [
+			      { serviceType => [ 'FAKE_SERVICE_2' ] }
+			      ]
+			}
+			],
+		    'deviceList' => [
+			{ 'device' => [
+			      { 'deviceType' => [ 'SUBDEVICE_B' ],
+				'serviceList' => [
+				    { 'service' => [
+					  { serviceType => [ 'FAKE_SERVICE_3' ] }
+					  ]
+				    }
+				    ]
+			      }
+			      ]
+			}
+			]
+		  },
+		  { 'deviceType' => [ 'SUBDEVICE_C' ],
+		    'serviceList' => [
+			{ 'service' => [
+			      { serviceType => [ 'FAKE_SERVICE_4' ] }
+			      ]
+			}
+			]
+		  }
+		  ]
+	    }
+	    ]
+    }
+}
