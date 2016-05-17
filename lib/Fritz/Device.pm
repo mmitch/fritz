@@ -357,17 +357,19 @@ sub dump {
     $text .= "${indent}modelName       = " . $self->attributes->{modelName} . "\n";
     $text .= "${indent}presentationURL = " . $self->attributes->{presentationURL} . "\n" if defined $self->attributes->{presentationURL};
 
-    if ($self->service_list) {
+    my @service_list = @{$self->service_list};
+    if (@service_list) {
 	$text .= "${indent}subservices    = {\n";
-	foreach my $service (@{$self->service_list}) {
+	foreach my $service (@service_list) {
 	    $text .= $service->dump($indent . '  ');
 	}
 	$text .= "${indent}}\n";
     }
 
-    if ($self->device_list) {
+    my @device_list = @{$self->device_list};
+    if (@device_list) {
 	$text .= "${indent}subdevices      = {\n";
-	foreach my $device (@{$self->device_list}) {
+	foreach my $device (@device_list) {
 	    $text .= $device->dump($indent . '  ');
 	}
 	$text .= "${indent}}\n";
