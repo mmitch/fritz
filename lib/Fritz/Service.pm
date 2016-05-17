@@ -417,6 +417,8 @@ sub dump {
 	}
 	$text .= "${indent}}\n";
     }
+
+    return $text;
 }
 
 =head2 errorcheck
