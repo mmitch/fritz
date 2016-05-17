@@ -410,9 +410,10 @@ sub dump {
     $text .= "${indent}controlURL      = " . $self->controlURL  . "\n";
     $text .= "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
 
-    if ($self->action_hash) {
+    my @actions = values %{$self->action_hash};
+    if (@actions) {
 	$text .= "${indent}actions         = {\n";
-	foreach my $action (values %{$self->action_hash}) {
+	foreach my $action (@actions) {
 	    $text .= $action->dump($indent . '  ');
 	}
 	$text .= "${indent}}\n";
