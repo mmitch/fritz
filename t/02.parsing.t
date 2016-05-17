@@ -59,29 +59,29 @@ for my $attribute (keys %root_device_attributes) {
 
 my @services = @{$device->service_list};
 is( scalar @services, 1, 'service count');
-isa_ok( $services[0], 'Fritz::Service', 'service class' );
+isa_ok( $services[0], 'Fritz::Service' );
 is ($services[0]->serviceId, 'fakeService1', 'service id' );
 
 my @devices = @{$device->device_list};
 is( scalar @devices, 1, 'device count');
-isa_ok( $devices[0], 'Fritz::Device', 'device class' );
+isa_ok( $devices[0], 'Fritz::Device' );
 is ($devices[0]->attributes->{deviceType}, 'FakeSubDevice:1', 'device type' );
 
 # check search methods
 note('=== check search methods');
 my $service = $device->get_service('GNARGLGHAST');
-isa_ok( $service, 'Fritz::Error', 'not found' );
+isa_ok( $service, 'Fritz::Error' );
 
 $service = $device->get_service('FakeService:1');
-isa_ok( $service, 'Fritz::Service', 'service class' );
+isa_ok( $service, 'Fritz::Service' );
 is ($service->serviceId, 'fakeService1', 'service id' );
 
 
 $service = $device->find_service('GNARGLGHAST');
-isa_ok( $service, 'Fritz::Error', 'not found' );
+isa_ok( $service, 'Fritz::Error' );
 
 $service = $device->find_service('Service');
-isa_ok( $service, 'Fritz::Service', 'service class' );
+isa_ok( $service, 'Fritz::Service' );
 is ($service->serviceId, 'fakeService1', 'service id' );
 
 
@@ -101,10 +101,10 @@ is ($services[1]->serviceId, 'fakeService2', 'service id #2' );
 
 
 my $subdevice = $device->find_device('GNARGLGHAST');
-isa_ok( $subdevice, 'Fritz::Error', 'not found' );
+isa_ok( $subdevice, 'Fritz::Error' );
 
 $subdevice = $device->find_device('FakeSubDevice:1');
-isa_ok( $subdevice, 'Fritz::Device', 'device class' );
+isa_ok( $subdevice, 'Fritz::Device' );
 is ($subdevice->attributes->{deviceType}, 'FakeSubDevice:1', 'device type' );
 
 # check subdevice
@@ -131,7 +131,7 @@ for my $attribute (keys %subdevice_attributes) {
 
 @services = @{$subdevice->service_list};
 is( scalar @services, 1, 'service count');
-isa_ok( $services[0], 'Fritz::Service', 'service class' );
+isa_ok( $services[0], 'Fritz::Service' );
 is ($services[0]->serviceId, 'fakeService2', 'service id' );
 
 @devices = @{$subdevice->device_list};
@@ -156,7 +156,7 @@ $service->_set_SCPDURL($scpd_file); # overwrite SCPDURL with computed location o
 my %actions = %{$service->action_hash};
 is( scalar keys %actions, 1, 'action count' );
 my $action = (values %actions)[0];
-isa_ok( $action, 'Fritz::Action', 'action type' );
+isa_ok( $action, 'Fritz::Action' );
 is( $action->name, 'SomeService', 'action name' );
 my @args = @{$action->args_in};
 is( scalar @args, 1, 'args_in count' );
@@ -185,7 +185,7 @@ $service->_set_SCPDURL($scpd_file); # overwrite SCPDURL with computed location o
 %actions = %{$service->action_hash};
 is( scalar keys %actions, 1, 'action count' );
 $action = (values %actions)[0];
-isa_ok( $action, 'Fritz::Action', 'action type' );
+isa_ok( $action, 'Fritz::Action' );
 is( $action->name, 'SomeService', 'action name' );
 @args = @{$action->args_in};
 is( scalar @args, 1, 'args_in count' );

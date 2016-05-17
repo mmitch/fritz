@@ -56,7 +56,7 @@ subtest 'check service_list getter and converter' => sub {
     is( scalar @service_list, 2, 'service_list length' );
     foreach my $i ( 0, 1 ) {
 	my $service = $service_list[$i];
-	isa_ok( $service, 'Fritz::Service', "service_list[$i] class" );
+	isa_ok( $service, 'Fritz::Service', "service_list[$i]" );
 	is( $service->fritz, $fritz, "service_list[$i]->fritz" );
 	is( $service->xmltree, "FAKE_SERVICE_$i", "service_list[$i]->xmltree" );
     }
@@ -87,7 +87,7 @@ subtest 'check device_list getter and converter' => sub {
     is( scalar @device_list, 2, 'device_list length' );
     foreach my $i ( 0, 1 ) {
 	my $device = $device_list[$i];
-	isa_ok( $device, 'Fritz::Device', "device_list[$i] class" );
+	isa_ok( $device, 'Fritz::Device', "device_list[$i]" );
 	is( $device->fritz, $fritz, "device_list[$i]->fritz" );
 	is( $device->xmltree, "FAKE_SUBDEVICE_$i", "device_list[$i]->xmltree" );
     }
@@ -147,7 +147,7 @@ subtest 'check get_service() w/success' => sub {
     my $service = $device->get_service($service_type);
 
     # then
-    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    isa_ok( $service, 'Fritz::Service', 'response' );
     is( $service->serviceType, $service_type, 'serviceType matches' );
 };
 
@@ -161,7 +161,7 @@ subtest 'check get_service() w/recursion' => sub {
     my $service = $device->get_service($service_type);
 
     # then
-    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    isa_ok( $service, 'Fritz::Service', 'response' );
     is( $service->serviceType, $service_type, 'serviceType matches' );
 };
 
@@ -175,7 +175,7 @@ subtest 'check get_service() w/not found' => sub {
     my $error = $device->get_service($service_type);
 
     # then
-    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    isa_ok( $error, 'Fritz::Error', 'response' );
     like( $error->error, qr/not found/, 'error text as expected' );
 };
 
@@ -191,7 +191,7 @@ subtest 'check find_service() w/success' => sub {
     my $service = $device->find_service('SERVICE.0');
 
     # then
-    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    isa_ok( $service, 'Fritz::Service', 'response' );
     is( $service->serviceType, $service_type, 'serviceType matches' );
 };
 
@@ -205,7 +205,7 @@ subtest 'check find_service() w/recursion' => sub {
     my $service = $device->find_service('S[A-Z]+_3');
 
     # then
-    isa_ok( $service, 'Fritz::Service', 'response is Fritz::Service' );
+    isa_ok( $service, 'Fritz::Service', 'response' );
     is( $service->serviceType, $service_type, 'serviceType matches' );
 };
 
@@ -218,7 +218,7 @@ subtest 'check find_service() w/not found' => sub {
     my $error = $device->find_service('^$');
 
     # then
-    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    isa_ok( $error, 'Fritz::Error', 'response' );
     like( $error->error, qr/not found/, 'error text as expected' );
 };
 
@@ -233,7 +233,7 @@ subtest 'check find_service_names() w/succeed' => sub {
     my $data = $device->find_service_names('[1-5]');
 
     # then
-    isa_ok( $data, 'Fritz::Data', 'response is Fritz::Data' );
+    isa_ok( $data, 'Fritz::Data', 'response' );
     isa_ok( $data->data, 'ARRAY', 'data->data' );
 
     my @actual_types = map { $_->serviceType } @{$data->data};
@@ -250,7 +250,7 @@ subtest 'check find_service_names() w/not found' => sub {
     my $data = $device->find_service_names('12345');
 
     # then
-    isa_ok( $data, 'Fritz::Data', 'response is Fritz::Data' );
+    isa_ok( $data, 'Fritz::Data', 'response' );
     isa_ok( $data->data, 'ARRAY', 'data->data' );
     is ( scalar @{$data->data}, 0, 'empty result' );
 };
@@ -267,7 +267,7 @@ subtest 'check find_device() w/success' => sub {
     my $device = $given_device->find_device($device_type);
 
     # then
-    isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
+    isa_ok( $device, 'Fritz::Device', 'response' );
     is( $device->attributes->{deviceType}, $device_type, 'serviceType matches' );
 };
 
@@ -281,7 +281,7 @@ subtest 'check find_device() w/recursion' => sub {
     my $device = $given_device->find_device($device_type);
 
     # then
-    isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
+    isa_ok( $device, 'Fritz::Device', 'response' );
     is( $device->attributes->{deviceType}, $device_type, 'serviceType matches' );
 };
 
@@ -294,7 +294,7 @@ subtest 'check find_device() w/not found' => sub {
     my $error = $given_device->find_device('not found');
 
     # then
-    isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
+    isa_ok( $error, 'Fritz::Error', 'response' );
     like( $error->error, qr/not found/, 'error text as expected' );
 };
 

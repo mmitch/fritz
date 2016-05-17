@@ -38,13 +38,13 @@ subtest 'check new() with parameters' => sub {
 
 subtest 'check discover() without Fritz!Box present' => sub {
     my $box = new_ok( 'Fritz::Box' );
-    isa_ok( $box->discover(), 'Fritz::Error' , 'get Fritz::Error because discovery failed' );
+    isa_ok( $box->discover(), 'Fritz::Error' , 'failed discovery' );
 };
 
 subtest 'check discover() with mocked Fritz!Box' => sub {
     my $box = new_ok( 'Fritz::Box' );
     $box->_ua->map('http://fritz.box:49000/tr64desc.xml', get_fake_device_response());
-    isa_ok( $box->discover(), 'Fritz::Device' , 'get Fritz::Device on mocked connect' );
+    isa_ok( $box->discover(), 'Fritz::Device' , 'mocked discovery' );
 };
 
 subtest 'check discover() with mocked Fritz!Box at non-standard URL' => sub {
@@ -54,7 +54,7 @@ subtest 'check discover() with mocked Fritz!Box at non-standard URL' => sub {
 		   ]
 	);
     $box->_ua->map('http://example.org:123/tr64', get_fake_device_response());
-    isa_ok( $box->discover(), 'Fritz::Device' , 'get Fritz::Device on mocked connect with nonstandard URL' );
+    isa_ok( $box->discover(), 'Fritz::Device' , 'mocked discovery' );
 };
 
 
