@@ -260,11 +260,11 @@ subtest 'check find_service_names() w/not found' => sub {
 subtest 'check find_device() w/success' => sub {
     # given
     my $xmltree = get_xmltree();
-    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $given_device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
     my $device_type = 'SUBDEVICE_C';
     
     # when
-    my $device = $device->find_device($device_type);
+    my $device = $given_device->find_device($device_type);
 
     # then
     isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
@@ -274,11 +274,11 @@ subtest 'check find_device() w/success' => sub {
 subtest 'check find_device() w/recursion' => sub {
     # given
     my $xmltree = get_xmltree();
-    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $given_device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
     my $device_type = 'SUBDEVICE_B';
     
     # when
-    my $device = $device->find_device($device_type);
+    my $device = $given_device->find_device($device_type);
 
     # then
     isa_ok( $device, 'Fritz::Device', 'response is Fritz::Device' );
@@ -288,10 +288,10 @@ subtest 'check find_device() w/recursion' => sub {
 subtest 'check find_device() w/not found' => sub {
     # given
     my $xmltree = get_xmltree();
-    my $device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
+    my $given_device = new_ok( 'Fritz::Device', [ fritz => undef, xmltree => $xmltree ] );
     
     # when
-    my $error = $device->find_device('not found');
+    my $error = $given_device->find_device('not found');
 
     # then
     isa_ok( $error, 'Fritz::Error', 'response is Fritz::Error' );
@@ -327,23 +327,33 @@ subtest 'check dump()' => sub {
 		  ],
 	    }
 	    ],
+	'deviceList' => [
+	    { 'device' => [
+		  {'modelName' => [ 'SOME_OTHER_MODEL_NAME' ],
+		  }
+		  ],
+	    }
+	    ],
     };
     my $fritz = new_ok( 'Fritz::Box' );
     my $device = new_ok( 'Fritz::Device', [ fritz => $fritz, xmltree => $xmltree ] );
 
     # when
-    my $dump = $device->dump('xxx');
+    my $dump = $device->dump();
 
+    # then
     foreach my $line (split /\n/, $dump) {
-	like( $line, qr/^xxx(Fritz|  )/, 'line starts as expected' );
+	like( $line, qr/^(Fritz|  )/, 'line starts as expected' );
     }
 
-    like( $dump, qr/^xxxFritz::Device/sm, 'class name is dumped' );
+    like( $dump, qr/^Fritz::Device/, 'class name is dumped' );
     my $model_name = $device->attributes->{modelName};
     like( $dump, qr/$model_name/, 'modelName is dumped' );
     my $presentation_url = $device->attributes->{presentationURL};
     like( $dump, qr/$presentation_url/, 'presentationURL is dumped' );
-    like( $dump, qr/^xxx    Fritz::Service/sm, 'service is dumped' );
+    
+    like( $dump, qr/^    Fritz::Service/sm, 'sub-service is dumped' );
+    like( $dump, qr/^    Fritz::Device/sm, 'sub-device is dumped' );
 };
 
 
