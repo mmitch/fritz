@@ -292,9 +292,7 @@ sub find_service_names {
 
     foreach my $device (@{$self->device_list}) {
 	my $data = $device->find_service_names($type);
-	if (! $data->error) {
-	    push @found, @{$data->data};
-	}
+	push @found, @{$data->data};
     }
 
     return Fritz::Data->new(\@found);
