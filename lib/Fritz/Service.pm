@@ -192,7 +192,7 @@ most of the other attributes are read from.
 
 =cut
 
-has SCPDURL      => ( is => 'rwp', lazy => 1, builder => 1, init_arg => undef );
+has SCPDURL      => ( is => 'rwp', lazy => 1, builder => 1, init_arg => undef ); # TODO remove private setter when all unit-tests are updates
 
 sub _build_SCPDURL {
     my $self = shift;
@@ -269,7 +269,6 @@ sub call {
     my $auth = $self->_get_initial_auth;
 
     # SOAP::Lite just dies on transport error (eg. 401 Unauthorized), so eval this
-    # TODO: send parameters
     my $som;
     eval {
 	$som = $soap->call($action, @args, $auth);
