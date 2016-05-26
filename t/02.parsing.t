@@ -60,7 +60,7 @@ for my $attribute (keys %root_device_attributes) {
 my @services = @{$device->service_list};
 is( scalar @services, 1, 'service count');
 isa_ok( $services[0], 'Fritz::Service' );
-is ($services[0]->serviceId, 'fakeService1', 'service id' );
+is_serviceId( $services[0], 'fakeService1' );
 
 my @devices = @{$device->device_list};
 is( scalar @devices, 1, 'device count');
@@ -74,7 +74,7 @@ isa_ok( $service, 'Fritz::Error' );
 
 $service = $device->get_service('FakeService:1');
 isa_ok( $service, 'Fritz::Service' );
-is ($service->serviceId, 'fakeService1', 'service id' );
+is_serviceId( $service, 'fakeService1' );
 
 
 $service = $device->find_service('GNARGLGHAST');
@@ -82,7 +82,7 @@ isa_ok( $service, 'Fritz::Error' );
 
 $service = $device->find_service('Service');
 isa_ok( $service, 'Fritz::Service' );
-is ($service->serviceId, 'fakeService1', 'service id' );
+is_serviceId( $service, 'fakeService1' );
 
 
 my $data = $device->find_service_names('GNARGLGHAST');
@@ -96,8 +96,8 @@ isa_ok( $data, 'Fritz::Data', 'service list' );
 is( scalar @services, 2, 'service count');
 isa_ok( $services[0], 'Fritz::Service', 'service class #1' );
 isa_ok( $services[1], 'Fritz::Service', 'service class #2' );
-is ($services[0]->serviceId, 'fakeService1', 'service id #1' );
-is ($services[1]->serviceId, 'fakeService2', 'service id #2' );
+is_serviceId( $services[0], 'fakeService1' );
+is_serviceId( $services[1], 'fakeService2' );
 
 
 my $subdevice = $device->find_device('GNARGLGHAST');
@@ -132,7 +132,7 @@ for my $attribute (keys %subdevice_attributes) {
 @services = @{$subdevice->service_list};
 is( scalar @services, 1, 'service count');
 isa_ok( $services[0], 'Fritz::Service' );
-is ($services[0]->serviceId, 'fakeService2', 'service id' );
+is_serviceId( $services[0], 'fakeService2' );
 
 @devices = @{$subdevice->device_list};
 is( scalar @devices, 0, 'device count');
@@ -193,3 +193,12 @@ is( $args[0], 'InputArgument', 'args_in[0] name' );
 @args = @{$action->args_out};
 is( scalar @args, 1, 'args_out count' );
 is( $args[0], 'OutputArgument', 'args_out[0] name' );
+
+
+### helper methods
+
+sub is_serviceId
+{
+    my ($actual_service, $expected_serviceId) = @_;
+    is( $actual_service->serviceId, $expected_serviceId, 'serviceId matches' );
+}
