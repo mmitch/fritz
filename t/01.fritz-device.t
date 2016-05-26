@@ -116,6 +116,7 @@ subtest 'check attribute getters' => sub {
 	# when
 	my $result = $device->attributes->{$key};
 
+	# then
 	if ($key =~ /^fake/) {
 	    is( $result, undef, "attributes->{$key} is undefined" );
 	    ok( ! exists $device->attributes->{$key}, "attributes->{$key} does not exist" );
