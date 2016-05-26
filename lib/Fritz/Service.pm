@@ -405,6 +405,7 @@ sub dump {
     $indent = '' unless defined $indent;
 
     my $text = "${indent}Fritz::Service:\n";
+    $indent .= '  ';
     $text .= "${indent}serviceType     = " . $self->serviceType . "\n";
     $text .= "${indent}controlURL      = " . $self->controlURL  . "\n";
     $text .= "${indent}SCPDURL         = " . $self->SCPDURL     . "\n";
