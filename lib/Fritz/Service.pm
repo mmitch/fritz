@@ -160,7 +160,7 @@ sub _build_serviceId {
 =head2
 
 The I<controlURL> (URL string) of this service which is needed to
-L</call> any L<Fritz::Action>s of this serice.
+L</call> any L<Fritz::Action>s of this service.
 
 =cut
 
@@ -187,8 +187,8 @@ sub _build_eventSubURL {
 
 =head2
 
-The URL of the SCPD file of this service where most of the other
-attributes are read from.
+The I<SCPDURL> (URL string) of the SCPD file of this service where
+most of the other attributes are read from.
 
 =cut
 
