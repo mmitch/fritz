@@ -1,9 +1,10 @@
 #!perl
-use Test::More tests => 18;
+use Test::More tests => 13;
 use warnings;
 use strict;
 
 use Test::Mock::LWP::Dispatch;
+use Digest::MD5 qw(md5_hex);
 use Fritz::Box;
 
 BEGIN { use_ok('Fritz::Service') };
@@ -93,75 +94,179 @@ subtest 'check attribute getters' => sub {
     }
 };
 
-subtest 'check service call' => sub {
-    plan skip_all => 'does not work yet';
+subtest 'check simple service call' => sub {
     # given
     my $service = create_service_with_scpd_data();
     my $service_name = 'SomeService';
     my @arguments = ('InputArgument' => 'foo');
-    $mock_ua->map($service->fritz->upnp_url.$service->controlURL, get_fake_soap_response());
+    $mock_ua->unmap_all;
+    $mock_ua->map($service->fritz->upnp_url.$service->controlURL, get_soap_response());
 
     # when
     my $result = $service->call($service_name, @arguments);
 
     # then
-    warn $result->error;
-    isa_ok( $result, 'Fritz::Data', 'response data' );
+    # TODO check if parameters were included in the SOAP call
+    isa_ok( $result, 'Fritz::Data', 'service response' );
+    isa_ok( $result->data, 'HASH', 'service response data' );
+    is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
 };
 
-# prepare XML tree data
+subtest 'check service call with authentication but no credentials' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map($service->fritz->upnp_url.$service->controlURL, get_unauthorized_response());
 
-my $xmltree = {
-    'serviceType' => [ 'S_TYPE' ],
-    'serviceId' => [ 'S_ID' ],
-    'controlURL' => [ 'C_URL' ],
-    'eventSubURL' => [ 'ES_URL' ],
-    'SCPDURL' => [ 'SCPD_URL' ],
-    'fake_key' => [ 'does_not_exist' ]
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service response' );
+    like( $result->error, qr/no credentials/, 'error message' );
+};
+
+subtest 'check service call with authentication and credentials' => sub {
+    # given
+    my $user = 'user';
+    my $pass = 'pass';
+    my $service = create_service_with_scpd_data( username => $user, password => $pass );
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map($service->fritz->upnp_url.$service->controlURL, sub { return authentication(@_) } );
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Data', 'service response' );
+    isa_ok( $result->data, 'HASH', 'service response data' );
+    is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
+};
+
+subtest 'check for error messages on missing parameters during call()' => sub {
+    plan skip_all => 'TODO test not implemented yet';
+    ok( 0, 'TODO test missing' );
 };
 
 
-# new() with named parameters
-my $service = new_ok( 'Fritz::Service', [ fritz => 'fake', xmltree => $xmltree ] );
-is( $service->error, '', 'get Fritz::Service instance');
-isa_ok( $service, 'Fritz::Service' );
+### internal tests
 
-is( $service->fritz, 'fake', 'Fritz::Service->fritz' );
+subtest 'check new()' => sub {
+    # given
 
-for my $key (keys %{$xmltree}) {
-    next if $key =~ /^fake/;
-    is( $service->$key, $xmltree->{$key}->[0], "Fritz::Service->$key" );
-}
-for my $key (keys %{$xmltree}) {
-    next unless $key =~ /^fake/;
-    ok( ! exists $service->{$key}, "Fritz::Service->$key does not exist" );
-}
+    # when
+    my $service = new_ok( 'Fritz::Service' );
+
+    # then
+    isa_ok( $service, 'Fritz::Service' );
+};
+
+subtest 'check dump()' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+
+    # when
+    my $dump = $service->dump();
+
+    # then
+    foreach my $line (split /\n/, $dump) {
+	like( $line, qr/^(Fritz|  )/, 'line starts as expected' );
+    }
+
+    like( $dump, qr/^Fritz::Service/, 'class name is dumped' );
+    my $service_type = $service->serviceType;
+    like( $dump, qr/$service_type/, 'serviceType is dumped' );
+    my $control_url = $service->controlURL;
+    like( $dump, qr/$control_url/, 'controlURL is dumped' );
+    my $scpd_url = $service->SCPDURL;
+    like( $dump, qr/$scpd_url/, 'SCPDURL is dumped' );
+    
+    like( $dump, qr/^    Fritz::Action/sm, 'action is dumped' );
+};
+
 
 ### helper methods
 
-sub get_fake_soap_response
+sub get_soap_response
 {
     my $result = HTTP::Response->new( 200 );
-    $result->content( get_soap_xml() );
+    $result->content( get_soap_response_xml() );
     return $result;
 }
 
-sub get_fake_scpd_response
+sub get_unauthorized_response
+{
+    my $result = HTTP::Response->new( 200 );
+    $result->content( get_soap_unauthenticated_xml() );
+    return $result;
+}
+
+sub get_scpd_response
 {
     my $result = HTTP::Response->new( 200 );
     $result->content( get_scpd_xml() );
     return $result;
 }
 
+sub pick_soap_header
+{
+    my ($request, $needle) = (@_);
+    my $content = $request->content;
+    my $regexp = "<${needle}[^>]*>([^<]+)</${needle}>"; # TODO: use an xml parser
+    if ($content =~ qr/$regexp/) {
+	return $1;
+    }
+    return undef;
+}
+
+sub authentication
+{
+    my $request = shift;
+    my $userid = pick_soap_header($request, 'UserID');
+    my $realm = pick_soap_header($request, 'Realm');
+    my $nonce = pick_soap_header($request, 'Nonce');
+    my $auth = pick_soap_header($request, 'Auth');
+
+    if (defined $userid and defined $realm and defined $nonce and defined $auth) {
+	my $expected_nonce = '0123456789ABCDEF';
+	my $expected_realm = 'UNIT TEST REALM';
+	my $expected_user = 'user';
+	my $expected_pass = 'pass';
+	my $expected_auth = md5_hex(
+	    md5_hex (
+		$expected_user
+		. ':'
+		. $expected_realm
+		. ':'
+		. $expected_pass
+	    )
+	    . ':'
+	    . $expected_nonce
+	    );
+
+	is( $userid, $expected_user, 'auth request: userid' );
+	is( $realm, $expected_realm, 'auth request: realm' );
+	is( $nonce, $expected_nonce, 'auth request: nonce' );
+	is( $auth, $expected_auth, 'auth request: auth' );
+	return get_soap_response();
+    }
+    return get_unauthorized_response();
+}
+
 sub create_service_with_scpd_data
 {
-    my $fritz = new_ok( 'Fritz::Box' );
+    my $fritz = new_ok( 'Fritz::Box', [ @_ ]);
     my $xmltree = {
 	SCPDURL => [ '/SCPD' ],
 	controlURL => [ '/control' ],
+	serviceType => [ 'TestService' ],
     };
     my $service = new_ok( 'Fritz::Service', [ fritz => $fritz, xmltree => $xmltree ] );
-    $fritz->_ua->map($fritz->upnp_url.$service->SCPDURL, get_fake_scpd_response());
+    $fritz->_ua->map($fritz->upnp_url.$service->SCPDURL, get_scpd_response());
     return $service;
 }
 
@@ -198,13 +303,41 @@ EOF
 ;
 }
 
-sub get_soap_xml {
+sub get_soap_response_xml {
     my $SOAP_XML = <<EOF;
 <Envelope>
 <Body>
 <SomeServiceResponse>
-<OutputArgument>foo</OutputArgument>
+<OutputArgument>bar</OutputArgument>
 </SomeServiceResponse>
+</Body>
+</Envelope>
+EOF
+;
+}
+
+sub get_soap_unauthenticated_xml {
+    my $SOAP_XML = <<EOF;
+<?xml version="1.0"?>
+<Envelope>
+<Header>
+<Challenge>
+<Status>Unauthenticated</Status>
+<Nonce>0123456789ABCDEF</Nonce>
+<Realm>UNIT TEST REALM</Realm>
+</Challenge>
+</Header>
+<Body>
+<Fault>
+<faultcode>s:Client</faultcode>
+<faultstring>UPnPError</faultstring>
+<detail>
+<UPnPError>
+<errorCode>503</errorCode>
+<errorDescription></errorDescription>
+</UPnPError>
+</detail>
+</Fault>
 </Body>
 </Envelope>
 EOF
