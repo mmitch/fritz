@@ -2,7 +2,7 @@ package Fritz;
 use strict;
 use warnings;
 
-use version; our $VERSION = qv('v0.0.1');
+use version; our $VERSION = qv('0.01');
 
 =head1 NAME
 
