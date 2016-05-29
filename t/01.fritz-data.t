@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 4;
+use Test::More tests => 5;
 use warnings;
 use strict;
 
@@ -9,17 +9,37 @@ BEGIN { use_ok('Fritz::Data') };
 ### public tests
 
 subtest 'check new() with named parameters' => sub {
-    my $data = new_ok( 'Fritz::Data', [ data => 'foo' ] );
-    is( $data->error, '', 'get Fritz::Data instance');
-    isa_ok( $data, 'Fritz::Data' );
-    is( $data->data, 'foo', 'Fritz::Data->name');
+    # given
+    my $value = 'foo';
+
+    # when
+    my $data = new_ok( 'Fritz::Data', [ data => $value ] );
+
+    # then
+    is( $data->data, $value, 'Fritz::Data->data');
+};
+
+subtest 'check new() with single parameter' => sub {
+    # given
+    my $value = 'bar';
+
+    # when
+    my $data = new_ok( 'Fritz::Data', [ $value ] );
+
+    # then
+    is( $data->data, $value, 'Fritz::Data->data');
 };
 
 subtest 'check get()' => sub {
-    my $data = new_ok( 'Fritz::Data', [ 'FOO' ] );
-    is( $data->error, '', 'get Fritz::Data instance');
-    isa_ok( $data, 'Fritz::Data' );
-    is( $data->get, 'FOO', 'Fritz::Data->name');
+    # given
+    my $value = 'FOObar';
+    my $data = new_ok( 'Fritz::Data', [ $value ] );
+
+    # when
+    my $result = $data->get();
+
+    # then
+    is( $result, $value, 'Fritz::Data->get');
 };
 
 subtest 'check dump()' => sub {
