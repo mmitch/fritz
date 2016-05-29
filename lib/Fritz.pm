@@ -34,7 +34,7 @@ v0.0.1
            $response->data->{NewSecurityPort};
 
     # dump all available devices and services
-    Fritz::Box->new()->discover()->dump();
+    print Fritz::Box->new()->discover()->dump();
 
 You also need to enable TR-064 on your Fritz!Box, see
 L</"CONFIGURATION AND ENVIRONMENT">.
