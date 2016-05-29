@@ -17,7 +17,7 @@ subtest 'check xmltree getter' => sub {
     my $result = $action->xmltree;
 
     # then
-    is_deeply( $result, $xmltree, 'action->xmltree' );
+    is_deeply( $result, $xmltree, 'Fritz::Action->xmltree' );
 };
 
 subtest 'check name getter' => sub {
@@ -28,7 +28,7 @@ subtest 'check name getter' => sub {
     my $result = $action->name;
 
     # then
-    is( $result, 'NAME', 'action->name' );
+    is( $result, 'NAME', 'Fritz::Action->name' );
 };
 
 subtest 'check args_in' => sub {
@@ -39,7 +39,7 @@ subtest 'check args_in' => sub {
     my $result = $action->args_in;
 
     # then
-    is_deeply( $result, [ 'IN1', 'IN2' ], 'action->args_in' );
+    is_deeply( $result, [ 'IN1', 'IN2' ], 'Fritz::Action->args_in' );
 };
 
 subtest 'check args_out' => sub {
@@ -50,7 +50,7 @@ subtest 'check args_out' => sub {
     my $result = $action->args_out;
 
     # then
-    is_deeply( $result, [ 'OUT' ], 'action->args_out' );
+    is_deeply( $result, [ 'OUT' ], 'Fritz::Action->args_out' );
 };
 
 subtest 'check Fritz::IsNoError role' => sub {
@@ -75,7 +75,7 @@ subtest 'check new() with named parameters' => sub {
     my $action = new_ok( 'Fritz::Action', [ xmltree => $xmltree ] );
 
     # then
-    is_deeply( $action->xmltree, $xmltree, 'action->xmltree' );
+    is_deeply( $action->xmltree, $xmltree, 'Fritz::Action->xmltree' );
 };
 
 subtest 'check new() with odd parameter count' => sub {
@@ -86,7 +86,7 @@ subtest 'check new() with odd parameter count' => sub {
     my $action = new_ok( 'Fritz::Action', [ $xmltree ] );
 
     # then
-    is_deeply( $action->xmltree, $xmltree, 'action->xmltree' );
+    is_deeply( $action->xmltree, $xmltree, 'Fritz::Action->xmltree' );
 };
 
 subtest 'check dump()' => sub {
