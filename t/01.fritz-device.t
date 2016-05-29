@@ -7,6 +7,7 @@ use Fritz::Box;
 
 BEGIN { use_ok('Fritz::Device') };
 
+
 ### public tests
 
 subtest 'check fritz getter, set via new()' => sub {
