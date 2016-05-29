@@ -192,7 +192,7 @@ most of the other attributes are read from.
 
 =cut
 
-has SCPDURL      => ( is => 'rwp', lazy => 1, builder => 1, init_arg => undef ); # TODO remove private setter when all unit-tests are updates
+has SCPDURL      => ( is => 'lazy', init_arg => undef );
 
 sub _build_SCPDURL {
     my $self = shift;
