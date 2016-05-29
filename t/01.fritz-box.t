@@ -8,6 +8,7 @@ use HTTP::Response;
 
 BEGIN { use_ok('Fritz::Box') };
 
+
 ### public tests
 
 subtest 'check new()' => sub {
@@ -89,15 +90,64 @@ subtest 'check dump()' => sub {
 
 ### helper methods
 
-# prepare a fake device structure
 sub get_fake_device_response
 {
-    local $/ = undef;
-    open(my $fh, '<', 't/fake_tr64desc.xml') or die $!;
-    my $xml = <$fh>;
-    close $fh or die $!;
+    my $xml = get_tr64desc_xml();
 
     my $result = HTTP::Response->new( 200 );
     $result->content( $xml );
     return $result;
+}
+
+sub get_tr64desc_xml
+{
+    my $tr64_desc_xml = <<EOF;
+<?xml version="1.0"?>
+<root xmlns="urn:dslforum-org:device-1-0">
+  <device>
+    <deviceType>FakeDevice:1</deviceType>
+    <friendlyName>UnitTest Unit</friendlyName>
+    <manufacturer>fake</manufacturer>
+    <manufacturerURL>http://example.org/1</manufacturerURL>
+    <modelDescription>fake model description</modelDescription>
+    <modelName>fake model name</modelName>
+    <modelNumber>fake model number</modelNumber>
+    <modelURL>http://example.org/2</modelURL>
+    <UDN>uuid:1</UDN>
+    <serviceList>
+      <service>
+	<serviceType>FakeService:1</serviceType>
+	<serviceId>fakeService1</serviceId>
+	<controlURL>/upnp/control/deviceinfo</controlURL>
+	<eventSubURL>/upnp/control/deviceinfo</eventSubURL>
+	<SCPDURL>fakeSCPD.xml</SCPDURL>
+      </service>
+    </serviceList>
+    <deviceList>
+      <device>
+	<deviceType>FakeSubDevice:1</deviceType>
+	<friendlyName>UnitTest Unit Subdevice</friendlyName>
+	<manufacturer>fake</manufacturer>
+	<manufacturerURL>http://example.org/3</manufacturerURL>
+	<modelDescription>fake model description - subdevice</modelDescription>
+	<modelName>fake model name - subdevice</modelName>
+	<modelNumber>fake model number - subdevice</modelNumber>
+	<modelURL>http://example.org/4</modelURL>
+	<UDN>uuid:2</UDN>
+	<serviceList>
+	  <service>
+	    <serviceType>FakeService:1</serviceType>
+	    <serviceId>fakeService2</serviceId>
+	    <controlURL>/upnp/control/deviceinfo</controlURL>
+	    <eventSubURL>/upnp/control/deviceinfo</eventSubURL>
+	    <SCPDURL>fakeSCPD.xml</SCPDURL>
+	  </service>
+	</serviceList>
+      </device>
+    </deviceList>
+    <presentationURL>http://localhost</presentationURL>
+  </device>
+</root>
+EOF
+    ;
 }
