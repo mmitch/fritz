@@ -11,7 +11,7 @@ lib/Fritz/Service.pm
 MANIFEST			This list of files
 META.json
 META.yml
-README
+README.md
 t/00.load.t
 t/01.fritz-action.t
 t/01.fritz-box.t
@@ -20,11 +20,8 @@ t/01.fritz-device.t
 t/01.fritz-error.t
 t/01.fritz-isnoerror.t
 t/01.fritz-service.t
-t/02.parsing.t
 t/03.connect-http.t
 t/03.connect-https.t
 t/04.perlcritic.t
 t/05.pod-coverage.t
 t/05.pod.t
-t/fake_tr64desc.xml
-t/fakeSCPD.xml
