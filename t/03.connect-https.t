@@ -6,11 +6,11 @@ use strict;
 use Fritz::Box;
 
 # check if a Fritz!Box is available - otherwise skip
-
-if (my $error = Fritz::Box->new()->discover->error) {
-    plan skip_all => 'no device found, further tests skipped: ' . $error;
-} else {
+# check if a live test is wanted - otherwise skip
+if (exists $ENV{AUTHOR_TEST} and $ENV{AUTHOR_TEST} eq 'fritz') {
     plan tests => 17;
+} else {
+    plan skip_all => 'needs a real Fritz!Box (set AUTHOR_TEST=fritz to enable)';
 }
 
 # connect on normal port to get SSL port (real request)
