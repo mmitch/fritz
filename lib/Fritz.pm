@@ -45,7 +45,7 @@ L<Fritz> is a set of modules to communicate with an AVM Fritz!Box (and
 possibly other routers as well) via the TR-064 protocol.
 
 I wanted to initiate calls via commandline, but I only found GUI tools
-to do that or libraries in other langages than Perl, so I have built
+to do that or libraries in other languages than Perl, so I have built
 this library.
 
 Luckily, the TR-064 protocol announces all available services via XML.
