@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 4;
+use Test::More tests => 6;
 use warnings;
 use strict;
 
@@ -10,20 +10,61 @@ BEGIN { use_ok('Fritz::Error') };
 
 ### public tests
 
-subtest 'check new()' => sub {
-    my $error = new_ok( 'Fritz::Error', [ error => 'SOME_ERROR' ] );
-    isa_ok( $error, 'Fritz::Error' );
-    is( $error->error, 'SOME_ERROR', 'Fritz::Error->error' );
+subtest 'check error getter' => sub {
+    # given
+    my $text = 'some_exception_text';
+    my $error = new_ok( 'Fritz::Error', [ $text ] );
+
+    # when
+    my $result = $error->error;
+
+    # then
+    is( $result, $text, 'Fritz::Error->error' );
 };
-    
+
 subtest 'check errorcheck()' => sub {
-    my $error = new_ok( 'Fritz::Error', [ 'some_exception_text' ] );
-    throws_ok { $error->errorcheck() } qr/some_exception_text/, 'error text thrown on die()';
+    # given
+    my $text = 'some other exception';
+    my $error = new_ok( 'Fritz::Error', [ error => $text ] );
+
+    # when/then
+    throws_ok { $error->errorcheck() } qr/$text/, 'error text thrown on die()';
 };
 
 subtest 'check dump()' => sub {
-    my $error = new_ok( 'Fritz::Error', [ 'SOME_OTHER_ERROR' ] );
+    # given
+    my $text = 'SOME_OTHER_ERROR';
+    my $error = new_ok( 'Fritz::Error', [ $text ] );
+
+    # when
     my $dump = $error->dump();
+
+    # then
     like( $dump, qr/Fritz::Error/, 'class name is dumped' );
-    like( $dump, qr/SOME_OTHER_ERROR/, 'errortext is dumped' );
+    like( $dump, qr/$text/, 'errortext is dumped' );
+};
+
+
+### internal tests
+
+subtest 'check new() with named parameter' => sub {
+    # given
+    my $text = 'SOME_ERROR';
+
+    # when
+    my $error = new_ok( 'Fritz::Error', [ error => $text ] );
+
+    # then
+    is( $error->error, $text, 'Fritz::Error->error' );
+};
+
+subtest 'check new() with single parameter' => sub {
+    # given
+    my $text = 'ERROR! ERROR! ERROR!';
+
+    # when
+    my $error = new_ok( 'Fritz::Error', [ $text ] );
+
+    # then
+    is( $error->error, $text, 'Fritz::Error->error' );
 };
