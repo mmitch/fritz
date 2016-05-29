@@ -14,6 +14,7 @@ BEGIN { use_ok('Fritz::IsNoError') };
     with 'Fritz::IsNoError';
 }
 
+
 ### public tests
 
 subtest 'check stub role' => sub {
@@ -44,6 +45,3 @@ subtest 'check errorcheck()' => sub {
     # when/then
     lives_ok( sub { $obj->errorcheck() }, 'errorcheck() does not die' );
 };
-
-
-### helper methods
