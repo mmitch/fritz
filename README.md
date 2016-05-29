@@ -6,8 +6,17 @@ Fritz - perl module for AVM Fritz!Box interaction via TR-064
 [![GPL 2+](https://img.shields.io/badge/license-GPL%202%2B-blue.svg)](http://www.gnu.org/licenses/gpl-2.0-standalone.html)
 
 
-what? why?
-----------
+what
+----
+
+The Fritz library is a set of Perl modules to communicate with an AVM
+Fritz!Box (and possibly other routers as well) via the TR-064
+protocol.  The AVM Fritz!Box is a popular home router family in
+Germany (and beyond).
+
+
+why
+---
 
 I wanted to use an old analog field telephone with my FritzBox and
 VoIP.  While this works quite out-of-the box (it’s just an ordinary
@@ -18,6 +27,24 @@ Luckily the Fritz!Box has a call helper mode where you can tell it to
 dial a number and patch it through to any local phone, but I found no
 Perl library to use this feature.  So I wrote my own library - the one
 you’re looking at right now.
+
+
+installation
+------------
+
+To build and install the Fritz module, run
+
+    $ perl Build.PL
+	$ perl Build install
+
+Any missing dependencies should be reported automatically and can be
+installed by
+
+    $ perl Build installdeps
+
+The current dependencies can be seen in the ``Build.PL`` file in the
+hashes ``configure_requires`` and ``requires``.  The modles listed
+under ``test_requires`` are optional if you want to skip the tests.
 
 
 where to get it
