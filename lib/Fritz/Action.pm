@@ -56,7 +56,7 @@ sub _build_name {
 =head2 args_in
 
 An arrayref containing the names of all input parameters for this
-action.  These parameters must be present on a L<Fritz::Service/call>.
+action.  These parameters must be present in a L<Fritz::Service/call>.
 
 =cut
 
@@ -149,6 +149,7 @@ sub dump {
     $indent = '' unless defined $indent;
 
     my $text = "${indent}Fritz::Action:\n";
+    $indent .= '  ';
     $text .= "${indent}name     = " . $self->name     . "\n";
     $text .= "${indent}args_in  = " . join(', ', @{$self->args_in})  . "\n";
     $text .= "${indent}args_out = " . join(', ', @{$self->args_out}) . "\n";
