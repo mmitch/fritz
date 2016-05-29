@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 5;
+use Test::More tests => 6;
 use warnings;
 use strict;
 
@@ -8,26 +8,16 @@ BEGIN { use_ok('Fritz::Data') };
 
 ### public tests
 
-subtest 'check new() with named parameters' => sub {
+subtest 'check data getter' => sub {
     # given
-    my $value = 'foo';
-
-    # when
+    my $value = 'barf00';
     my $data = new_ok( 'Fritz::Data', [ data => $value ] );
 
-    # then
-    is( $data->data, $value, 'Fritz::Data->data');
-};
-
-subtest 'check new() with single parameter' => sub {
-    # given
-    my $value = 'bar';
-
     # when
-    my $data = new_ok( 'Fritz::Data', [ $value ] );
+    my $result = $data->data();
 
     # then
-    is( $data->data, $value, 'Fritz::Data->data');
+    is( $result, $value, 'Fritz::Data->data');
 };
 
 subtest 'check get()' => sub {
@@ -58,5 +48,30 @@ subtest 'check dump()' => sub {
 
     like( $dump, qr/Fritz::Data/, 'class name is dumped' );
     like( $dump, qr/TEST VALUE/, 'data is dumped' );
+};
+
+
+### internal tests
+
+subtest 'check new() with named parameters' => sub {
+    # given
+    my $value = 'foo';
+
+    # when
+    my $data = new_ok( 'Fritz::Data', [ data => $value ] );
+
+    # then
+    is( $data->data, $value, 'Fritz::Data->data');
+};
+
+subtest 'check new() with single parameter' => sub {
+    # given
+    my $value = 'bar';
+
+    # when
+    my $data = new_ok( 'Fritz::Data', [ $value ] );
+
+    # then
+    is( $data->data, $value, 'Fritz::Data->data');
 };
 
