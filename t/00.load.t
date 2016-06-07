@@ -2,7 +2,7 @@
 use Test::More tests => 1;
 
 BEGIN {
-use_ok( 'Fritz' );
+use_ok( 'Net::Fritz' );
 }
 
-diag( "Testing Fritz $Fritz::VERSION" );
+diag( "Testing Net::Fritz $Net::Fritz::VERSION" );

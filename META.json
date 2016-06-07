@@ -12,7 +12,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "Fritz",
+   "name" : "Net-Fritz",
    "prereqs" : {
       "configure" : {
          "requires" : {
@@ -38,30 +38,30 @@
       }
    },
    "provides" : {
-      "Fritz" : {
-         "file" : "lib/Fritz.pm",
+      "Net::Fritz" : {
+         "file" : "lib/Net/Fritz.pm",
          "version" : "v0.0.1"
       },
-      "Fritz::Action" : {
-         "file" : "lib/Fritz/Action.pm"
+      "Net::Fritz::Action" : {
+         "file" : "lib/Net/Fritz/Action.pm"
       },
-      "Fritz::Box" : {
-         "file" : "lib/Fritz/Box.pm"
+      "Net::Fritz::Box" : {
+         "file" : "lib/Net/Fritz/Box.pm"
       },
-      "Fritz::Data" : {
-         "file" : "lib/Fritz/Data.pm"
+      "Net::Fritz::Data" : {
+         "file" : "lib/Net/Fritz/Data.pm"
       },
-      "Fritz::Device" : {
-         "file" : "lib/Fritz/Device.pm"
+      "Net::Fritz::Device" : {
+         "file" : "lib/Net/Fritz/Device.pm"
       },
-      "Fritz::Error" : {
-         "file" : "lib/Fritz/Error.pm"
+      "Net::Fritz::Error" : {
+         "file" : "lib/Net/Fritz/Error.pm"
       },
-      "Fritz::IsNoError" : {
-         "file" : "lib/Fritz/IsNoError.pm"
+      "Net::Fritz::IsNoError" : {
+         "file" : "lib/Net/Fritz/IsNoError.pm"
       },
-      "Fritz::Service" : {
-         "file" : "lib/Fritz/Service.pm"
+      "Net::Fritz::Service" : {
+         "file" : "lib/Net/Fritz/Service.pm"
       }
    },
    "release_status" : "stable",

@@ -5,13 +5,13 @@ use strict;
 
 use Test::Exception;
 
-BEGIN { use_ok('Fritz::IsNoError') };
+BEGIN { use_ok('Net::Fritz::IsNoError') };
 
 # a role has no constructor, so we need a dummy class
 {
-    package Fritz::IsNoError::Stub;
+    package Net::Fritz::IsNoError::Stub;
     use Moo;
-    with 'Fritz::IsNoError';
+    with 'Net::Fritz::IsNoError';
 }
 
 
@@ -21,15 +21,15 @@ subtest 'check stub role' => sub {
     # given
 
     # when
-    my $obj = Fritz::IsNoError::Stub->new;
+    my $obj = Net::Fritz::IsNoError::Stub->new;
 
     # then
-    ok( $obj->does('Fritz::IsNoError'), 'does Fritz::IsNoError role' );
+    ok( $obj->does('Net::Fritz::IsNoError'), 'does Net::Fritz::IsNoError role' );
 };
 
 subtest 'check error getter' => sub {
     # given
-    my $obj = Fritz::IsNoError::Stub->new;
+    my $obj = Net::Fritz::IsNoError::Stub->new;
 
     # when
     my $result = $obj->error;
@@ -40,7 +40,7 @@ subtest 'check error getter' => sub {
 
 subtest 'check errorcheck()' => sub {
     # given
-    my $obj = Fritz::IsNoError::Stub->new;
+    my $obj = Net::Fritz::IsNoError::Stub->new;
 
     # when/then
     lives_ok( sub { $obj->errorcheck() }, 'errorcheck() does not die' );

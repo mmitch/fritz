@@ -1,45 +1,48 @@
-package Fritz::Error;
+package Net::Fritz::Error;
 use strict;
 use warnings;
 
 # TODO: use a global configuration option to make every call to
-#       Fritz::Error->new an immediately fatal error?
+#       Net::Fritz::Error->new an immediately fatal error?
 
 use Moo;
 
 =head1 NAME
 
-Fritz::Error - wraps any error from the L<Fritz> modules
+Net::Fritz::Error - wraps any error from the L<Net::Fritz> modules
 
 =head1 SYNOPSIS
 
-    $root_device = Fritz::Box->new->discover;
+    $root_device = Net::Fritz::Box->new->discover;
     $root_device->errorcheck;
 
 or
 
-    $root_device = Fritz::Box->new->discover;
+    $root_device = Net::Fritz::Box->new->discover;
     if ($root_device->error) {
         die "error: " . $root_device->error;
     }
 
 =head1 DESCRIPTION
 
-Whenever any of the L<Fritz> modules detects an error, it returns an
-L<Fritz::Error> object.  All valid (non-error) objects also implement
-C<error> and C<errorcheck> via the role L<Fritz::IsNoError>, so
-calling both methods always works for any L<Fritz> object.
+Whenever any of the L<Net::Fritz> modules detects an error, it returns
+an L<Net::Fritz::Error> object.  All valid (non-error) objects also
+implement C<error> and C<errorcheck> via the role
+L<Net::Fritz::IsNoError>, so calling both methods always works for any
+L<Net::Fritz> object.
 
 If you want your code to just C<die()> on any error, call
-C<$obj->errorcheck> on every returned object (see first example above).
+C<$obj->errorcheck> on every returned object (see first example
+above).
 
 If you just want to check for an error and handle it by yourself, call
-C<$obj-E<gt>error>.  All non-errors will return C<0> (see second example above).
+C<$obj-E<gt>error>.  All non-errors will return C<0> (see second
+example above).
 
 You don't have to check for errors at all, but then you might run into
-problems when you want to invoke methods on an L<Fritz::Error> object
-that don't exist (because you expected to get eg. an L<Fritz::Service>
-object instead).
+problems when you want to invoke methods on an L<Net::Fritz::Error>
+object that don't exist (because you expected to get eg. an
+L<Net::Fritz::Service> object instead).
 
 =head1 ATTRIBUTES (read-only)
 
@@ -56,9 +59,9 @@ has error => ( is => 'ro', default => 'generic error' );
 
 =head2 new
 
-Creates a new L<Fritz::Error> object.  You propably don't have to call
-this method, it's mostly used internally.  Expects parameters in C<key
-=E<gt> value> form with the following keys:
+Creates a new L<Net::Fritz::Error> object.  You propably don't have to
+call this method, it's mostly used internally.  Expects parameters in
+C<key =E<gt> value> form with the following keys:
 
 =over
 
@@ -89,7 +92,7 @@ Immediately C<die()>, printing the error text.
 
 sub errorcheck {
     my $self = shift;
-    die "Fritz::Error: " . $self->error. "\n";
+    die "Net::Fritz::Error: " . $self->error. "\n";
 }
 
 =head2 dump
@@ -102,7 +105,7 @@ debugging purposes, printing or logging.
 sub dump {
     my $self = shift;
 
-    return "Fritz::Error: " . $self->error . "\n";
+    return "Net::Fritz::Error: " . $self->error . "\n";
 }
 
 =head1 LICENSE AND COPYRIGHT
@@ -116,8 +119,8 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
-See L<Fritz> for general information about this package, especially
-L<Fritz/INTERFACE> for links to the other classes.
+See L<Net::Fritz> for general information about this package,
+especially L<Net::Fritz/INTERFACE> for links to the other classes.
 
 =cut
 

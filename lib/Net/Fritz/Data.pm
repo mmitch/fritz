@@ -1,4 +1,4 @@
-package Fritz::Data;
+package Net::Fritz::Data;
 use strict;
 use warnings;
 
@@ -6,37 +6,37 @@ use Scalar::Util qw(blessed);
 
 use Moo;
 
-with 'Fritz::IsNoError';
+with 'Net::Fritz::IsNoError';
 
 =head1 NAME
 
-Fritz::Data - wraps various response data 
+Net::Fritz::Data - wraps various response data 
 
 =head1 SYNOPSIS
 
-    my $fritz    = Fritz::Box->new();
+    my $fritz    = Net::Fritz::Box->new();
     my $device   = $fritz->discover();
     my $service  = $device->find_service('DeviceInfo:1');
     my $response = $service->call('GetSecurityPort');
 
-    # $response is Fritz::Data
+    # $response is Net::Fritz::Data
     printf "SSL communication port is %d\n",
            $response->data->{NewSecurityPort};
 
 
     my $service_list = $device->find_service_names('DeviceInfo:1');
 
-    # service_list is Fritz::Data
+    # service_list is Net::Fritz::Data
     printf "%d services found\n",
            scalar @{$service_list->data};
 
 =head1 DESCRIPTION
 
-This class wraps the return data from a L<Fritz::Service> call.  This
-is only done for consistent error checks: L<Fritz::Data> does the role
-L<Fritz::IsNoError>, so it is possible to check for errors during the
-service call with C<$response-E<gt>error> and
-C<$response-E<gt>errorcheck> (see L<Fritz::Error> for details).
+This class wraps the return data from a L<Net::Fritz::Service> call.
+This is only done for consistent error checks: L<Net::Fritz::Data>
+does the role L<Net::Fritz::IsNoError>, so it is possible to check for
+errors during the service call with C<$response-E<gt>error> and
+C<$response-E<gt>errorcheck> (see L<Net::Fritz::Error> for details).
 
 Apart from that the response data from the service call is passed
 through unaltered, so you have to know with which data type the
@@ -44,7 +44,7 @@ services answers.
 
 This wrapper class is also used in some other methods that return
 things that need to be error-checkable, like
-L<Fritz::Device/find_service_names>.
+L<Net::Fritz::Device/find_service_names>.
 
 =head1 ATTRIBUTES (read-only)
 
@@ -59,15 +59,15 @@ has data => ( is => 'ro' );
 
 =head2 error
 
-See L<Fritz::IsNoError/error>.
+See L<Net::Fritz::IsNoError/error>.
 
 =head1 METHODS
 
 =head2 new
 
-Creates a new L<Fritz::Data> object.  You propably don't have to call
-this method, it's mostly used internally.  Expects parameters in C<key
-=E<gt> value> form with the following keys:
+Creates a new L<Net::Fritz::Data> object.  You propably don't have to
+call this method, it's mostly used internally.  Expects parameters in
+C<key =E<gt> value> form with the following keys:
 
 =over
 
@@ -94,7 +94,8 @@ sub BUILDARGS {
 
 =head2 get
 
-Kind of an alias for C<$response->data>: Returns the L<data|/data> attribute.
+Kind of an alias for C<$response->data>: Returns the L<data|/data>
+attribute.
 
 =cut
 
@@ -129,7 +130,7 @@ sub dump {
 
 =head2 errorcheck
 
-See L<Fritz::IsNoError/errorcheck>.
+See L<Net::Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -142,8 +143,8 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
-See L<Fritz> for general information about this package, especially
-L<Fritz/INTERFACE> for links to the other classes.
+See L<Net::Fritz> for general information about this package,
+especially L<Net::Fritz/INTERFACE> for links to the other classes.
 
 =cut
 

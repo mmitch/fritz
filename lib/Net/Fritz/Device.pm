@@ -1,22 +1,22 @@
-package Fritz::Device;
+package Net::Fritz::Device;
 use strict;
 use warnings;
 
-use Fritz::Data;
-use Fritz::Error;
-use Fritz::Service;
+use Net::Fritz::Data;
+use Net::Fritz::Error;
+use Net::Fritz::Service;
 
 use Moo;
 
-with 'Fritz::IsNoError';
+with 'Net::Fritz::IsNoError';
 
 =head1 NAME
 
-Fritz::Device - represents a TR064 device
+Net::Fritz::Device - represents a TR064 device
 
 =head1 SYNOPSIS
 
-    my $fritz    = Fritz::Box->new();
+    my $fritz    = Net::Fritz::Box->new();
     my $device   = $fritz->discover();
 
     # get services to call them later
@@ -37,14 +37,15 @@ Fritz::Device - represents a TR064 device
 =head1 DESCRIPTION
 
 This class represents a TR064 device that has been discovered.  A
-device gives access to other subdevices (L<Fritz::Device>) as well as
-L<Fritz::Service>s which allow interaction with a L<Fritz::Device>.
+device gives access to other subdevices (L<Net::Fritz::Device>) as
+well as L<Net::Fritz::Service>s which allow interaction with a
+L<Net::Fritz::Device>.
 
 =head1 ATTRIBUTES (read-only)
 
 =head2 fritz
 
-A L<Fritz::Box> instance containing the current configuration
+A L<Net::Fritz::Box> instance containing the current configuration
 information (device address, authentication etc.).
 
 =cut
@@ -54,8 +55,8 @@ has fritz        => ( is => 'ro' );
 =head2 xmltree
 
 A complex hashref containing all information about this
-L<Fritz::Device>.  This is the parsed form of the TR064 XML which
-describes the device, it's subdevices and L<Fritz::Service>s.
+L<Net::Fritz::Device>.  This is the parsed form of the TR064 XML which
+describes the device, it's subdevices and L<Net::Fritz::Service>s.
 
 =cut
 
@@ -63,7 +64,7 @@ has xmltree      => ( is => 'ro' );
 
 =head2 service_list
 
-An arrayref of all L<Fritz::Service>s that are available on this
+An arrayref of all L<Net::Fritz::Service>s that are available on this
 device.
 
 =cut
@@ -77,7 +78,7 @@ sub _build_service_list {
 
     if (exists $xml->{serviceList}) {
 	foreach my $service (@{$xml->{serviceList}->[0]->{service}}) {
-	    push @services, Fritz::Service->new(
+	    push @services, Net::Fritz::Service->new(
 		xmltree => $service,
 		fritz   => $self->fritz
 		);
@@ -89,8 +90,8 @@ sub _build_service_list {
 
 =head2 device_list
 
-An arrayref of all subdevices (L<Fritz::Device>) that are available on
-this device.
+An arrayref of all subdevices (L<Net::Fritz::Device>) that are
+available on this device.
 
 =cut
 
@@ -103,7 +104,7 @@ sub _build_device_list {
 
     if (exists $xml->{deviceList}) {
 	foreach my $device (@{$xml->{deviceList}->[0]->{device}}) {
-	    push @devices, Fritz::Device->new(
+	    push @devices, Net::Fritz::Device->new(
 		xmltree => $device,
 		fritz   => $self->fritz
 		);
@@ -178,21 +179,21 @@ sub _build_attributes {
 
 =head2 error
 
-See L<Fritz::IsNoError/error>.
+See L<Net::Fritz::IsNoError/error>.
 
 =head1 METHODS
 
 =head2 new
 
-Creates a new L<Fritz::Device> object.  You propably don't have to call
-this method, it's mostly used internally.  Expects parameters in C<key
-=E<gt> value> form with the following keys:
+Creates a new L<Net::Fritz::Device> object.  You propably don't have
+to call this method, it's mostly used internally.  Expects parameters
+in C<key =E<gt> value> form with the following keys:
 
 =over
 
 =item I<fritz>
 
-L<Fritz::Box> configuration object
+L<Net::Fritz::Box> configuration object
 
 =item I<xmltree>
 
@@ -202,13 +203,13 @@ device information in parsed XML format
 
 =head2 get_service(I<name>)
 
-Returns the L<Fritz::Service> whose
-L<serviceType|Fritz::Service/serviceType> equals I<name>.
+Returns the L<Net::Fritz::Service> whose
+L<serviceType|Net::Fritz::Service/serviceType> equals I<name>.
 
 If no matching service is found, the subdevices are searched for the
 service in the order they are listed in the device XML, depth first.
 
-If no matching service is found, a L<Fritz::Error> is returned.
+If no matching service is found, a L<Net::Fritz::Error> is returned.
 
 =cut
 
@@ -229,18 +230,18 @@ sub get_service {
 	}
     }
     
-    return Fritz::Error->new('service not found');
+    return Net::Fritz::Error->new('service not found');
 }
 
 =head2 find_service(I<regexp>)
 
-Returns the L<Fritz::Service> whose
-L<serviceType|Fritz::Service/serviceType> matches I<regexp>.
+Returns the L<Net::Fritz::Service> whose
+L<serviceType|Net::Fritz::Service/serviceType> matches I<regexp>.
 
 If no matching service is found, the subdevices are searched for the
 service in the order they are listed in the device XML, depth first.
 
-If no matching service is found, a L<Fritz::Error> is returned.
+If no matching service is found, a L<Net::Fritz::Error> is returned.
 
 =cut
 
@@ -261,20 +262,20 @@ sub find_service {
 	}
     }
 
-    return Fritz::Error->new('service not found');
+    return Net::Fritz::Error->new('service not found');
 }
 
 =head2 find_service_names(I<regexp>)
 
-Returns all L<Fritz::Service>s whose
-L<serviceType|Fritz::Service/serviceType> match I<regexp>.
+Returns all L<Net::Fritz::Service>s whose
+L<serviceType|Net::Fritz::Service/serviceType> match I<regexp>.
 
 Searches recursively through all subdevices in the order they are
 listed in the device XML, depth first.
 
-The resulting arrayref is wrapped in a L<Fritz::Data> to allow L<error
-checking|Fritz::IsNoError>.  (Although no error should ever occur, an
-an empty list is returned if nothing matched.)
+The resulting arrayref is wrapped in a L<Net::Fritz::Data> to allow
+L<error checking|Net::Fritz::IsNoError>.  (Although no error should
+ever occur, an an empty list is returned if nothing matched.)
 
 =cut
 
@@ -295,19 +296,19 @@ sub find_service_names {
 	push @found, @{$data->data};
     }
 
-    return Fritz::Data->new(\@found);
+    return Net::Fritz::Data->new(\@found);
 }
 
 =head2 find_device(I<name>)
 
-Returns the L<Fritz::Device> subdevice whose I<deviceType> equals
+Returns the L<Net::Fritz::Device> subdevice whose I<deviceType> equals
 I<name>.
 
 If no matching service is found, the subdevices are searched for the
 I<deviceType> in the order they are listed in the device XML, depth
 first.
 
-If no matching device is found, a L<Fritz::Error> is returned.
+If no matching device is found, a L<Net::Fritz::Error> is returned.
 
 =cut
 
@@ -328,7 +329,7 @@ sub find_device {
 	}
     }
     
-    return Fritz::Error->new( 'device not found' );
+    return Net::Fritz::Error->new( 'device not found' );
 }
 
 =head2 dump(I<indent>)
@@ -339,7 +340,7 @@ parameter I<indent> is used for indentation of the output by
 prepending it to every line.
 
 Recursively descends into subdevices and services, so dumping the root
-device of a L<Fritz::Box/discover> should show everything that is
+device of a L<Net::Fritz::Box/discover> should show everything that is
 available.
 
 =cut
@@ -350,7 +351,7 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    my $text = "${indent}Fritz::Device:\n";
+    my $text = "${indent}Net::Fritz::Device:\n";
     $indent .= '  ';
     $text .= "${indent}modelName       = " . $self->attributes->{modelName} . "\n";
     $text .= "${indent}presentationURL = " . $self->attributes->{presentationURL} . "\n" if defined $self->attributes->{presentationURL};
@@ -378,7 +379,7 @@ sub dump {
 
 =head2 errorcheck
 
-See L<Fritz::IsNoError/errorcheck>.
+See L<Net::Fritz::IsNoError/errorcheck>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -402,8 +403,8 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
-See L<Fritz> for general information about this package, especially
-L<Fritz/INTERFACE> for links to the other classes.
+See L<Net::Fritz> for general information about this package,
+especially L<Net::Fritz/INTERFACE> for links to the other classes.
 
 =cut
 

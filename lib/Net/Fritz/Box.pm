@@ -1,31 +1,31 @@
-package Fritz::Box;
+package Net::Fritz::Box;
 use strict;
 use warnings;
 
 use LWP::UserAgent;
 use XML::Simple qw(:strict);
 
-use Fritz::Error;
-use Fritz::Device;
+use Net::Fritz::Error;
+use Net::Fritz::Device;
 
 use Moo;
 
-with 'Fritz::IsNoError';
+with 'Net::Fritz::IsNoError';
 
 =head1 NAME
 
-Fritz::Box - main configuration and entry point for L<Fritz> distribution
+Net::Fritz::Box - main configuration and entry point for L<Net::Fritz> distribution
 
 =head1 SYNOPSIS
 
-    my $fritz = Fritz::Box->new();
+    my $fritz = Net::Fritz::Box->new();
     $fritz->dump();
 
-    my $fritz_ssl = Fritz::Box->new(
+    my $fritz_ssl = Net::Fritz::Box->new(
         upnp_url => 'https://fritz.box:49000'
     );
 
-    my $fritz_auth = Fritz::Box->new(
+    my $fritz_auth = Net::Fritz::Box->new(
         username => 'admin',
         password => 's3cr3t'
     );
@@ -33,7 +33,7 @@ Fritz::Box - main configuration and entry point for L<Fritz> distribution
 =head1 DESCRIPTION
 
 This class the global configuration state and provides discovery of
-L<Fritz::Device>s.
+L<Net::Fritz::Device>s.
 
 =head1 ATTRIBUTES (read-only, defaults can be changed)
 
@@ -53,7 +53,7 @@ C<192.168.179.1> or C<169.254.1.1>, these adresses seem to be
 hardcoded for "emergency use" after a misconfiguration.
 
 An address starting with C<https://> enables secure communication over
-SSL, but see L<Fritz/SSL> for bugs and limitations.
+SSL, but see L<Net::Fritz/SSL> for bugs and limitations.
 
 =cut
 
@@ -127,15 +127,16 @@ sub _build__sslopts {
 
 =head2 error
 
-See L<Fritz::IsNoError/error>.
+See L<Net::Fritz::IsNoError/error>.
 
 =head1 METHODS
 
 =head2 new
 
-Creates a new L<Fritz::Box> object.  This is propably the first thing
-to do when using L<Fritz>.  Expects parameters in C<key =E<gt> value>
-form with the following keys to overwrite the default values:
+Creates a new L<Net::Fritz::Box> object.  This is propably the first
+thing to do when using L<Net::Fritz>.  Expects parameters in C<key
+=E<gt> value> form with the following keys to overwrite the default
+values:
 
 =over
 
@@ -152,8 +153,7 @@ form with the following keys to overwrite the default values:
 =head2 discover
 
 Tries to discover the TR064 device at the current L</upnp_url>.
-Returns a L<Fritz::Device> on success.
-Accepts no parameters.
+Returns a L<Net::Fritz::Device> on success.  Accepts no parameters.
 
 =cut
 
@@ -165,13 +165,13 @@ sub discover {
     my $response = $self->_ua->get($url);
     
     if ($response->is_success) {
-	return Fritz::Device->new(
+	return Net::Fritz::Device->new(
 	    xmltree => $self->_xs->parse_string($response->decoded_content)->{device}->[0],
 	    fritz   => $self
 	    );
     }
     else {
-	return Fritz::Error->new($response->status_line)
+	return Net::Fritz::Error->new($response->status_line)
     }
 }
 
@@ -189,7 +189,7 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    my $text = "${indent}Fritz::Box:\n";
+    my $text = "${indent}Net::Fritz::Box:\n";
     $indent .= '  ';
     $text .= "${indent}upnp_url    = " . $self->upnp_url    . "\n";
     $text .= "${indent}trdesc_path = " . $self->trdesc_path . "\n";
@@ -199,7 +199,7 @@ sub dump {
 
 =head2 errorcheck
 
-See L<Fritz::IsNoError/errorcheck>.
+See L<Net::Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -212,8 +212,8 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
-See L<Fritz> for general information about this package, especially
-L<Fritz/INTERFACE> for links to the other classes.
+See L<Net::Fritz> for general information about this package,
+especially L<Net::Fritz/INTERFACE> for links to the other classes.
 
 =cut
 

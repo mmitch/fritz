@@ -5,17 +5,17 @@ use strict;
 
 use Test::Mock::LWP::Dispatch;
 use Digest::MD5 qw(md5_hex);
-use Fritz::Box;
+use Net::Fritz::Box;
 
-BEGIN { use_ok('Fritz::Service') };
+BEGIN { use_ok('Net::Fritz::Service') };
 
 
 ### public tests
 
 subtest 'check fritz getter, set via new()' => sub {
     # given
-    my $fritz = Fritz::Box->new();
-    my $service = new_ok( 'Fritz::Service', [ fritz => $fritz, xmltree => undef ] );
+    my $fritz = Net::Fritz::Box->new();
+    my $service = new_ok( 'Net::Fritz::Service', [ fritz => $fritz, xmltree => undef ] );
 
     # when
     my $result = $service->fritz;
@@ -27,7 +27,7 @@ subtest 'check fritz getter, set via new()' => sub {
 subtest 'check xmltree getter, set via new()' => sub {
     # given
     my $xmltree = [ some => 'thing' ];
-    my $service = new_ok( 'Fritz::Service', [ fritz => undef, xmltree => $xmltree ] );
+    my $service = new_ok( 'Net::Fritz::Service', [ fritz => undef, xmltree => $xmltree ] );
 
     # when
     my $result = $service->xmltree;
@@ -39,14 +39,14 @@ subtest 'check xmltree getter, set via new()' => sub {
 subtest 'check for scpd error after HTTP error' => sub {
     # given
     my $xmltree = { SCPDURL => [ '' ] };
-    my $fritz = new_ok( 'Fritz::Box' );
-    my $service = new_ok( 'Fritz::Service', [ fritz => $fritz, xmltree => $xmltree ] );
+    my $fritz = new_ok( 'Net::Fritz::Box' );
+    my $service = new_ok( 'Net::Fritz::Service', [ fritz => $fritz, xmltree => $xmltree ] );
 
     # when
     my $result = $service->scpd;
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'SCPD conversion result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'SCPD conversion result' );
 };
 
 subtest 'check scpd after successful HTTP GET' => sub {
@@ -57,7 +57,7 @@ subtest 'check scpd after successful HTTP GET' => sub {
     my $result = $service->scpd;
 
     # then
-    isa_ok( $result, 'Fritz::Data', 'SCPD conversion result' );
+    isa_ok( $result, 'Net::Fritz::Data', 'SCPD conversion result' );
     isa_ok( $result->data, 'HASH', 'SCPD result data' );
 };
 
@@ -72,7 +72,7 @@ subtest 'check action hash' => sub {
     # then
     isa_ok( $result, 'HASH', 'action_hash result' );
     ok( exists $result->{$service_name}, 'action exists' );
-    isa_ok( $result->{$service_name}, 'Fritz::Action', 'action' );
+    isa_ok( $result->{$service_name}, 'Net::Fritz::Action', 'action' );
 };
 
 subtest 'check attribute getters' => sub {
@@ -84,7 +84,7 @@ subtest 'check attribute getters' => sub {
 	'eventSubURL' => [ 'EV_SUB_URL' ],
 	'SCPDURL' => [ 'SCPD_URL' ],
     };
-    my $service = new_ok( 'Fritz::Service', [ fritz => undef, xmltree => $xmltree ] );
+    my $service = new_ok( 'Net::Fritz::Service', [ fritz => undef, xmltree => $xmltree ] );
 
     foreach my $key (keys %{$xmltree}) {
 	# when
@@ -108,7 +108,7 @@ subtest 'check simple service call' => sub {
 
     # then
     # TODO check if parameters were actually sent in the SOAP call
-    isa_ok( $result, 'Fritz::Data', 'service response' );
+    isa_ok( $result, 'Net::Fritz::Data', 'service response' );
     isa_ok( $result->data, 'HASH', 'service response data' );
     is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
 };
@@ -125,7 +125,7 @@ subtest 'check service call with authentication but no credentials' => sub {
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service response' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service response' );
     like( $result->error, qr/no credentials/, 'error message' );
 };
 
@@ -143,7 +143,7 @@ subtest 'check service call with authentication and credentials' => sub {
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Data', 'service response' );
+    isa_ok( $result, 'Net::Fritz::Data', 'service response' );
     isa_ok( $result->data, 'HASH', 'service response data' );
     is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
 };
@@ -156,7 +156,7 @@ subtest 'check for error message on non-existant action in call()' => sub {
     my $result = $service->call( 'MISSING_ACTION' );
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service result' );
     like( $result->error, qr/unknown action/ );
     like( $result->error, qr/MISSING_ACTION/ );
 };
@@ -170,7 +170,7 @@ subtest 'check for error message on missing parameter in call()' => sub {
     my $result = $service->call( 'SomeService', @arguments );
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service result' );
     like( $result->error, qr/missing input argument/ );
     like( $result->error, qr/InputArgument/ );
 };
@@ -184,7 +184,7 @@ subtest 'check for error message on additional parameter in call()' => sub {
     my $result = $service->call( 'SomeService', @arguments );
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service result' );
     like( $result->error, qr/unknown input argument/ );
     like( $result->error, qr/AdditionalArgument/ );
 };
@@ -204,7 +204,7 @@ subtest 'check for error message on missing parameter in service response' => su
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service result' );
     like( $result->error, qr/missing output argument/ );
     like( $result->error, qr/OutputArgument/ );
 };
@@ -224,7 +224,7 @@ subtest 'check for error message on additional parameter in service response' =>
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service result' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service result' );
     like( $result->error, qr/unknown output argument/ );
     like( $result->error, qr/AdditionalArgument/ );
 };
@@ -240,7 +240,7 @@ subtest 'check for error message on service error (HTTP 404)' => sub {
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service response' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service response' );
     like( $result->error, qr/404/ );
 };
 
@@ -259,7 +259,7 @@ subtest 'check for error message in service response' => sub {
     my $result = $service->call($service_name, @arguments);
 
     # then
-    isa_ok( $result, 'Fritz::Error', 'service response' );
+    isa_ok( $result, 'Net::Fritz::Error', 'service response' );
     like( $result->error, qr/UPnPError/ );
     like( $result->error, qr/418/ );
     like( $result->error, qr/teapot/ );
@@ -273,20 +273,20 @@ subtest 'check _build_an_attribute() with missing attribute' => sub {
     my $xmltree = {};
 
     # when
-    my $service = new_ok( 'Fritz::Service', [ xmltree => $xmltree ] );
+    my $service = new_ok( 'Net::Fritz::Service', [ xmltree => $xmltree ] );
     
     # then
-    is( $service->serviceType, undef, 'Fritz::Service->serviceType' );
+    is( $service->serviceType, undef, 'Net::Fritz::Service->serviceType' );
 };
 
 subtest 'check new()' => sub {
     # given
 
     # when
-    my $service = new_ok( 'Fritz::Service' );
+    my $service = new_ok( 'Net::Fritz::Service' );
 
     # then
-    isa_ok( $service, 'Fritz::Service' );
+    isa_ok( $service, 'Net::Fritz::Service' );
 };
 
 subtest 'check dump()' => sub {
@@ -298,10 +298,10 @@ subtest 'check dump()' => sub {
 
     # then
     foreach my $line (split /\n/, $dump) {
-	like( $line, qr/^(Fritz|  )/, 'line starts as expected' );
+	like( $line, qr/^(Net::Fritz|  )/, 'line starts as expected' );
     }
 
-    like( $dump, qr/^Fritz::Service/, 'class name is dumped' );
+    like( $dump, qr/^Net::Fritz::Service/, 'class name is dumped' );
     my $service_type = $service->serviceType;
     like( $dump, qr/$service_type/, 'serviceType is dumped' );
     my $control_url = $service->controlURL;
@@ -309,7 +309,7 @@ subtest 'check dump()' => sub {
     my $scpd_url = $service->SCPDURL;
     like( $dump, qr/$scpd_url/, 'SCPDURL is dumped' );
     
-    like( $dump, qr/^    Fritz::Action/sm, 'action is dumped' );
+    like( $dump, qr/^    Net::Fritz::Action/sm, 'action is dumped' );
 };
 
 
@@ -387,13 +387,13 @@ sub authentication
 
 sub create_service_with_scpd_data
 {
-    my $fritz = new_ok( 'Fritz::Box', [ @_ ]);
+    my $fritz = new_ok( 'Net::Fritz::Box', [ @_ ]);
     my $xmltree = {
 	SCPDURL => [ '/SCPD' ],
 	controlURL => [ '/control' ],
 	serviceType => [ 'TestService' ],
     };
-    my $service = new_ok( 'Fritz::Service', [ fritz => $fritz, xmltree => $xmltree ] );
+    my $service = new_ok( 'Net::Fritz::Service', [ fritz => $fritz, xmltree => $xmltree ] );
     $fritz->_ua->map($fritz->upnp_url.$service->SCPDURL, get_scpd_response());
     return $service;
 }

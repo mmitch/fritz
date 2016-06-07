@@ -1,13 +1,13 @@
 Build.PL
 Changes
-lib/Fritz.pm
-lib/Fritz/Action.pm
-lib/Fritz/Box.pm
-lib/Fritz/Data.pm
-lib/Fritz/Device.pm
-lib/Fritz/Error.pm
-lib/Fritz/IsNoError.pm
-lib/Fritz/Service.pm
+lib/Net/Fritz.pm
+lib/Net/Fritz/Action.pm
+lib/Net/Fritz/Box.pm
+lib/Net/Fritz/Data.pm
+lib/Net/Fritz/Device.pm
+lib/Net/Fritz/Error.pm
+lib/Net/Fritz/IsNoError.pm
+lib/Net/Fritz/Service.pm
 MANIFEST			This list of files
 META.json
 META.yml

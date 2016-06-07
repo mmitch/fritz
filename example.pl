@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Fritz::Box;
+use Net::Fritz::Box;
 
 use Data::Dumper;
 
@@ -27,7 +27,7 @@ if (-r $rcfile) {
     close FRITZRC or die $!;
 }
 
-my $f = Fritz::Box->new(
+my $f = Net::Fritz::Box->new(
     username => $user,
     password => $pass
     );
@@ -124,7 +124,7 @@ if (1 == 1) {
     my $upnp_url = $f->upnp_url;
     $upnp_url =~ s/http:/https:/;
     $upnp_url =~ s/:49000/:$port/;
-    my $f_ssl = Fritz::Box->new( upnp_url => $upnp_url );
+    my $f_ssl = Net::Fritz::Box->new( upnp_url => $upnp_url );
     $f_ssl->errorcheck;
     my $d_ssl = $f_ssl->discover;
     $d_ssl->errorcheck;
@@ -142,7 +142,7 @@ if (1 == 1) {
 #my $s = $d->find_service( 'urn:dslforum-org:service:WANDSLInterfaceConfig:1' );
 #print $s->dump() . "\n\n";
 
-#$s = $d->find_service( Fritz::Service::DEVICEINFO );
+#$s = $d->find_service( Net::Fritz::Service::DEVICEINFO );
 #print $s->dump() . "\n\n";
 
 #my $r;

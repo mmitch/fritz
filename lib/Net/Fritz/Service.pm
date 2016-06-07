@@ -1,4 +1,4 @@
-package Fritz::Service;
+package Net::Fritz::Service;
 use strict;
 use warnings;
 
@@ -7,20 +7,20 @@ use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # T
 
 use Data::Dumper; # TODO: remove
 
-use Fritz::Action;
-use Fritz::Data;
+use Net::Fritz::Action;
+use Net::Fritz::Data;
 
 use Moo;
 
-with 'Fritz::IsNoError';
+with 'Net::Fritz::IsNoError';
 
 =head1 NAME
 
-Fritz::Service - represents a TR064 service
+Net::Fritz::Service - represents a TR064 service
 
 =head1 SYNOPSIS
 
-    my $fritz    = Fritz::Box->new();
+    my $fritz    = Net::Fritz::Box->new();
     my $device   = $fritz->discover();
     my $service  = $device->get_service('DeviceInfo:1');
 
@@ -32,15 +32,15 @@ Fritz::Service - represents a TR064 service
 
 =head1 DESCRIPTION
 
-This class represents a TR064 service belonging to a L<Fritz::Device>.
-A service consists of one or more L<Fritz::Action>s that interact with
-the underlying device.
+This class represents a TR064 service belonging to a
+L<Net::Fritz::Device>.  A service consists of one or more
+L<Net::Fritz::Action>s that interact with the underlying device.
 
 =head1 ATTRIBUTES (read-only)
 
 =head2 fritz
 
-A L<Fritz::Box> instance containing the current configuration
+A L<Net::Fritz::Box> instance containing the current configuration
 information (device address, authentication etc.).
 
 =cut
@@ -50,9 +50,9 @@ has fritz        => ( is => 'ro' );
 =head2 xmltree
 
 A complex hashref containing most information about this
-L<Fritz::Service>.  This is the parsed form of the TR064 XML which
-describes the service.  It contains nearly all information besides
-L</fritz> and L</scpd>.
+L<Net::Fritz::Service>.  This is the parsed form of the TR064 XML
+which describes the service.  It contains nearly all information
+besides L</fritz> and L</scpd>.
 
 =cut
 
@@ -75,8 +75,9 @@ sub _build_an_attribute {
 =head2 scpd
 
 A complex hashref containing all information about this
-L<Fritz::Service>.  This is the parsed form of the XML available at
-L</SCPDURL> which describes the service and its L<Fritz::Action>s.
+L<Net::Fritz::Service>.  This is the parsed form of the XML available
+at L</SCPDURL> which describes the service and its
+L<Net::Fritz::Action>s.
 
 =cut
 
@@ -90,19 +91,19 @@ sub _build_scpd {
     my $response = $self->fritz->_ua->get($url);
 
     if ($response->is_success) {
-	return Fritz::Data->new(
+	return Net::Fritz::Data->new(
 	    $self->fritz->_xs->parse_string($response->decoded_content)
 	    );
     }
     else {
-	return Fritz::Error->new($response->status_line);
+	return Net::Fritz::Error->new($response->status_line);
     }
 }
 
 =head2 action_hash
 
-A hashref containing all L<Fritz::Action>s of this service indexed by
-their L<Fritz::Action/name>.
+A hashref containing all L<Net::Fritz::Action>s of this service
+indexed by their L<Net::Fritz::Action/name>.
 
 =cut
 
@@ -122,7 +123,7 @@ sub _build_action_hash {
 	my $xml = $scpd->data->{actionList}->[0]->{action};
 
 	foreach my $action (@{$xml}) {
-	    $hash->{$action->{name}->[0]} = Fritz::Action->new(
+	    $hash->{$action->{name}->[0]} = Net::Fritz::Action->new(
 		xmltree => $action
 		);
 	}
@@ -133,7 +134,7 @@ sub _build_action_hash {
 =head2
 
 The I<serviceType> (string) of this service which is used by
-L<Fritz::Device> to look up services.
+L<Net::Fritz::Device> to look up services.
 
 =cut
 
@@ -160,7 +161,7 @@ sub _build_serviceId {
 =head2
 
 The I<controlURL> (URL string) of this service which is needed to
-L</call> any L<Fritz::Action>s of this service.
+L</call> any L<Net::Fritz::Action>s of this service.
 
 =cut
 
@@ -201,21 +202,21 @@ sub _build_SCPDURL {
 
 =head2 error
 
-See L<Fritz::IsNoError/error>.
+See L<Net::Fritz::IsNoError/error>.
 
 =head1 METHODS
 
 =head2 new
 
-Creates a new L<Fritz::Service> object.  You propably don't have to call
-this method, it's mostly used internally.  Expects parameters in C<key
-=E<gt> value> form with the following keys:
+Creates a new L<Net::Fritz::Service> object.  You propably don't have
+to call this method, it's mostly used internally.  Expects parameters
+in C<key =E<gt> value> form with the following keys:
 
 =over
 
 =item I<fritz>
 
-L<Fritz::Box> configuration object
+L<Net::Fritz::Box> configuration object
 
 =item I<xmltree>
 
@@ -225,13 +226,13 @@ service information in parsed XML format
 
 =head2 call(I<action_name [I<parameter> => I<value>] [...])
 
-Calls the L<Fritz::Action> named I<action_name> of this service.
-Response data from the service call is wrapped as L<Fritz::Data>.  If
-the action expects parameters, they must be passed as key=L<gt>value
-pairs.
+Calls the L<Net::Fritz::Action> named I<action_name> of this service.
+Response data from the service call is wrapped as L<Net::Fritz::Data>.
+If the action expects parameters, they must be passed as
+key=L<gt>value pairs.
 
 If no matching action is found, the parameters don't match the action
-or any other error occurs, a L<Fritz::Error> is returned.
+or any other error occurs, a L<Net::Fritz::Error> is returned.
 
 =cut
 
@@ -241,7 +242,7 @@ sub call {
     my %call_args = (@_);
 
     if (! exists $self->action_hash->{$action}) {
-	return Fritz::Error->new("unknown action $action");
+	return Net::Fritz::Error->new("unknown action $action");
     }
 
     my $err = _hash_check(
@@ -291,12 +292,12 @@ sub call {
 	    };
 	}
 	else {
-	    return Fritz::Error->new("authentication needed, but no credentials given");
+	    return Net::Fritz::Error->new("authentication needed, but no credentials given");
 	}
     }
 
     if ($@) {
-	return Fritz::Error->new($@);
+	return Net::Fritz::Error->new($@);
     }
     elsif ($som->fault) {
 	my @error = ($som->fault->{faultcode}, $som->fault->{faultstring});
@@ -304,7 +305,7 @@ sub call {
 	    push @error, $som->fault->{detail}->{UPnPError}->{errorCode};
 	    push @error, $som->fault->{detail}->{UPnPError}->{errorDescription};
 	}
-	return Fritz::Error->new(join ' ', @error);
+	return Net::Fritz::Error->new(join ' ', @error);
     }
     else {
 	# according to the docs, $som->paramsin returns an array of hashes.  I don't see this :-/
@@ -319,7 +320,7 @@ sub call {
 	    );
 	return $err if $err->error;
 
-	return Fritz::Data->new($args_out);
+	return Net::Fritz::Data->new($args_out);
     }
 }
 
@@ -373,17 +374,17 @@ sub _hash_check {
 
     foreach my $arg (keys %{$hash_a}) {
 	if (! exists $hash_b->{$arg}) {
-	    return Fritz::Error->new("$msg_a $arg");
+	    return Net::Fritz::Error->new("$msg_a $arg");
 	}
     }
 
     foreach my $arg (keys %{$hash_b}) {
 	if (! exists $hash_a->{$arg}) {
-	    return Fritz::Error->new("$msg_b $arg");
+	    return Net::Fritz::Error->new("$msg_b $arg");
 	}
     }
 
-    return Fritz::Data->new();
+    return Net::Fritz::Data->new();
 }
 
 =head2 dump(I<indent>)
@@ -404,7 +405,7 @@ sub dump {
     my $indent = shift;
     $indent = '' unless defined $indent;
 
-    my $text = "${indent}Fritz::Service:\n";
+    my $text = "${indent}Net::Fritz::Service:\n";
     $indent .= '  ';
     $text .= "${indent}serviceType     = " . $self->serviceType . "\n";
     $text .= "${indent}controlURL      = " . $self->controlURL  . "\n";
@@ -424,7 +425,7 @@ sub dump {
 
 =head2 errorcheck
 
-See L<Fritz::IsNoError/errorcheck>.
+See L<Net::Fritz::IsNoError/errorcheck>.
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -437,8 +438,8 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
-See L<Fritz> for general information about this package, especially
-L<Fritz/INTERFACE> for links to the other classes.
+See L<Net::Fritz> for general information about this package,
+especially L<Net::Fritz/INTERFACE> for links to the other classes.
 
 =cut
 
