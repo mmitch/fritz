@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 9;
+use Test::More tests => 10;
 use warnings;
 use strict;
 
@@ -109,6 +109,21 @@ subtest 'check dump()' => sub {
     like( $dump, qr/args_in\s+=\s$args_in/, 'args_in is dumped' );
     my $args_out = 'OUT';
     like( $dump, qr/args_out\s+=\s$args_out/, 'args_out is dumped' );
+};
+
+
+subtest 'check dump() without indentation' => sub {
+    # given
+    my $xmltree = get_xmltree();
+    my $action = new_ok( 'Fritz::Action', [ xmltree => $xmltree ] );
+
+    # when
+    my $dump = $action->dump();
+
+    # then
+    foreach my $line (split /\n/, $dump) {
+	like( $line, qr/^(Fritz|  )/, 'line starts as expected' );
+    }
 };
 
 
