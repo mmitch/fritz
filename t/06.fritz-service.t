@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 13;
+use Test::More tests => 16;
 use warnings;
 use strict;
 
@@ -148,13 +148,60 @@ subtest 'check service call with authentication and credentials' => sub {
     is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
 };
 
-subtest 'check for error messages on missing parameters during call()' => sub {
-    plan skip_all => 'TODO test not implemented yet';
-    ok( 0, 'TODO test missing' );
+subtest 'check for error message on non-existant action in call()' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+
+    # when
+    my $result = $service->call( 'MISSING_ACTION' );
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service result' );
+    like( $result->error, qr/unknown action/ );
+    like( $result->error, qr/MISSING_ACTION/ );
+};
+
+subtest 'check for error messages on missing parameter in call()' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my @arguments = ();
+
+    # when
+    my $result = $service->call( 'SomeService', @arguments );
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service result' );
+    like( $result->error, qr/missing input argument/ );
+    like( $result->error, qr/InputArgument/ );
+};
+
+subtest 'check for error messages on additional parameter in call()' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my @arguments = ( 'InputArgument' => '1', 'AdditionalArgument' => '2' );
+
+    # when
+    my $result = $service->call( 'SomeService', @arguments );
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service result' );
+    like( $result->error, qr/unknown input argument/ );
+    like( $result->error, qr/AdditionalArgument/ );
 };
 
 
 ### internal tests
+
+subtest 'check _build_an_attribute() with missing attribute' => sub {
+    # given
+    my $xmltree = {};
+
+    # when
+    my $service = new_ok( 'Fritz::Service', [ xmltree => $xmltree ] );
+    
+    # then
+    is( $service->serviceType, undef, 'Fritz::Service->serviceType' );
+};
 
 subtest 'check new()' => sub {
     # given
