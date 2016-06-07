@@ -17,9 +17,9 @@ t/01.fritz-isnoerror.t
 t/02.fritz-error.t
 t/03.fritz-box.t
 t/04.fritz-data.t
-t/05.fritz-device.t
+t/05.fritz-action.t
 t/06.fritz-service.t
-t/07.fritz-action.t
+t/07.fritz-device.t
 t/60.connect-http.t
 t/61.connect-https.t
 t/80.perlcritic.t

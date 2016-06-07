@@ -111,7 +111,6 @@ subtest 'check dump()' => sub {
     like( $dump, qr/args_out\s+=\s$args_out/, 'args_out is dumped' );
 };
 
-
 subtest 'check dump() without indentation' => sub {
     # given
     my $xmltree = get_xmltree();
