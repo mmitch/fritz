@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 16;
+use Test::More tests => 18;
 use warnings;
 use strict;
 
@@ -107,7 +107,7 @@ subtest 'check simple service call' => sub {
     my $result = $service->call($service_name, @arguments);
 
     # then
-    # TODO check if parameters were included in the SOAP call
+    # TODO check if parameters were actually sent in the SOAP call
     isa_ok( $result, 'Fritz::Data', 'service response' );
     isa_ok( $result->data, 'HASH', 'service response data' );
     is( $result->data->{OutputArgument}, 'bar', 'OutputArgument' );
@@ -161,7 +161,7 @@ subtest 'check for error message on non-existant action in call()' => sub {
     like( $result->error, qr/MISSING_ACTION/ );
 };
 
-subtest 'check for error messages on missing parameter in call()' => sub {
+subtest 'check for error message on missing parameter in call()' => sub {
     # given
     my $service = create_service_with_scpd_data();
     my @arguments = ();
@@ -175,7 +175,7 @@ subtest 'check for error messages on missing parameter in call()' => sub {
     like( $result->error, qr/InputArgument/ );
 };
 
-subtest 'check for error messages on additional parameter in call()' => sub {
+subtest 'check for error message on additional parameter in call()' => sub {
     # given
     my $service = create_service_with_scpd_data();
     my @arguments = ( 'InputArgument' => '1', 'AdditionalArgument' => '2' );
@@ -186,6 +186,46 @@ subtest 'check for error messages on additional parameter in call()' => sub {
     # then
     isa_ok( $result, 'Fritz::Error', 'service result' );
     like( $result->error, qr/unknown input argument/ );
+    like( $result->error, qr/AdditionalArgument/ );
+};
+
+subtest 'check for error message on missing parameter in service response' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map(
+	$service->fritz->upnp_url.$service->controlURL,
+	get_soap_response( get_soap_response_missing_argument_xml() )
+	);
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service result' );
+    like( $result->error, qr/missing output argument/ );
+    like( $result->error, qr/OutputArgument/ );
+};
+
+subtest 'check for error message on additional parameter in service response' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map(
+	$service->fritz->upnp_url.$service->controlURL,
+	get_soap_response( get_soap_response_extra_argument_xml() )
+	);
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service result' );
+    like( $result->error, qr/unknown output argument/ );
     like( $result->error, qr/AdditionalArgument/ );
 };
 
@@ -241,8 +281,12 @@ subtest 'check dump()' => sub {
 
 sub get_soap_response
 {
+    my ($xml) = (@_);
+
+    $xml = get_soap_response_xml() unless defined $xml;
+
     my $result = HTTP::Response->new( 200 );
-    $result->content( get_soap_response_xml() );
+    $result->content( $xml );
     return $result;
 }
 
@@ -357,6 +401,32 @@ sub get_soap_response_xml {
 <Body>
 <SomeServiceResponse>
 <OutputArgument>bar</OutputArgument>
+</SomeServiceResponse>
+</Body>
+</Envelope>
+EOF
+;
+}
+
+sub get_soap_response_missing_argument_xml {
+    my $SOAP_XML = <<EOF;
+<Envelope>
+<Body>
+<SomeServiceResponse>
+</SomeServiceResponse>
+</Body>
+</Envelope>
+EOF
+;
+}
+
+sub get_soap_response_extra_argument_xml {
+    my $SOAP_XML = <<EOF;
+<Envelope>
+<Body>
+<SomeServiceResponse>
+<OutputArgument>bar</OutputArgument>
+<AdditionalArgument>foo</AdditionalArgument>
 </SomeServiceResponse>
 </Body>
 </Envelope>
