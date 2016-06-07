@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 18;
+use Test::More tests => 20;
 use warnings;
 use strict;
 
@@ -229,6 +229,42 @@ subtest 'check for error message on additional parameter in service response' =>
     like( $result->error, qr/AdditionalArgument/ );
 };
 
+subtest 'check for error message on service error (HTTP 404)' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service response' );
+    like( $result->error, qr/404/ );
+};
+
+subtest 'check for error message in service response' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map(
+	$service->fritz->upnp_url.$service->controlURL,
+	get_soap_response( get_soap_error_xml() )
+	);
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Fritz::Error', 'service response' );
+    like( $result->error, qr/UPnPError/ );
+    like( $result->error, qr/418/ );
+    like( $result->error, qr/teapot/ );
+};
+
 
 ### internal tests
 
@@ -453,6 +489,27 @@ sub get_soap_unauthenticated_xml {
 <UPnPError>
 <errorCode>503</errorCode>
 <errorDescription></errorDescription>
+</UPnPError>
+</detail>
+</Fault>
+</Body>
+</Envelope>
+EOF
+;
+}
+
+sub get_soap_error_xml {
+    my $SOAP_XML = <<EOF;
+<?xml version="1.0"?>
+<Envelope>
+<Body>
+<Fault>
+<faultcode>s:Client</faultcode>
+<faultstring>UPnPError</faultstring>
+<detail>
+<UPnPError>
+<errorCode>418</errorCode>
+<errorDescription>teapot</errorDescription>
 </UPnPError>
 </detail>
 </Fault>
