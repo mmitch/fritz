@@ -300,11 +300,13 @@ sub call {
 	return Net::Fritz::Error->new($@);
     }
     elsif ($som->fault) {
-	my @error = ($som->fault->{faultcode}, $som->fault->{faultstring});
-	if (exists $som->fault->{detail}->{UPnPError}) {
-	    push @error, $som->fault->{detail}->{UPnPError}->{errorCode};
-	    push @error, $som->fault->{detail}->{UPnPError}->{errorDescription};
-	}
+	my @error = (
+	    $som->fault->{faultcode},
+	    $som->fault->{faultstring},
+	    $som->fault->{detail}->{UPnPError}->{errorCode},
+	    $som->fault->{detail}->{UPnPError}->{errorDescription}
+	    );
+	@error = map { defined $_ ? $_ : () } @error;
 	return Net::Fritz::Error->new(join ' ', @error);
     }
     else {
