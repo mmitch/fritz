@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 20;
+use Test::More tests => 21;
 use warnings;
 use strict;
 
@@ -265,6 +265,26 @@ subtest 'check for error message in service response' => sub {
     like( $result->error, qr/teapot/ );
 };
 
+subtest 'check for unspecified error message in service response' => sub {
+    # given
+    my $service = create_service_with_scpd_data();
+    my $service_name = 'SomeService';
+    my @arguments = ('InputArgument' => 'foo');
+    $mock_ua->unmap_all;
+    $mock_ua->map(
+	$service->fritz->upnp_url.$service->controlURL,
+	get_soap_response( get_soap_unspecified_error_xml() )
+	);
+
+    # when
+    my $result = $service->call($service_name, @arguments);
+
+    # then
+    isa_ok( $result, 'Net::Fritz::Error', 'service response' );
+    like( $result->error, qr/UnspecifiedError/ );
+    unlike( $result->error, qr/undefined/ );
+};
+
 
 ### internal tests
 
@@ -512,6 +532,21 @@ sub get_soap_error_xml {
 <errorDescription>teapot</errorDescription>
 </UPnPError>
 </detail>
+</Fault>
+</Body>
+</Envelope>
+EOF
+;
+}
+
+sub get_soap_unspecified_error_xml {
+    my $SOAP_XML = <<EOF;
+<?xml version="1.0"?>
+<Envelope>
+<Body>
+<Fault>
+<faultcode>s:Client</faultcode>
+<faultstring>UnspecifiedError</faultstring>
 </Fault>
 </Body>
 </Envelope>
