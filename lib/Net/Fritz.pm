@@ -166,6 +166,13 @@ Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
+=item *
+
+L<WebService::FritzBox> for communicating with a Fritz!Box without the
+TR-064 protocol (eg. to list current bandwidth)
+
+=item *
+
 L<AVM interface documentation|http://avm.de/service/schnittstellen/>
 
 =cut
