@@ -64,10 +64,13 @@ carries on.
 sub errorcheck {
 }
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT
 
 Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-Licensed under GNU GPL v2 or later.
+
+=head1 LICENSE
+
+Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-standalone.html>
 
 =head1 AUTHOR
 

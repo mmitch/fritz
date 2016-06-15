@@ -128,18 +128,13 @@ should be pretty straight-forward to split the modules.
 
 There might also be some parts in here that look vaguely like UPnP...
 
-=head1 LICENSE AND COPYRIGHT
-
-=begin html
-
-<p>
-<a href="http://www.gnu.org/licenses/gpl-2.0-standalone.html"><img src="https://img.shields.io/badge/license-GPL%202%2B-blue.svg" alt="GPL 2+"></a>
-</p>
-
-=end html
+=head1 COPYRIGHT
 
 Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-Licensed under GNU GPL v2 or later.
+
+=head1 LICENSE
+
+Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-standalone.html>
 
 =head1 AVAILABILITY
 

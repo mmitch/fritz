@@ -392,10 +392,13 @@ B<TODO:> Rename L</find_service_names> to something like
 L</find_all_service> as it's basically L</find_service> with multiple
 results.  It does not return service names but services.
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT
 
 Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-Licensed under GNU GPL v2 or later.
+
+=head1 LICENSE
+
+Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-standalone.html>
 
 =head1 AUTHOR
 
