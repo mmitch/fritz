@@ -24,7 +24,7 @@ my $builder = Module::Build->new(
 	'Test::More'                => 0,
 	'Test::Perl::Critic'        => 0,
     },
-    add_to_cleanup => [ 'Fritz-*' ],
+    add_to_cleanup => [ 'Net-Fritz-*' ],
 );
 
 $builder->create_build_script();
