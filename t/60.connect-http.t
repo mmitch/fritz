@@ -9,7 +9,7 @@ use Net::Fritz::Box;
 if (exists $ENV{AUTHOR_TEST} and $ENV{AUTHOR_TEST} eq 'fritz') {
     plan tests => 10;
 } else {
-    plan skip_all => 'needs a real Net::Fritz!Box (set AUTHOR_TEST=fritz to enable)';
+    plan skip_all => 'needs a real Fritz!Box (set AUTHOR_TEST=fritz to enable)';
 }
 
 # connect on normal http port and call a service
