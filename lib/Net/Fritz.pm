@@ -123,7 +123,7 @@ identifies the code parts that belong to TR-064, I'm happy to move
 them out to another package.  Apart from the authentication scheme it
 should be pretty straight-forward to split the modules.
 
-There might also be some parts in here that look vaguely like UPnP…
+There might also be some parts in here that look vaguely like UPnP...
 
 =head1 LICENSE AND COPYRIGHT
 
