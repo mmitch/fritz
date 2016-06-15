@@ -106,6 +106,9 @@ I<password> parameters of C<Net::Fritz::Box->new()>.
 
 =end html
 
+To report a bug, please use the github issue tracker:
+L<https://github.com/mmitch/fritz/issues>
+
 =head2 event subscriptions
 
 Apart from exposing the L<eventSubURL|Net::Fritz::Service/eventSubURL>
