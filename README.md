@@ -35,7 +35,7 @@ installation
 To build and install the Fritz module, run
 
     $ perl Build.PL
-	$ perl Build install
+    $ perl Build install
 
 Any missing dependencies should be reported automatically and can be
 installed by
