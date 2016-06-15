@@ -114,7 +114,8 @@ Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
 
 =head1 LICENSE
 
-Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-standalone.html>
+Licensed under GNU GPL v2 or later, see
+L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
 
 =head1 AUTHOR
 
