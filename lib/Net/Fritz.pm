@@ -130,11 +130,17 @@ Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-sta
 
 =over
 
-=item github repository: L<git://github.com/mmitch/fritz.git>
+=item github repository
 
-=item github browser: L<https://github.com/mmitch/fritz>
+L<git://github.com/mmitch/fritz.git>
 
-=item github issue tracker: L<https://github.com/mmitch/fritz/issues>
+=item github browser
+
+L<https://github.com/mmitch/fritz>
+
+=item github issue tracker
+
+L<https://github.com/mmitch/fritz/issues>
 
 =back
 
