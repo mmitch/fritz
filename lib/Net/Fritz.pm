@@ -96,16 +96,6 @@ I<password> parameters of C<Net::Fritz::Box->new()>.
 
 =head1 BUGS AND LIMITATIONS
 
-=begin html
-
-<p>
-<a href="https://travis-ci.org/mmitch/fritz"><img src="https://travis-ci.org/mmitch/fritz.svg?branch=master" alt="Build Status"></a>
-<a href="https://codecov.io/github/mmitch/fritz?branch=master"><img src="https://codecov.io/github/mmitch/fritz/coverage.svg?branch=master" alt="Coverage Status"></a>
-<a href="http://www.gnu.org/licenses/gpl-2.0-standalone.html"><img src="https://img.shields.io/badge/license-GPL%202%2B-blue.svg" alt="GPL 2+"></a>
-</p>
-
-=end html
-
 To report a bug, please use the github issue tracker:
 L<https://github.com/mmitch/fritz/issues>
 
@@ -147,6 +137,22 @@ Licensed under GNU GPL v2 or later, see <http://www.gnu.org/licenses/gpl-2.0-sta
 =item github issue tracker: L<https://github.com/mmitch/fritz/issues>
 
 =back
+
+=begin html
+
+=head1 BUILD STATUS
+
+<p><a href="https://travis-ci.org/mmitch/fritz"><img src="https://travis-ci.org/mmitch/fritz.svg?branch=master" alt="Build Status"></a></p>
+
+=end html
+
+=begin html
+
+=head1 TEST COVERAGE
+
+<p><a href="https://codecov.io/github/mmitch/fritz?branch=master"><img src="https://codecov.io/github/mmitch/fritz/coverage.svg?branch=master" alt="Coverage Status"></a></p>
+
+=end html
 
 =head1 AUTHOR
 
