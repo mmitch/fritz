@@ -63,7 +63,7 @@ authentication data etc.).  Use the C<discover()> method to get a
 
 L<Net::Fritz::Device> which represents your router.  A device may
 contain further L<Net::Fritz::Device> subdevices, eg. a LAN or WAN
-interface.  But most importantly, a device should contain at least
+interface.  But most importantly, a device should contain at least one
 
 L<Net::Fritz::Service> on which different methods can be C<call()>ed
 to set or read parameters or do various things.  A method call will
@@ -73,12 +73,12 @@ L<Net::Fritz::Data> which is a simple wrapper about the data returned
 (normally a hash containing all return values from the called
 service).
 
-L<Net::Fritz::Error> is returned instead of the ofter objects whenever
+L<Net::Fritz::Error> is returned instead of the other objects whenever
 something goes wrong.
 
 Finally, there is L<Net::Fritz::IsNoError>, which is just a role to
 provide all valid (non-error) objects with C<error> and
-C<errorcheck()> so that you can query every Net::Fritz:: object for
+C<errorcheck()> so that you can query every C<Net::Fritz::> object for
 its error state.
 
 =head1 CONFIGURATION AND ENVIRONMENT
@@ -92,7 +92,7 @@ user with its own password (again via the web administration
 interface).  The user needs the permission to change and edit the
 Fritz!Box configuration.  If you want to call the VoIP services, it
 needs that permission as well.  Then use the I<username> and
-I<password> parameters to C<Net::Fritz::Box->new()>.
+I<password> parameters of C<Net::Fritz::Box->new()>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -111,6 +111,19 @@ I<password> parameters to C<Net::Fritz::Box->new()>.
 Apart from exposing the L<eventSubURL|Net::Fritz::Service/eventSubURL>
 of a L<Net::Fritz::Service> there is currently no support for event
 subscriptions.
+
+=head2 TR-064 protocol
+
+L<Net::Fritz> implements parts of the TR-064 protocol, which could be
+separated in to a C<Net::Protocol::TR064> distribution or something
+like that.  I have not yet done this because I don't know much about
+the TR-064 protocol, I just implemented everything I needed to get the
+Fritz!Box communication running.  If anybody comes along and
+identifies the code parts that belong to TR-064, I'm happy to move
+them out to another package.  Apart from the authentication scheme it
+should be pretty straight-forward to split the modules.
+
+There might also be some parts in here that look vaguely like UPnP…
 
 =head1 LICENSE AND COPYRIGHT
 
