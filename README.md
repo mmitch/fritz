@@ -1,5 +1,5 @@
-Fritz - perl module for AVM Fritz!Box interaction via TR-064
-============================================================
+Net::Fritz - perl module for AVM Fritz!Box interaction via TR-064
+=================================================================
 
 [![Build Status](https://travis-ci.org/mmitch/fritz.svg?branch=master)](https://travis-ci.org/mmitch/fritz)
 [![Coverage Status](https://codecov.io/github/mmitch/fritz/coverage.svg?branch=master)](https://codecov.io/github/mmitch/fritz?branch=master)
@@ -9,7 +9,7 @@ Fritz - perl module for AVM Fritz!Box interaction via TR-064
 what
 ----
 
-The Fritz library is a set of Perl modules to communicate with an AVM
+Net::Fritz is a set of Perl modules to communicate with an AVM
 Fritz!Box (and possibly other routers as well) via the TR-064
 protocol.  The AVM Fritz!Box is a popular home router family in
 Germany (and beyond).
@@ -32,7 +32,17 @@ you’re looking at right now.
 installation
 ------------
 
-To build and install the Fritz module, run
+The latest release of Net::Fritz can be installed directly from CPAN,
+eg. via
+
+    $ cpan -i Net::Fritz
+
+
+building
+--------
+
+To build and install the current development version of Net::Fritz
+module, clone this repository and then run
 
     $ perl Build.PL
     $ perl Build install
@@ -50,7 +60,9 @@ under ``test_requires`` are optional if you want to skip the tests.
 where to get it
 ---------------
 
-The Fritz library is hosted at https://github.com/mmitch/fritz
+Net::Fritz source is hosted at https://github.com/mmitch/fritz  
+The latest released version is available on CPAN at
+https://metacpan.org/release/Net-Fritz
 
 
 more information
