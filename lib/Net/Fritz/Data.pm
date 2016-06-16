@@ -2,6 +2,9 @@ package Net::Fritz::Data;
 # ABSTRACT: wraps various response data
 
 
+# Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v2 or later.
+
 use strict;
 use warnings;
 

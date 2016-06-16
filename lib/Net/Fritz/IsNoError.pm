@@ -2,6 +2,9 @@ package Net::Fritz::IsNoError;
 # ABSTRACT: a L<Moo::Role> discerning all other L<Net::Fritz> objects from a L<Net::Fritz::Error> object
 
 
+# Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v2 or later.
+
 use strict;
 use warnings;
 

@@ -2,6 +2,9 @@ package Net::Fritz::Box;
 # ABSTRACT: main configuration and entry point for L<Net::Fritz> distribution
 
 
+# Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v2 or later.
+
 use strict;
 use warnings;
 
