@@ -8,7 +8,8 @@ perl:
 
 install:
   - cpanm --quiet --notest --skip-satisfied Dist::Zilla
-  - dzil listdeps | cpanm -
+  - dzil authordeps --missing | cpanm --quiet --notest
+  - dzil listdeps --missing | cpanm --quiet --notest
 
 before_script:
   - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov Dist::Zilla::App::Command::cover
