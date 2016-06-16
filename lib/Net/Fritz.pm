@@ -1,16 +1,12 @@
 package Net::Fritz;
+
+
 use strict;
 use warnings;
-
-use version; our $VERSION = qv('v0.0.2');
 
 =head1 NAME
 
 Net::Fritz - AVM Fritz!Box interaction via TR-064
-
-=head1 VERSION
-
-v0.0.2
 
 =head1 SYNOPSIS
 

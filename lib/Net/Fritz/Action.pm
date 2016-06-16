@@ -1,4 +1,6 @@
 package Net::Fritz::Action;
+
+
 use strict;
 use warnings;
 

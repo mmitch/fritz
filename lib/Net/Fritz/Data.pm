@@ -1,4 +1,6 @@
 package Net::Fritz::Data;
+
+
 use strict;
 use warnings;
 

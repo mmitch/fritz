@@ -1,4 +1,6 @@
 package Net::Fritz::Box;
+
+
 use strict;
 use warnings;
 

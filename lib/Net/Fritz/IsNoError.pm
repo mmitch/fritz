@@ -1,4 +1,6 @@
 package Net::Fritz::IsNoError;
+
+
 use strict;
 use warnings;
 

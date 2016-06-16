@@ -1,4 +1,6 @@
 package Net::Fritz::Device;
+
+
 use strict;
 use warnings;
 

@@ -1,4 +1,6 @@
 package Net::Fritz::Error;
+
+
 use strict;
 use warnings;
 
