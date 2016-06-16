@@ -63,7 +63,8 @@ subtest 'check discover() with mocked Net::Fritz!Box at non-standard URL' => sub
 
 subtest 'check _sslopts' => sub {
     my $box = new_ok( 'Net::Fritz::Box' );
-    is_deeply( [ sort keys { @{$box->_sslopts} } ], [ sort $box->_ua->ssl_opts ], 'SSL option keys' );
+    my %box_sslopts = @{$box->_sslopts};
+    is_deeply( [ sort keys %box_sslopts ], [ sort $box->_ua->ssl_opts ], 'SSL option keys' );
 };
 
 subtest 'check dump()' => sub {
