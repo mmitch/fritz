@@ -1,4 +1,5 @@
 package Net::Fritz::Action;
+# ABSTRACT: represents a TR064 action
 
 
 use strict;
@@ -7,10 +8,6 @@ use warnings;
 use Moo;
 
 with 'Net::Fritz::IsNoError';
-
-=head1 NAME
-
-Net::Fritz::Action - represents a TR064 action
 
 =head1 SYNOPSIS
 
@@ -162,19 +159,6 @@ sub dump {
 =head2 errorcheck
 
 See L<Net::Fritz::IsNoError/errorcheck>.
-
-=head1 COPYRIGHT
-
-Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-
-=head1 LICENSE
-
-Licensed under GNU GPL v2 or later, see
-L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
-
-=head1 AUTHOR
-
-Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 

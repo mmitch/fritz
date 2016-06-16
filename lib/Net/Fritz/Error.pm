@@ -1,4 +1,5 @@
 package Net::Fritz::Error;
+# ABSTRACT: wraps any error from the L<Net::Fritz> modules
 
 
 use strict;
@@ -8,10 +9,6 @@ use warnings;
 #       Net::Fritz::Error->new an immediately fatal error?
 
 use Moo;
-
-=head1 NAME
-
-Net::Fritz::Error - wraps any error from the L<Net::Fritz> modules
 
 =head1 SYNOPSIS
 
@@ -109,19 +106,6 @@ sub dump {
 
     return "Net::Fritz::Error: " . $self->error . "\n";
 }
-
-=head1 COPYRIGHT
-
-Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-
-=head1 LICENSE
-
-Licensed under GNU GPL v2 or later, see
-L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
-
-=head1 AUTHOR
-
-Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 

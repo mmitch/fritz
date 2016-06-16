@@ -1,4 +1,5 @@
 package Net::Fritz::Data;
+# ABSTRACT: wraps various response data
 
 
 use strict;
@@ -9,10 +10,6 @@ use Scalar::Util qw(blessed);
 use Moo;
 
 with 'Net::Fritz::IsNoError';
-
-=head1 NAME
-
-Net::Fritz::Data - wraps various response data 
 
 =head1 SYNOPSIS
 
@@ -133,19 +130,6 @@ sub dump {
 =head2 errorcheck
 
 See L<Net::Fritz::IsNoError/errorcheck>.
-
-=head1 COPYRIGHT
-
-Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-
-=head1 LICENSE
-
-Licensed under GNU GPL v2 or later, see
-L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
-
-=head1 AUTHOR
-
-Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 

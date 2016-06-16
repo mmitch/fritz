@@ -1,4 +1,5 @@
 package Net::Fritz::Device;
+# ABSTRACT: represents a TR064 device
 
 
 use strict;
@@ -11,10 +12,6 @@ use Net::Fritz::Service;
 use Moo;
 
 with 'Net::Fritz::IsNoError';
-
-=head1 NAME
-
-Net::Fritz::Device - represents a TR064 device
 
 =head1 SYNOPSIS
 
@@ -393,19 +390,6 @@ the service methods and add the missing variants.
 B<TODO:> Rename L</find_service_names> to something like
 L</find_all_service> as it's basically L</find_service> with multiple
 results.  It does not return service names but services.
-
-=head1 COPYRIGHT
-
-Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-
-=head1 LICENSE
-
-Licensed under GNU GPL v2 or later, see
-L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
-
-=head1 AUTHOR
-
-Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 

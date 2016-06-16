@@ -1,12 +1,9 @@
 package Net::Fritz;
+# ABSTRACT: AVM Fritz!Box interaction via TR-064
 
 
 use strict;
 use warnings;
-
-=head1 NAME
-
-Net::Fritz - AVM Fritz!Box interaction via TR-064
 
 =head1 SYNOPSIS
 
@@ -114,15 +111,6 @@ should be pretty straight-forward to split the modules.
 
 There might also be some parts in here that look vaguely like UPnP...
 
-=head1 COPYRIGHT
-
-Copyright (C) 2015 by  Christian Garbs <mitch@cgarbs.de>
-
-=head1 LICENSE
-
-Licensed under GNU GPL v2 or later, see
-L<http://www.gnu.org/licenses/gpl-2.0-standalone.html>
-
 =head1 AVAILABILITY
 
 =over
@@ -156,10 +144,6 @@ L<https://github.com/mmitch/fritz/issues>
 <p><a href="https://codecov.io/github/mmitch/fritz?branch=master"><img src="https://codecov.io/github/mmitch/fritz/coverage.svg?branch=master" alt="Coverage Status"></a></p>
 
 =end html
-
-=head1 AUTHOR
-
-Christian Garbs <mitch@cgarbs.de>
 
 =head1 SEE ALSO
 
