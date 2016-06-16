@@ -1,12 +1,11 @@
-package Net::Fritz::Action;
-# ABSTRACT: represents a TR064 action
-
-
+use strict;
+use warnings;
 # Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
-use strict;
-use warnings;
+package Net::Fritz::Action;
+# ABSTRACT: represents a TR064 action
+
 
 use Moo;
 

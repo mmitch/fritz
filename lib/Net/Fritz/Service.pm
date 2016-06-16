@@ -1,12 +1,11 @@
-package Net::Fritz::Service;
-# ABSTRACT: represents a TR064 service
-
-
+use strict;
+use warnings;
 # Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
-use strict;
-use warnings;
+package Net::Fritz::Service;
+# ABSTRACT: represents a TR064 service
+
 
 use Digest::MD5 qw(md5_hex);
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # TODO: remove

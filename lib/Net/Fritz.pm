@@ -1,12 +1,11 @@
-package Net::Fritz;
-# ABSTRACT: AVM Fritz!Box interaction via TR-064
-
-
+use strict;
+use warnings;
 # Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
-use strict;
-use warnings;
+package Net::Fritz;
+# ABSTRACT: AVM Fritz!Box interaction via TR-064
+
 
 =head1 SYNOPSIS
 

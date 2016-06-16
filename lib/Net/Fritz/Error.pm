@@ -1,12 +1,11 @@
-package Net::Fritz::Error;
-# ABSTRACT: wraps any error from the L<Net::Fritz> modules
-
-
+use strict;
+use warnings;
 # Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
-use strict;
-use warnings;
+package Net::Fritz::Error;
+# ABSTRACT: wraps any error from the L<Net::Fritz> modules
+
 
 # TODO: use a global configuration option to make every call to
 #       Net::Fritz::Error->new an immediately fatal error?

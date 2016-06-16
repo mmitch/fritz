@@ -1,12 +1,11 @@
-package Net::Fritz::Box;
-# ABSTRACT: main configuration and entry point for L<Net::Fritz> distribution
-
-
+use strict;
+use warnings;
 # Copyright (C) 2015  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
-use strict;
-use warnings;
+package Net::Fritz::Box;
+# ABSTRACT: main configuration and entry point for L<Net::Fritz> distribution
+
 
 use LWP::UserAgent;
 use XML::Simple qw(:strict);
