@@ -5,8 +5,6 @@ use warnings;
 use Digest::MD5 qw(md5_hex);
 use SOAP::Lite; # +trace => [ transport => sub { print $_[0]->as_string } ]; # TODO: remove
 
-use Data::Dumper; # TODO: remove
-
 use Net::Fritz::Action;
 use Net::Fritz::Data;
 
