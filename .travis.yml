@@ -7,12 +7,10 @@ perl:
   - "5.14"
 
 before_script:
-  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov Dist::Zilla::App::Command::cover
 
 script:
-  - perl Build.PL
-  - ./Build build
-  - cover -test
+  - dzil cover
 
 after_success:
-  - test $TRAVIS_PERL_VERSION = '5.20' && cover -report codecov
+  - test $TRAVIS_PERL_VERSION = '5.20' && cd .build/*/ && cover -report codecov
