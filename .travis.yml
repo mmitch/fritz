@@ -6,6 +6,10 @@ perl:
   - "5.16"
   - "5.14"
 
+install:
+  - cpanm --quiet --notest --skip-satisfied Dist::Zilla
+  - dzil listdeps | cpanm -
+
 before_script:
   - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov Dist::Zilla::App::Command::cover
 
