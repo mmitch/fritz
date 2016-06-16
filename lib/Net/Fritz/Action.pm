@@ -124,6 +124,8 @@ action information in parsed XML format
 With only one parameter (in fact: any odd value of parameters), the
 first parameter is automatically mapped to I<xmltree>.
 
+=for Pod::Coverage BUILDARGS
+
 =cut
 
 sub BUILDARGS {

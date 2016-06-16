@@ -81,6 +81,8 @@ set the data to hold
 With only one parameter (in fact: any odd value of parameters), the
 first parameter is automatically mapped to I<data>.
 
+=for Pod::Coverage BUILDARGS
+
 =cut
 
 # prepend 'data => ' when called without hash

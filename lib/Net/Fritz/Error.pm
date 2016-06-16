@@ -75,6 +75,8 @@ set the error message
 With only one parameter (in fact: any odd value of parameters), the
 first parameter is automatically mapped to I<error>.
 
+=for Pod::Coverage BUILDARGS
+
 =cut
 
 sub BUILDARGS {
