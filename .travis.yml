@@ -1,6 +1,7 @@
 language: perl
 
 perl:
+  - "5.22"
   - "5.20"
   - "5.18"
   - "5.16"
@@ -18,4 +19,4 @@ script:
   - dzil cover
 
 after_success:
-  - test $TRAVIS_PERL_VERSION = '5.20' && cd .build/*/ && cover -report codecov
+  - test $TRAVIS_PERL_VERSION = '5.22' && cd .build/*/ && cover -report codecov
