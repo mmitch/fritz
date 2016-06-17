@@ -1,5 +1,9 @@
 Revision history for perl distribution Net::Fritz
 
+v0.0.3 unrelease
+
+ -
+
 v0.0.2 2016-06-17
 
  - bugfix for "Experimental keys on scalar is now forbidden"
