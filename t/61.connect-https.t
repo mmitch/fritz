@@ -40,25 +40,19 @@ my $fritz_ssl = new_ok( 'Net::Fritz::Box' => [ upnp_url => $upnp_url ] );
 is ($fritz_ssl->error, '', 'get Net::Fritz::Box instance for SSL');
 isa_ok( $fritz_ssl, 'Net::Fritz::Box' );
 
- TODO: {
+my $device_ssl = $fritz_ssl->discover();
+is( $device_ssl->error, '', 'get Net::Fritz::Device');
+isa_ok( $device_ssl, 'Net::Fritz::Device' );
 
-     todo_skip 'SSL is expected to fail because certificate checks can\'t be disabled properly, see Net::Fritz.pm -> BUGS AND LIMITATIONS -> SSL', 8;
+my $service_ssl = $device_ssl->find_service('DeviceInfo:1');
+is( $service_ssl->error, '', 'get DeviceInfo service via SSL');
+isa_ok( $service_ssl, 'Net::Fritz::Service' );
 
-     my $device_ssl = $fritz_ssl->discover();
-     is( $device_ssl->error, '', 'get Net::Fritz::Device');
-     isa_ok( $device_ssl, 'Net::Fritz::Device' );
+my $response_ssl = $service_ssl->call('GetSecurityPort');
+is( $response_ssl->error, '', 'call CatSecurityPort via SSL');
+isa_ok( $response, 'Net::Fritz::Data' );
 
-     my $service_ssl = $device_ssl->find_service('DeviceInfo:1');
-     is( $service_ssl->error, '', 'get DeviceInfo service via SSL');
-     isa_ok( $service_ssl, 'Net::Fritz::Service' );
+my $port_ssl = $response_ssl->data->{NewSecurityPort};
+cmp_ok( $port_ssl, '>', 0, 'get port number');
 
-     my $response_ssl = $service_ssl->call('GetSecurityPort');
-     is( $response_ssl->error, '', 'call CatSecurityPort via SSL');
-     isa_ok( $response, 'Net::Fritz::Data' );
-
-     my $port_ssl = $response_ssl->data->{NewSecurityPort};
-     cmp_ok( $port_ssl, '>', 0, 'get port number');
-
-     is( $port, $port_ssl, 'port number comparison');
-
-}
+is( $port, $port_ssl, 'port number comparison');
