@@ -7,6 +7,10 @@ package Net::Fritz::Box;
 # ABSTRACT: main configuration and entry point for L<Net::Fritz> distribution
 
 
+# We need LWP::UserAgent 6.00 because of ssl_opts.  We could work with
+# an older version as seen in # https://github.com/rhuss/jmx4perl/issues/28
+# but SOAP::Lite might then have the same problem...  For now just
+# stick with the versioned dependency.
 use LWP::UserAgent 6.00;
 use XML::Simple qw(:strict);
 
