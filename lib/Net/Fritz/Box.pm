@@ -7,7 +7,7 @@ package Net::Fritz::Box;
 # ABSTRACT: main configuration and entry point for L<Net::Fritz> distribution
 
 
-use LWP::UserAgent;
+use LWP::UserAgent 6.00;
 use XML::Simple qw(:strict);
 
 use Net::Fritz::Error;
