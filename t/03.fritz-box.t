@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 8;
+use Test::More tests => 9;
 use warnings;
 use strict;
 
@@ -12,9 +12,13 @@ BEGIN { use_ok('Net::Fritz::Box') };
 ### public tests
 
 subtest 'check new()' => sub {
+    # given
+
+    # when
     my $box = new_ok( 'Net::Fritz::Box' );
-    is( $box->error, '', 'get Net::Fritz::Box instance');
-    isa_ok( $box, 'Net::Fritz::Box' );
+
+    # then
+    is( $box->error,       '',                       'Net::Fritz::Box->error'       );
     is( $box->upnp_url,    'http://fritz.box:49000', 'Net::Fritz::Box->upnp_url'    );
     is( $box->trdesc_path, '/tr64desc.xml',          'Net::Fritz::Box->trdesc_path' );
     is( $box->username,    undef,                    'Net::Fritz::Box->username'    );
@@ -22,6 +26,9 @@ subtest 'check new()' => sub {
 };
 
 subtest 'check new() with parameters' => sub {
+    # given
+
+    # when
     my $box = new_ok( 'Net::Fritz::Box',
 		      [ upnp_url    => 'U1',
 			trdesc_path => 'T2',
@@ -29,8 +36,9 @@ subtest 'check new() with parameters' => sub {
 			password    => 'P4'
 		      ]
 	);
-    is( $box->error, '', 'get Net::Fritz::Box instance');
-    isa_ok( $box, 'Net::Fritz::Box' );
+
+    # then
+    is( $box->error,       '',   'Net::Fritz::Box->error'       );
     is( $box->upnp_url,    'U1', 'Net::Fritz::Box->upnp_url'    );
     is( $box->trdesc_path, 'T2', 'Net::Fritz::Box->trdesc_path' );
     is( $box->username,    'U3', 'Net::Fritz::Box->username'    );
@@ -38,44 +46,66 @@ subtest 'check new() with parameters' => sub {
 };
 
 subtest 'check discover() without Net::Fritz!Box present' => sub {
+    # given
     my $box = new_ok( 'Net::Fritz::Box' );
-    isa_ok( $box->discover(), 'Net::Fritz::Error' , 'failed discovery' );
+
+    # when
+    my $discovery = $box->discover();
+
+    # then
+    isa_ok( $discovery, 'Net::Fritz::Error' , 'failed discovery' );
 };
 
 subtest 'check discover() with mocked Net::Fritz!Box' => sub {
+    # given
     my $box = new_ok( 'Net::Fritz::Box' );
     $box->_ua->map('http://fritz.box:49000/tr64desc.xml', get_fake_device_response());
-    isa_ok( $box->discover(), 'Net::Fritz::Device' , 'mocked discovery' );
+
+    # when
+    my $discovery = $box->discover();
+
+    # then
+    isa_ok( $discovery, 'Net::Fritz::Device' , 'mocked discovery' );
 };
 
 subtest 'check discover() with mocked Net::Fritz!Box at non-standard URL' => sub {
+    # given
     my $box = new_ok( 'Net::Fritz::Box',
 		   [ upnp_url    => 'http://example.org:123',
 		     trdesc_path => '/tr64'
 		   ]
 	);
     $box->_ua->map('http://example.org:123/tr64', get_fake_device_response());
-    isa_ok( $box->discover(), 'Net::Fritz::Device' , 'mocked discovery' );
+
+    # when
+    my $discovery = $box->discover();
+
+    # then
+    isa_ok( $discovery, 'Net::Fritz::Device' , 'mocked discovery' );
 };
 
 
 ### internal tests
 
 subtest 'check _sslopts' => sub {
+    # given
     my $box = new_ok( 'Net::Fritz::Box' );
+
+    # when
     my %box_sslopts = @{$box->_sslopts};
+
+    # then
     is_deeply( [ sort keys %box_sslopts ], [ sort $box->_ua->ssl_opts ], 'SSL option keys' );
 };
 
-subtest 'check dump()' => sub {
+subtest 'check dump_without_indent()' => sub {
+    # given
     my $box = new_ok( 'Net::Fritz::Box' );
 
-    my $dump = $box->dump('xxx');
-    foreach my $line (split /\n/, $dump) {
-	like( $line, qr/^xxx/, 'line starts with given indent' );
-    }
+    # when
+    my $dump = $box->dump();
 
-    $dump = $box->dump();
+    # then
     foreach my $line (split /\n/, $dump) {
 	like( $line, qr/^(Net::Fritz|  )/, 'line starts as expected' );
     }
@@ -86,6 +116,19 @@ subtest 'check dump()' => sub {
     like( $dump, qr/$upnp_url/, 'upnp_url is dumped' );
     my $trdesc_path = $box->trdesc_path;
     like( $dump, qr/$trdesc_path/, 'trdesc_path is dumped' );
+};
+
+subtest 'check dump_with_indent()' => sub {
+    # given
+    my $box = new_ok( 'Net::Fritz::Box' );
+
+    # when
+    my $dump = $box->dump('xxx');
+
+    # then
+    foreach my $line (split /\n/, $dump) {
+	like( $line, qr/^xxx/, 'line starts with given indent' );
+    }
 };
 
 

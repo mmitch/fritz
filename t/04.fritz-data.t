@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 6;
+use Test::More tests => 7;
 use warnings;
 use strict;
 
@@ -32,22 +32,33 @@ subtest 'check get()' => sub {
     is( $result, $value, 'Net::Fritz::Data->get');
 };
 
-subtest 'check dump()' => sub {
+subtest 'check dump_without_indent()' => sub {
+    # given
     my $data = new_ok( 'Net::Fritz::Data', [ 'TEST VALUE' ] );
 
-    # only check first two lines!
-    my $dump = $data->dump('xxx');
-    foreach my $line ((split /\n/, $dump, 2)) { 
-	like( $line, qr/^xxx/, 'line starts with given indent' );
-    }
+    # when
+    my $dump = $data->dump();
 
-    $dump = $data->dump();
+    # then
     foreach my $line ((split /\n/, $dump, 2)) {
 	like( $line, qr/^(Net::Fritz|----)/, 'line starts as expected' );
     }
 
     like( $dump, qr/Net::Fritz::Data/, 'class name is dumped' );
     like( $dump, qr/TEST VALUE/, 'data is dumped' );
+};
+
+subtest 'check dump_with_indent()' => sub {
+    # given
+    my $data = new_ok( 'Net::Fritz::Data', [ 'TEST VALUE' ] );
+
+    # when
+    my $dump = $data->dump('xxx');
+
+    # then
+    foreach my $line ((split /\n/, $dump, 2)) { # only check first two lines!
+	like( $line, qr/^xxx/, 'line starts with given indent' );
+    }
 };
 
 
