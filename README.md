@@ -37,6 +37,10 @@ eg. via
 
     $ cpan -i Net::Fritz
 
+or
+
+    $ cpanm Net::Fritz
+
 
 building
 --------
@@ -53,7 +57,7 @@ installed by
     $ perl Build installdeps
 
 The current dependencies can be seen in the ``Build.PL`` file in the
-hashes ``configure_requires`` and ``requires``.  The modles listed
+hashes ``configure_requires`` and ``requires``.  The modules listed
 under ``test_requires`` are optional if you want to skip the tests.
 
 
