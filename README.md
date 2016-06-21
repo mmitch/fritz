@@ -46,19 +46,32 @@ building
 --------
 
 To build and install the current development version of Net::Fritz
-module, clone this repository and then run
+module, you need to have Dist::Zilla installed.  Run the ``dzil``
+command - if it is available, Dist::Zilla should be installed.
 
-    $ perl Build.PL
-    $ perl Build install
+To install or upgrade Dist::Zilla use
+
+    $ cpan -i Dist::Zilla
+
+or
+
+    $ cpanm Dist::Zilla
+
+Then clone this repository, enter it and start the install process:
+
+    $ git clone https://github.com/mmitch/fritz.git
+	$ cd fritz
+    $ dzil install
 
 Any missing dependencies should be reported automatically and can be
 installed by
 
-    $ perl Build installdeps
+    $ dzil authordeps --missing | cpanm
+	$ dzil listdeps --missing | cpanm
 
-The current dependencies can be seen in the ``Build.PL`` file in the
-hashes ``configure_requires`` and ``requires``.  The modules listed
-under ``test_requires`` are optional if you want to skip the tests.
+Afterwards, try the installation again with
+
+    $ dzil install
 
 
 where to get it
