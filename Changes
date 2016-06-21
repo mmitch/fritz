@@ -1,5 +1,9 @@
 Revision history for perl distribution Net::Fritz
 
+v0.0.4 unreleased
+
+ -
+
 v0.0.3 2016-06-21
 
  - bump LWP::UserAgent dependency to 6.00 because ssl_opts are needed
