@@ -1,17 +1,10 @@
 #!perl
-use Test::More;
+use Test::DescribeMe qw(author);
+use Test::More tests => 17;
 use warnings;
 use strict;
 
 use Net::Fritz::Box;
-
-# check if a Net::Fritz!Box is available - otherwise skip
-# check if a live test is wanted - otherwise skip
-if (exists $ENV{AUTHOR_TEST} and $ENV{AUTHOR_TEST} eq 'fritz') {
-    plan tests => 17;
-} else {
-    plan skip_all => 'needs a real Fritz!Box (set AUTHOR_TEST=fritz to enable)';
-}
 
 # connect on normal port to get SSL port (real request)
 # connect-http tests this in detail, so skip all those checks
