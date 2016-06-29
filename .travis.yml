@@ -12,11 +12,10 @@ install:
   - dzil authordeps --missing | cpanm --quiet --notest
   - dzil listdeps --missing | cpanm --quiet --notest
 
-before_script:
-  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov Dist::Zilla::App::Command::cover
-
+# full author tests only once, smoke tests everywhere else
 script:
-  - dzil cover
+  - if test $TRAVIS_PERL_VERSION = '5.22'; then cpanm --quiet --notest --skip-satisfied Pod::Coverage::TrustPod && dzil test --keep; else dzil smoke; fi
 
+# run coverage only once and on non-mongled, non-PodWeavered code or line numbers won't match
 after_success:
-  - test $TRAVIS_PERL_VERSION = '5.22' && cd .build/*/ && cover -report codecov
+  - test $TRAVIS_PERL_VERSION = '5.22' && cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov && cp .build/*/Makefile* . && cover -test -report codecov
