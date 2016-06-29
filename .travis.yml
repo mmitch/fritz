@@ -12,9 +12,8 @@ install:
   - dzil authordeps --missing | cpanm --quiet --notest
   - dzil listdeps --missing | cpanm --quiet --notest
 
-# full author tests only once, smoke tests everywhere else
 script:
-  - if test $TRAVIS_PERL_VERSION = '5.22'; then cpanm --quiet --notest --skip-satisfied Pod::Coverage::TrustPod && dzil test --keep; else dzil smoke; fi
+  - dzil smoke
 
 # run coverage only once and on non-mongled, non-PodWeavered code or line numbers won't match
 after_success:
