@@ -260,10 +260,12 @@ sub call {
     my $url = $self->fritz->upnp_url . $self->controlURL;
 
     my $soap = SOAP::Lite->new(
-	proxy    => [ $url, ssl_opts => $self->fritz->_sslopts ],
+	proxy    => [ $url, ssl_opts => $self->fritz->_sslopts, keep_alive => 1, ],
 	uri      => $self->serviceType,
 	readable => 1, # TODO: remove this
 	);
+    # Keep up to 4 connections open
+    $soap->transport->conn_cache({ total_capacity => 4 });
 
     # expect the call to need authentication, so prepare an initial request
     my $auth = $self->_get_initial_auth;
