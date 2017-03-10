@@ -185,7 +185,7 @@ sub _build_eventSubURL {
     return $self->_build_an_attribute('eventSubURL');
 }
 
-=head2
+=head2 SCPDURL
 
 The I<SCPDURL> (URL string) of the SCPD file of this service where
 most of the other attributes are read from.
