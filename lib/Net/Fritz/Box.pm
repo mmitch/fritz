@@ -112,7 +112,8 @@ sub _build__ua {
     # I have one machine that needs it and another that doesn't.
     $ENV{HTTPS_DEBUG} = 1;
     
-    my $ua = LWP::UserAgent->new();
+    my $ua = LWP::UserAgent->new(keep_alive => 1);
+    $ua->conn_cache({total_capacity => 4});
     # disable SSL certificate checks, Fritz!Box has no verifiable SSL certificate
     $ua->ssl_opts(verify_hostname => 0 ,SSL_verify_mode => 0x00);
     
