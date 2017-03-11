@@ -60,14 +60,14 @@ or
 Then clone this repository, enter it and start the install process:
 
     $ git clone https://github.com/mmitch/fritz.git
-	$ cd fritz
+    $ cd fritz
     $ dzil install
 
 Any missing dependencies should be reported automatically and can be
 installed by
 
     $ dzil authordeps --missing | cpanm
-	$ dzil listdeps --missing | cpanm
+    $ dzil listdeps --missing | cpanm
 
 Afterwards, try the installation again with
 
