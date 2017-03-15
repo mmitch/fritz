@@ -254,7 +254,7 @@ sub call {
 
     my @args;
     foreach my $arg (keys %call_args) {
-	push @args, SOAP::Data->name($arg)->value($call_args{$arg});
+	push @args, SOAP::Data->name($arg)->value($call_args{$arg})->type('string');
     }
 
     my $url = $self->fritz->upnp_url . $self->controlURL;
