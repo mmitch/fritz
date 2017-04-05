@@ -1,5 +1,9 @@
 Revision history for perl distribution Net::Fritz
 
+v0.0.6 unreleased
+
+ -
+
 v0.0.5 2017-04-05
 
  - send all action parameters als SOAP strings
