@@ -75,12 +75,10 @@ if (1 == 0) {
     # get all connected WLAN devices
     my $services = $d->find_service_names('Configuration:');
     $services->errorcheck;
-    print Dumper($services->data);
-    for my $serviceType (@{$services->data}) {
-	my $service = $d->get_service($serviceType);
-	$services->errorcheck;
+    for my $service (@{$services->data}) {
+	$service->errorcheck;
 	my $response = $service->call('GetTotalAssociations');
-	$response->errorcheck;
+	$service->errorcheck;
 	print Dumper($response->data);
 	# now do a loop and read device by device - my WLAN is off, so I can't test here :-)
     }
