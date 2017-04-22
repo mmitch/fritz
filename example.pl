@@ -78,7 +78,7 @@ if (1 == 0) {
     for my $service (@{$services->data}) {
 	$service->errorcheck;
 	my $response = $service->call('GetTotalAssociations');
-	$service->errorcheck;
+	$response->errorcheck;
 	print Dumper($response->data);
 	# now do a loop and read device by device - my WLAN is off, so I can't test here :-)
     }
