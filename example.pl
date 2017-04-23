@@ -79,8 +79,20 @@ if (1 == 0) {
 	$service->errorcheck;
 	my $response = $service->call('GetTotalAssociations');
 	$response->errorcheck;
-	print Dumper($response->data);
-	# now do a loop and read device by device - my WLAN is off, so I can't test here :-)
+	# now do a loop and read device by device
+	for my $host ( 0 .. $response->data->{NewTotalAssociations} - 1) {
+	    my $hostresponse = $service->call('GetGenericAssociatedDeviceInfo', 'NewAssociatedDeviceIndex' => $host);
+	    $hostresponse->errorcheck;
+	    my $d = $hostresponse->data;
+
+	    printf("%15s   %-20s   %-15d   %-7d   %d\n",
+		   $d->{"NewAssociatedDeviceIPAddress"},
+		   $d->{"NewAssociatedDeviceMACAddress"},
+		   $d->{"NewX_AVM-DE_SignalStrength"},
+		   $d->{"NewX_AVM-DE_Speed"},
+		   $d->{"NewAssociatedDeviceAuthState"},
+		);
+	}
     }
 }
 
