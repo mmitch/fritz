@@ -38,6 +38,18 @@ my $d = $f->discover();
 #print $d->dump() . "\n\n";
 
 if (1 == 0) {
+    # list all phonebooks
+    my $service = $d->find_service('X_AVM-DE_OnTel:');
+    $service->errorcheck;
+    my $phonebooks = $service->call('GetPhonebookList');
+    $phonebooks->errorcheck;
+    for my $phonebookID (split /\D+/, $phonebooks->data->{NewPhonebookList}) {
+	my $phonebook = $service->call('GetPhonebook', 'NewPhonebookID' => $phonebookID);
+	printf "%-20s %s\n", $phonebook->data->{NewPhonebookName}, $phonebook->data->{NewPhonebookURL};
+    }
+}
+
+if (1 == 0) {
     # get DSL information (CRC, data rates, ...)
     my $service = $d->find_service(':WANDSLInterfaceConfig:');
     $service->errorcheck;
