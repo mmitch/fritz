@@ -1,8 +1,11 @@
 Revision history for perl distribution Net::Fritz
 
-v0.0.6 unreleased
+v0.0.6 2017-06-12
 
- -
+ - try to fix XML::Simple related bugs during test execution
+   where parse_string() gets something that looks more like a file
+   (sort of a heisenbug: rarely happens, can't reproduce,
+    CPAN test reports show about 0.5% error rate)
 
 v0.0.5 2017-04-05
 
