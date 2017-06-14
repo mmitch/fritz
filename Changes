@@ -1,5 +1,12 @@
 Revision history for perl distribution Net::Fritz
 
+v0.0.7 2017-06-14
+
+ - next try to fix XML::Simple related bugs during test execution,
+   this time by forcing XML::Simple to use XML::Parser
+   (still can't reproduce locally, need the tester infrastructure
+    to pick up a new released version)
+
 v0.0.6 2017-06-12
 
  - try to fix XML::Simple related bugs during test execution
