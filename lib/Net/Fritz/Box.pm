@@ -13,6 +13,7 @@ package Net::Fritz::Box;
 # stick with the versioned dependency.
 use LWP::UserAgent 6.00;
 use XML::Simple qw(:strict);
+$XML::Simple::PREFERRED_PARSER = 'XML::Parser';
 
 use Net::Fritz::Error;
 use Net::Fritz::Device;
