@@ -91,7 +91,7 @@ sub _build_scpd {
 
     if ($response->is_success) {
 	return Net::Fritz::Data->new(
-	    $self->fritz->_xs->xml_in($response->decoded_content)
+	    $self->fritz->_xs->parse_string($response->decoded_content)
 	    );
     }
     else {

@@ -172,7 +172,7 @@ sub discover {
     
     if ($response->is_success) {
 	return Net::Fritz::Device->new(
-	    xmltree => $self->_xs->xml_in($response->decoded_content)->{device}->[0],
+	    xmltree => $self->_xs->parse_string($response->decoded_content)->{device}->[0],
 	    fritz   => $self
 	    );
     }
