@@ -1,5 +1,9 @@
 Revision history for perl distribution Net::Fritz
 
+v0.0.8 unreleased
+
+ - 
+
 v0.0.7 2017-06-14
 
  - next try to fix XML::Simple related bugs during test execution,
