@@ -29,7 +29,7 @@ L<Net::Fritz::Error>.  B<All> L<Net::Fritz> objects thus support
 C<error> and C<errorcheck>
 
 If you want your code to just C<die()> on any error, call
-C<$obj->errorcheck> on every returned object (see first example
+C<$obj-E<gt>errorcheck> on every returned object (see first example
 above).
 
 If you just want to check for an error and handle it by yourself, call
