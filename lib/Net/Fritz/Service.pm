@@ -130,7 +130,7 @@ sub _build_action_hash {
     }
 }
 
-=head2
+=head2 serviceType
 
 The I<serviceType> (string) of this service which is used by
 L<Net::Fritz::Device> to look up services.
@@ -144,7 +144,7 @@ sub _build_serviceType {
     return $self->_build_an_attribute('serviceType');
 }
 
-=head2
+=head2 serviceId
 
 The I<serviceId> (string) of this service.
 
@@ -157,7 +157,7 @@ sub _build_serviceId {
     return $self->_build_an_attribute('serviceId');
 }
 
-=head2
+=head2 controlURL
 
 The I<controlURL> (URL string) of this service which is needed to
 L</call> any L<Net::Fritz::Action>s of this service.
@@ -171,7 +171,7 @@ sub _build_controlURL {
     return $self->_build_an_attribute('controlURL');
 }
 
-=head2
+=head2 eventSubURL
 
 The I<eventSubURL> (URL string) of this service for subscribing to or
 unsubscribing from events.
