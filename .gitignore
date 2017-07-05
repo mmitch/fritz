@@ -1,6 +1,7 @@
 *~
 
 local_stuff/
+.build/
 
 /Net-Fritz-v*.tar.gz
 /Net-Fritz-v*/
