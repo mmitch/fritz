@@ -333,6 +333,39 @@ sub find_device {
     return Net::Fritz::Error->new( 'device not found' );
 }
 
+=head2 call(I<service_name> I<action_name [I<parameter> => I<value>] [...])
+
+Directly calls the L<Net::Fritz::Action> named I<action_name> of the
+L<Net::Fritz::Service> named I<service_name>.
+
+This is a convenience method that internally calls
+L<Net::Fritz::Device/get_service> followed by
+L<Net::Fritz::Service/call> - see those methods for further details.
+
+The intermediate L<Net::Fritz::Service> is cached, so that further
+calls to the same I<service_name> only need to do one instead of two
+SOAP requests.
+
+=cut
+
+has _service_cache => ( is => 'rw', default => sub { return {} } );
+
+sub call {
+    my $self      = shift;
+    my $type      = shift;
+    my $action    = shift;
+    my %call_args = (@_);
+
+    my $service = $self->_service_cache->{$type};
+    if (! defined $service) {
+	$service = $self->get_service($type);
+	$self->_service_cache->{$type} = $service;
+    }
+    return $service if $service->error;
+
+    return $service->call($action, %call_args);
+}
+
 =head2 dump(I<indent>)
 
 Returns some preformatted multiline information about the object.
