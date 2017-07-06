@@ -348,7 +348,7 @@ SOAP requests.
 
 =cut
 
-has _service_cache => ( is => 'rw', default => sub { return {} } );
+has _service_cache => ( is => 'ro', default => sub { return {} } );
 
 sub call {
     my $self      = shift;
