@@ -182,6 +182,38 @@ sub discover {
     }
 }
 
+=head2 call(I<service_name> I<action_name [I<parameter> => I<value>] [...])
+
+Directly calls the L<Net::Fritz::Action> named I<action_name> of the
+L<Net::Fritz::Service> matching the regular expression I<service_name>.
+
+This is a convenience method that internally calls
+L<Net::Fritz::Box/discover> followed by L<Net::Fritz::Device/call> -
+see those methods for further details.
+
+The intermediate L<Net::Fritz::Device> is cached, so that further
+calls can skip that initial SOAP request.
+
+=cut
+
+has _device_cache => ( is => 'rw' );
+
+sub call {
+    my $self      = shift;
+    my $service   = shift;
+    my $action    = shift;
+    my %call_args = (@_);
+
+    my $device = $self->_device_cache;
+    if (!defined $device) {
+	$device = $self->discover();
+	return $device if $device->error;
+	$self->_device_cache($device);
+    }
+
+    return $device->call($service, $action, %call_args);
+}
+
 =head2 dump(I<indent>)
 
 Returns some preformatted multiline information about the object.
