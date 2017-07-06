@@ -98,7 +98,8 @@ subtest 'call() adds Net::Fritz::Service to cache if missing' => sub {
     my $cached_service = $device->_service_cache->{$service};
     ok( defined $cached_service, 'value is cached' );
     isa_ok( $cached_service, 'Net::Fritz::Service', 'cached value is of expected type' );
-    is( $cached_service->serviceType, $service, 'cached service has exected name' );
+    like( $cached_service->serviceType, qr/$service/, 'cached service contains searched name' );
+    is( $cached_service->serviceType, 'FAKE_SERVICE_additional_ignored_part_of_name', 'cached service has exected name' );
 };
 
 
@@ -110,7 +111,7 @@ sub get_xmltree
 	'serviceList' => [
 	    { 'deviceType' => [ 'MAIN_DEVICE' ],
 	      'service'    => [
-		  { 'serviceType' => [ 'FAKE_SERVICE' ],
+		  { 'serviceType' => [ 'FAKE_SERVICE_additional_ignored_part_of_name' ],
 		    'SCPDURL'     => [ '/SCPD' ],
 		    'controlURL'  => [ '/control' ],
 		  }

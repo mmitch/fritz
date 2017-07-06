@@ -336,10 +336,10 @@ sub find_device {
 =head2 call(I<service_name> I<action_name [I<parameter> => I<value>] [...])
 
 Directly calls the L<Net::Fritz::Action> named I<action_name> of the
-L<Net::Fritz::Service> named I<service_name>.
+L<Net::Fritz::Service> matching the regular expression I<service_name>.
 
 This is a convenience method that internally calls
-L<Net::Fritz::Device/get_service> followed by
+L<Net::Fritz::Device/find_service> followed by
 L<Net::Fritz::Service/call> - see those methods for further details.
 
 The intermediate L<Net::Fritz::Service> is cached, so that further
@@ -358,7 +358,7 @@ sub call {
 
     my $service = $self->_service_cache->{$type};
     if (! defined $service) {
-	$service = $self->get_service($type);
+	$service = $self->find_service($type);
 	$self->_service_cache->{$type} = $service;
     }
     return $service if $service->error;
