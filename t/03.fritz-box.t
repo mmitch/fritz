@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 9;
+use Test::More tests => 11;
 use warnings;
 use strict;
 
@@ -44,6 +44,50 @@ subtest 'check new() with parameters' => sub {
     is( $box->username,    'U3', 'Net::Fritz::Box->username'    );
     is( $box->password,    'P4', 'Net::Fritz::Box->password'    );
 };
+
+subtest 'new() reads from configfile' => sub {
+    # given
+
+    # when
+    my $box = new_ok( 'Net::Fritz::Box',
+		      [ configfile  => 't/config.file'
+		      ]
+	);
+
+    # then
+    is( $box->error,       '',              'Net::Fritz::Box->error'       );
+    is( $box->upnp_url,    'UPNP',          'Net::Fritz::Box->upnp_url'    );
+    is( $box->trdesc_path, 'TRDESC',        'Net::Fritz::Box->trdesc_path' );
+    is( $box->username,    'USER',          'Net::Fritz::Box->username'    );
+    is( $box->password,    'PASS',          'Net::Fritz::Box->password'    );
+    is( $box->configfile,  't/config.file', 'Net::Fritz::Box->configfile'  );
+};
+
+subtest 'new() parameters overwrite configfile values' => sub {
+    # given
+
+    # when
+    my $box = new_ok( 'Net::Fritz::Box',
+		      [ upnp_url    => 'U1',
+			trdesc_path => 'T2',
+			username    => 'U3',
+			password    => 'P4',
+			configfile  => 't/config.file'
+		      ]
+	);
+
+    # then
+    is( $box->error,       '',              'Net::Fritz::Box->error'       );
+    is( $box->upnp_url,    'U1',            'Net::Fritz::Box->upnp_url'    );
+    is( $box->trdesc_path, 'T2',            'Net::Fritz::Box->trdesc_path' );
+    is( $box->username,    'U3',            'Net::Fritz::Box->username'    );
+    is( $box->password,    'P4',            'Net::Fritz::Box->password'    );
+    is( $box->configfile,  't/config.file', 'Net::Fritz::Box->configfile'  );
+};
+
+# TODO: error or 'no-op' when configfile does not exist?
+# TODO: configfile ~/ expansion
+# TODO: default configfile ~/.fritzrc
 
 subtest 'check discover() without Fritz!Box present' => sub {
     # given

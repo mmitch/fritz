@@ -12,8 +12,11 @@ package Net::Fritz::Box;
 # but SOAP::Lite might then have the same problem...  For now just
 # stick with the versioned dependency.
 use LWP::UserAgent 6.00;
+
 use XML::Simple qw(:strict);
 $XML::Simple::PREFERRED_PARSER = 'XML::Parser';
+
+use AppConfig;
 
 use Net::Fritz::Error;
 use Net::Fritz::Device;
@@ -95,6 +98,50 @@ Sets the password to use for authentication against a device.
 =cut
 
 has password      => ( is => 'ro' );
+
+=head2 configfile
+
+Default value: none
+
+Sets a configuration file to read the configuration from.  The file
+format is simply C<key = value> (for more details see L<AppConfig>)
+per line with the following keys available:
+
+=over
+
+=item L</upnp_url>
+
+=item L</trdesc_path>
+
+=item L</username>
+
+=item L</password>
+
+=back
+
+If an attribute is both defined by the configuration file and given as
+a parameter to L</new()>, the parameter is taken and the value from
+the configuration file is ignored.
+
+=cut
+
+has configfile    => ( is => 'ro' );
+
+sub BUILDARGS {
+    my ( $class, %args ) = @_;
+
+    if (exists $args{configfile}) {
+	my $config = AppConfig->new();
+	$config->define('upnp_url=s');
+	$config->define('trdesc_path=s');
+	$config->define('username=s');
+	$config->define('password=s');
+	$config->file($args{configfile});
+	return { $config->varlist('^'), %args };
+    }
+
+    return \%args;
+};
 
 # internal XML::Simple instance (lazy)
 has _xs           => ( is => 'lazy', init_arg => undef );
