@@ -160,7 +160,8 @@ sub _build_serviceId {
 =head2 controlURL
 
 The I<controlURL> (URL string) of this service which is needed to
-L</call> any L<Net::Fritz::Action>s of this service.
+L<call|Net::Fritz::Action/call> any L<Net::Fritz::Action>s of this
+service.
 
 =cut
 

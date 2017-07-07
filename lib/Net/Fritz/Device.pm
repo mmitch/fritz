@@ -338,9 +338,9 @@ sub find_device {
 Directly calls the L<Net::Fritz::Action> named I<action_name> of the
 L<Net::Fritz::Service> matching the regular expression I<service_name>.
 
-This is a convenience method that internally calls L</find_service>
-followed by L<Net::Fritz::Service/call> - see those methods for
-further details.
+This is a convenience method that internally calls
+L<find_service()|/find_service(regexp)> followed by L<Net::Fritz::Service/call> -
+see those methods for further details.
 
 The intermediate L<Net::Fritz::Service> is cached, so that further
 calls to the same I<service_name> only need to do one instead of two
@@ -421,12 +421,13 @@ See L<Net::Fritz::IsNoError/errorcheck>.
 
 B<TODO:> Method names are inconsistent: With services, C<get_*> uses
 exact matching while C<find_*> uses regexp matching.  But with
-devices, L</find_device> uses exact matching.  Change this to match
-the service methods and add the missing variants.
+devices, L<find_device()|/find_device(name)> uses exact matching.
+Change this to match the service methods and add the missing variants.
 
-B<TODO:> Rename L</find_service_names> to something like
-L</find_all_service> as it's basically L</find_service> with multiple
-results.  It does not return service names but services.
+B<TODO:> Rename L<find_service_names()|/find_service_names(regexp)> to
+something like C<find_all_services()> as it's basically
+L<find_service()|/find_service(regexp)> with multiple results.  It
+does not return service names but services.
 
 =head1 SEE ALSO
 
