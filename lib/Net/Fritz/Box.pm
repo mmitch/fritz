@@ -187,12 +187,14 @@ sub discover {
 Directly calls the L<Net::Fritz::Action> named I<action_name> of the
 L<Net::Fritz::Service> matching the regular expression I<service_name>.
 
-This is a convenience method that internally calls
-L<Net::Fritz::Box/discover> followed by L<Net::Fritz::Device/call> -
-see those methods for further details.
+This is a convenience method that internally calls L</discover>
+followed by L<Net::Fritz::Device/call> - see those methods for further
+details.
 
 The intermediate L<Net::Fritz::Device> is cached, so that further
 calls can skip that initial SOAP request.
+
+This method is available since C<v0.0.8>.
 
 =cut
 
