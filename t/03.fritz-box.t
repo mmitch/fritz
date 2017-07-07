@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 12;
+use Test::More tests => 13;
 use warnings;
 use strict;
 
@@ -87,6 +87,7 @@ subtest 'new() parameters overwrite configfile values' => sub {
 };
 
 # TODO: error or 'no-op' when configfile does not exist?
+# TODO: skip default configfile if it does not exist
 
 subtest '~ is expanded in configfile name' => sub {
     # given
@@ -106,7 +107,23 @@ subtest '~ is expanded in configfile name' => sub {
     is( $file_to_read,    "$ENV{HOME}/.fritzrc", 'filename passed to AppConfig->file()' );
 };
 
-# TODO: default configfile ~/.fritzrc
+subtest 'use ~/.fritzrc as default configfile if filename is not set' => sub {
+    # given
+    my $file_to_read;
+    my $mock = Test::Mock::Simple->new(module => 'AppConfig');
+    $mock->add(file => sub { shift; $file_to_read = shift; });
+
+    # when
+    my $box = new_ok( 'Net::Fritz::Box',
+		      [ configfile  => 0
+		      ]
+	);
+
+    # then
+    is( $box->error,      '',                    'Net::Fritz::Box->error' );
+    is( $box->configfile, "$ENV{HOME}/.fritzrc", 'Net::Fritz::Box->configfile' );
+    is( $file_to_read,    "$ENV{HOME}/.fritzrc", 'filename passed to AppConfig->file()' );
+};
 
 subtest 'check discover() without Fritz!Box present' => sub {
     # given

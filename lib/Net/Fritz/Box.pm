@@ -104,7 +104,9 @@ has password      => ( is => 'ro' );
 Default value: none
 
 Sets a configuration file to read the configuration from.  A C<~> at
-the beginning of the filename will be expanded to C<$ENV{HOME}>.
+the beginning of the filename will be expanded to C<$ENV{HOME}>.  If
+the filename expands to C<false> (C<0>, C<''> or the like), the
+default filename of C<~/.fritzrc> will be used.
 
 The file format is simply C<key = value> (for more details see
 L<AppConfig>) per line with the following keys available:
@@ -134,6 +136,7 @@ sub BUILDARGS {
 
     if (exists $args{configfile}) {
 
+	$args{configfile} = '~/.fritzrc' unless $args{configfile};
 	$args{configfile} =~ s/^~/$ENV{HOME}/;
 
 	my $config = AppConfig->new();
