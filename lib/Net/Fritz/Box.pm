@@ -103,9 +103,11 @@ has password      => ( is => 'ro' );
 
 Default value: none
 
-Sets a configuration file to read the configuration from.  The file
-format is simply C<key = value> (for more details see L<AppConfig>)
-per line with the following keys available:
+Sets a configuration file to read the configuration from.  A C<~> at
+the beginning of the filename will be expanded to C<$ENV{HOME}>.
+
+The file format is simply C<key = value> (for more details see
+L<AppConfig>) per line with the following keys available:
 
 =over
 
@@ -131,6 +133,9 @@ sub BUILDARGS {
     my ( $class, %args ) = @_;
 
     if (exists $args{configfile}) {
+
+	$args{configfile} =~ s/^~/$ENV{HOME}/;
+
 	my $config = AppConfig->new();
 	$config->define('upnp_url=s');
 	$config->define('trdesc_path=s');
