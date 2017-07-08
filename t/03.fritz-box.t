@@ -130,6 +130,11 @@ subtest 'use ~/.fritzrc as default configfile if filename is not set' => sub {
     my $mock = Test::Mock::Simple->new(module => 'AppConfig');
     $mock->add(file => sub { shift; $file_to_read = shift; });
 
+    # ensure that ~/.fritzrc exists
+    $ENV{HOME} = tempdir();
+    open EMPTYFILE, '>', "$ENV{HOME}/.fritzrc" or die $!;
+    close EMPTYFILE or die $!;    
+
     # when
     my $box = new_ok( 'Net::Fritz::Box',
 		      [ configfile  => 0
