@@ -62,7 +62,8 @@ C<192.168.179.1> or C<169.254.1.1>, these adresses seem to be
 hardcoded for "emergency use" after a misconfiguration.
 
 An address starting with C<https://> enables secure communication over
-SSL, but see L<Net::Fritz/SSL> for bugs and limitations.
+SSL.  The port will be different; the Fritz!Box default for SSL access
+is C<https://fritz.box:49443>
 
 =cut
 
