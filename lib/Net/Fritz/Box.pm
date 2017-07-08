@@ -109,7 +109,7 @@ A C<~> at the beginning of the filename will be expanded to
 C<$ENV{HOME}>.
 
 If the filename expands to C<false> (C<0>, C<''> or the like), the
-default filename of C<~/.fritzrc> will be used.
+default filename of C<~/.fritzrc> will be used if it exists.
 
 The file format is simply C<key = value> (for more details see
 L<AppConfig>) per line with the following keys available:
@@ -141,20 +141,33 @@ sub BUILDARGS {
 
     if (exists $args{configfile}) {
 
-	$args{configfile} = '~/.fritzrc' unless $args{configfile};
+	# expand empty filename to default ~/.fritzrc
+	if (! $args{configfile}) {
+	    my $default_configfile = "$ENV{HOME}/.fritzrc";
+	    return \%args unless -e $default_configfile; # skip if ~/.fritzrc does not exist
+	    $args{configfile} = $default_configfile;
+	}
+
+	# expand ~ to $HOME
 	$args{configfile} =~ s/^~/$ENV{HOME}/;
 
+	# configure AppConfig
 	my $config = AppConfig->new();
 	$config->define('upnp_url=s');
 	$config->define('trdesc_path=s');
 	$config->define('username=s');
 	$config->define('password=s');
+
+	# read configfile
 	$config->file($args{configfile});
 
+	# get configuration variables
 	my %config_vars = $config->varlist('^');
 
+	# remove all missing configuration variables
 	delete $config_vars{$_} foreach grep {!defined $config_vars{$_}} keys %config_vars;
 
+	# merge both hashes; %args wins for duplicate keys
 	return { %config_vars, %args };
     }
 

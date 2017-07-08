@@ -1,10 +1,11 @@
 #!perl
-use Test::More tests => 14;
+use Test::More tests => 15;
 use warnings;
 use strict;
 
 use Test::Mock::Simple;
 use Test::Mock::LWP::Dispatch;
+use Test::TempDir::Tiny;
 use HTTP::Response;
 
 BEGIN { use_ok('Net::Fritz::Box') };
@@ -105,9 +106,6 @@ subtest 'new() parameters overwrite configfile values' => sub {
     is( $box->configfile,  't/config.file', 'Net::Fritz::Box->configfile'  );
 };
 
-# TODO: error or 'no-op' when configfile does not exist?
-# TODO: skip default configfile if it does not exist
-
 subtest '~ is expanded in configfile name' => sub {
     # given
     my $file_to_read;
@@ -142,6 +140,28 @@ subtest 'use ~/.fritzrc as default configfile if filename is not set' => sub {
     is( $box->error,      '',                    'Net::Fritz::Box->error' );
     is( $box->configfile, "$ENV{HOME}/.fritzrc", 'Net::Fritz::Box->configfile' );
     is( $file_to_read,    "$ENV{HOME}/.fritzrc", 'filename passed to AppConfig->file()' );
+};
+
+subtest 'missing default configfile is skipped and throws no error' => sub {
+    # given
+    my $file_to_read;
+    my $mock = Test::Mock::Simple->new(module => 'AppConfig');
+    $mock->add(file => sub { shift; $file_to_read = shift; });
+
+    # set $HOME to empty temporary directory
+    # to be sure that no ~/.fritzrc exists
+    $ENV{HOME} = tempdir();
+    
+    # when
+    my $box = new_ok( 'Net::Fritz::Box',
+		      [ configfile  => 0
+		      ]
+	);
+
+    # then
+    is( $box->error,      '',    'Net::Fritz::Box->error' );
+    is( $box->configfile, 0,     'Net::Fritz::Box->configfile' );
+    is( $file_to_read,    undef, 'no filename passed to AppConfig->file()' );
 };
 
 subtest 'check discover() without Fritz!Box present' => sub {
