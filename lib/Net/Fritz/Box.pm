@@ -127,14 +127,18 @@ L<AppConfig>) per line with the following keys available:
 =back
 
 If an attribute is both defined by the configuration file and given as
-a parameter to L</new()>, the parameter is taken and the value from
-the configuration file is ignored.
+a parameter to L</new>, the parameter is taken and the value from the
+configuration file is ignored.
 
 This attribute is available since C<v0.0.8>.
 
 =cut
 
 has configfile    => ( is => 'ro' );
+
+=for Pod::Coverage BUILDARGS
+
+=cut
 
 sub BUILDARGS {
     my ( $class, %args ) = @_;
