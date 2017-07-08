@@ -150,7 +150,12 @@ sub BUILDARGS {
 	$config->define('username=s');
 	$config->define('password=s');
 	$config->file($args{configfile});
-	return { $config->varlist('^'), %args };
+
+	my %config_vars = $config->varlist('^');
+
+	delete $config_vars{$_} foreach grep {!defined $config_vars{$_}} keys %config_vars;
+
+	return { %config_vars, %args };
     }
 
     return \%args;

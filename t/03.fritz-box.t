@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 13;
+use Test::More tests => 14;
 use warnings;
 use strict;
 
@@ -24,6 +24,7 @@ subtest 'check new()' => sub {
     is( $box->trdesc_path, '/tr64desc.xml',          'Net::Fritz::Box->trdesc_path' );
     is( $box->username,    undef,                    'Net::Fritz::Box->username'    );
     is( $box->password,    undef,                    'Net::Fritz::Box->password'    );
+    is( $box->configfile,  undef,                    'Net::Fritz::Box->configfile'  );
 };
 
 subtest 'check new() with parameters' => sub {
@@ -62,6 +63,24 @@ subtest 'new() reads from configfile' => sub {
     is( $box->username,    'USER',          'Net::Fritz::Box->username'    );
     is( $box->password,    'PASS',          'Net::Fritz::Box->password'    );
     is( $box->configfile,  't/config.file', 'Net::Fritz::Box->configfile'  );
+};
+
+subtest 'empty configfile does not overwrite defaults' => sub {
+    # given
+
+    # when
+    my $box = new_ok( 'Net::Fritz::Box',
+		      [ configfile  => 't/empty.file'
+		      ]
+	);
+
+    # then
+    is( $box->error,       '',                       'Net::Fritz::Box->error'       );
+    is( $box->upnp_url,    'http://fritz.box:49000', 'Net::Fritz::Box->upnp_url'    );
+    is( $box->trdesc_path, '/tr64desc.xml',          'Net::Fritz::Box->trdesc_path' );
+    is( $box->username,    undef,                    'Net::Fritz::Box->username'    );
+    is( $box->password,    undef,                    'Net::Fritz::Box->password'    );
+    is( $box->configfile,  't/empty.file',           'Net::Fritz::Box->configfile'  );
 };
 
 subtest 'new() parameters overwrite configfile values' => sub {
