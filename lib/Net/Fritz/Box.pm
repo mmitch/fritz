@@ -103,9 +103,12 @@ has password      => ( is => 'ro' );
 
 Default value: none
 
-Sets a configuration file to read the configuration from.  A C<~> at
-the beginning of the filename will be expanded to C<$ENV{HOME}>.  If
-the filename expands to C<false> (C<0>, C<''> or the like), the
+Sets a configuration file to read the configuration from.
+
+A C<~> at the beginning of the filename will be expanded to
+C<$ENV{HOME}>.
+
+If the filename expands to C<false> (C<0>, C<''> or the like), the
 default filename of C<~/.fritzrc> will be used.
 
 The file format is simply C<key = value> (for more details see
@@ -126,6 +129,8 @@ L<AppConfig>) per line with the following keys available:
 If an attribute is both defined by the configuration file and given as
 a parameter to L</new()>, the parameter is taken and the value from
 the configuration file is ignored.
+
+This attribute is available since C<v0.0.8>.
 
 =cut
 
