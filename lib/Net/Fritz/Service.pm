@@ -224,7 +224,7 @@ service information in parsed XML format
 
 =back
 
-=head2 call(I<action_name [I<parameter> => I<value>] [...])
+=head2 call(I<action_name [I<parameter> =E<gt> I<value>] [...])
 
 Calls the L<Net::Fritz::Action> named I<action_name> of this service.
 Response data from the service call is wrapped as L<Net::Fritz::Data>.
