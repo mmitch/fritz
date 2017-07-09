@@ -265,14 +265,16 @@ sub discover {
     }
 }
 
-=head2 call(I<service_name> I<action_name [I<parameter> =E<gt> I<value>] [...])
+=head2 call(I<service_name> I<action_name> [I<parameter> =E<gt> I<value>] [...])
 
 Directly calls the L<Net::Fritz::Action> named I<action_name> of the
 L<Net::Fritz::Service> matching the regular expression I<service_name>.
 
 This is a convenience method that internally calls L</discover>
-followed by L<Net::Fritz::Device/call> - see those methods for further
-details.
+followed by
+L<Net::Fritz::Device::call|Net::Fritz::Device/call(service_name
+action_name [parameter = value] [...])> - see those methods for
+further details.
 
 The intermediate L<Net::Fritz::Device> is cached, so that further
 calls can skip that initial SOAP request.

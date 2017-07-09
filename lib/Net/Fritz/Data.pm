@@ -45,7 +45,7 @@ services answers.
 
 This wrapper class is also used in some other methods that return
 things that need to be error-checkable, like
-L<Net::Fritz::Device/find_service_names>.
+L<find_service_names|Net::Fritz::Device/find_service_names(regexp)>.
 
 =head1 ATTRIBUTES (read-only)
 

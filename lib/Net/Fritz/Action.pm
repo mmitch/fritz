@@ -26,7 +26,9 @@ with 'Net::Fritz::IsNoError';
 This class represents a TR064 action belonging to a
 L<Net::Fritz::Service>.  An action is a rather boring object
 containing the input/output parameter names as well as the action
-name.  To call (execute) an action, use L<Net::Fritz::Service/call>.
+name.  To call (execute) an action, use
+L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
+[parameter = value] [...])>.
 
 =head1 ATTRIBUTES (read-only)
 
@@ -43,7 +45,9 @@ has xmltree      => ( is => 'ro' );
 =head2 name
 
 The name of this action as a string.  This is used to identify the
-action in a L<Net::Fritz::Service/call>.
+action in a
+L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
+[parameter = value] [...])>.
 
 =cut
     
@@ -57,7 +61,9 @@ sub _build_name {
 =head2 args_in
 
 An arrayref containing the names of all input parameters for this
-action.  These parameters must be present in a L<Net::Fritz::Service/call>.
+action.  These parameters must be present in a
+L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
+[parameter = value] [...])>.
 
 =cut
 
@@ -81,7 +87,9 @@ sub _build_args_in {
 
 An arrayref containing the names of all output parameters of this
 action.  These parameters will be present in the
-L<Net::Fritz::Data/data> response to a L<Net::Fritz::Service/call>.
+L<Net::Fritz::Data/data> response to a
+L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
+[parameter = value] [...])>.
 
 =cut
 

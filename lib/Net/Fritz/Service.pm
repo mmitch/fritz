@@ -160,8 +160,8 @@ sub _build_serviceId {
 =head2 controlURL
 
 The I<controlURL> (URL string) of this service which is needed to
-L<call|Net::Fritz::Action/call> any L<Net::Fritz::Action>s of this
-service.
+L<call|/call(action_name [parameter =E<gt> value] [...])> any
+L<Net::Fritz::Action>s of this service.
 
 =cut
 
@@ -224,12 +224,12 @@ service information in parsed XML format
 
 =back
 
-=head2 call(I<action_name [I<parameter> =E<gt> I<value>] [...])
+=head2 call(I<action_name> [I<parameter> =E<gt> I<value>] [...])
 
 Calls the L<Net::Fritz::Action> named I<action_name> of this service.
 Response data from the service call is wrapped as L<Net::Fritz::Data>.
 If the action expects parameters, they must be passed as
-key=L<gt>value pairs.
+key=E<gt>value pairs.
 
 If no matching action is found, the parameters don't match the action
 or any other error occurs, a L<Net::Fritz::Error> is returned.

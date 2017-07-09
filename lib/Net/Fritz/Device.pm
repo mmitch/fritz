@@ -333,14 +333,15 @@ sub find_device {
     return Net::Fritz::Error->new( 'device not found' );
 }
 
-=head2 call(I<service_name> I<action_name [I<parameter> =E<gt> I<value>] [...])
+=head2 call(I<service_name> I<action_name> [I<parameter> =E<gt> I<value>] [...])
 
 Directly calls the L<Net::Fritz::Action> named I<action_name> of the
 L<Net::Fritz::Service> matching the regular expression I<service_name>.
 
 This is a convenience method that internally calls
-L<find_service()|/find_service(regexp)> followed by L<Net::Fritz::Service/call> -
-see those methods for further details.
+L<find_service()|/find_service(regexp)> followed by
+L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
+[parameter = value] [...])> - see those methods for further details.
 
 The intermediate L<Net::Fritz::Service> is cached, so that further
 calls to the same I<service_name> only need to do one instead of two
