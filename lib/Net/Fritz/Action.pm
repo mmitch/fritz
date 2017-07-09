@@ -28,7 +28,7 @@ L<Net::Fritz::Service>.  An action is a rather boring object
 containing the input/output parameter names as well as the action
 name.  To call (execute) an action, use
 L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
-[parameter = value] [...])>.
+[I<argument_hash>])>.
 
 =head1 ATTRIBUTES (read-only)
 
@@ -47,7 +47,7 @@ has xmltree      => ( is => 'ro' );
 The name of this action as a string.  This is used to identify the
 action in a
 L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
-[parameter = value] [...])>.
+[I<argument_hash>])>.
 
 =cut
     
@@ -63,7 +63,7 @@ sub _build_name {
 An arrayref containing the names of all input parameters for this
 action.  These parameters must be present in a
 L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
-[parameter = value] [...])>.
+[I<argument_hash>])>.
 
 =cut
 
@@ -89,7 +89,7 @@ An arrayref containing the names of all output parameters of this
 action.  These parameters will be present in the
 L<Net::Fritz::Data/data> response to a
 L<Net::Fritz::Service::call|Net::Fritz::Service/call(action_name
-[parameter = value] [...])>.
+[I<argument_hash>])>.
 
 =cut
 
