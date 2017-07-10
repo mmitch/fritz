@@ -20,6 +20,7 @@ use AppConfig;
 
 use Net::Fritz::Error;
 use Net::Fritz::Device;
+use Net::Fritz::ConfigFile;
 
 use Moo;
 
@@ -146,34 +147,16 @@ sub BUILDARGS {
 
     if (exists $args{configfile}) {
 
-	# expand empty filename to default ~/.fritzrc
-	if (! $args{configfile}) {
-	    my $default_configfile = "$ENV{HOME}/.fritzrc";
-	    return \%args unless -e $default_configfile; # skip if ~/.fritzrc does not exist
-	    $args{configfile} = $default_configfile;
-	}
-
-	# expand ~ to $HOME
-	$args{configfile} =~ s/^~/$ENV{HOME}/;
-
-	# configure AppConfig
-	my $config = AppConfig->new();
-	$config->define('upnp_url=s');
-	$config->define('trdesc_path=s');
-	$config->define('username=s');
-	$config->define('password=s');
-
-	# read configfile
-	$config->file($args{configfile});
+	my $config = Net::Fritz::ConfigFile->new( $args{configfile} );
 
 	# get configuration variables
-	my %config_vars = $config->varlist('^');
+	my %config_vars = %{$config->configuration};
 
-	# remove all missing configuration variables
-	delete $config_vars{$_} foreach grep {!defined $config_vars{$_}} keys %config_vars;
-
-	# merge both hashes; %args wins for duplicate keys
-	return { %config_vars, %args };
+	# merge both hashes: %args wins over %config_vars for duplicate keys
+	%args = ( %config_vars, %args );
+	
+	# always update 'configfile' from $config (might be expanded or auto-selected)
+	$args{'configfile'} = $config->configfile;
     }
 
     return \%args;
