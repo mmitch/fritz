@@ -230,6 +230,8 @@ values:
 
 =over
 
+=item L</configfile>
+
 =item L</upnp_url>
 
 =item L</trdesc_path>
