@@ -1,5 +1,5 @@
 #!perl
-use Test::More tests => 9;
+use Test::More tests => 10;
 use warnings;
 use strict;
 
@@ -30,7 +30,7 @@ subtest 'check new() with named parameters' => sub {
     my $config = new_ok( 'Net::Fritz::ConfigFile',
 		      [ configfile  => 't/config.file' ]
 	);
-    
+
     # then
     is( $config->configfile, 't/config.file', 'Net::Fritz::ConfigFile->configfile' );
 };
@@ -40,7 +40,7 @@ subtest 'check new() with single parameter' => sub {
 
     # when
     my $config = new_ok( 'Net::Fritz::ConfigFile', [ 't/config.file' ] );
-    
+
     # then
     is( $config->configfile, 't/config.file', 'Net::Fritz::ConfigFile->configfile' );
 };
@@ -97,7 +97,6 @@ subtest 'use ~/.fritzrc as default configfile if filename is not set' => sub {
 
     # then
     is( $config->configfile, "$ENV{HOME}/.fritzrc", 'Net::Fritz::Box->configfile' );
-    is_deeply( $config->configuration, {}, 'configuration data' );
 };
 
 subtest 'missing default configfile is skipped and throws no error' => sub {
@@ -105,12 +104,26 @@ subtest 'missing default configfile is skipped and throws no error' => sub {
     # set $HOME to empty temporary directory
     # to be sure that no ~/.fritzrc exists
     $ENV{HOME} = tempdir();
-    
+
     # when
     my $config = new_ok( 'Net::Fritz::ConfigFile', [ 0 ] );
 
     # then
     is( $config->configfile, 0, 'Net::Fritz::Box->configfile' );
+    is_deeply( $config->configuration, {}, 'configuration data' );
+};
+
+subtest 'missing default configfile returns empty configuration' => sub {
+    # given
+    # set $HOME to empty temporary directory
+    # to be sure that no ~/.fritzrc exists
+    $ENV{HOME} = tempdir();
+
+    # when
+    my $config = new_ok( 'Net::Fritz::ConfigFile', [ 0 ] );
+
+    # then
+    is_deeply( $config->configuration, {}, 'configuration data' );
 };
 
 
@@ -125,7 +138,7 @@ sub touch_file
 
     my $dir = dirname($file);
     make_path $dir unless -d $dir;
-    
+
     open EMPTYFILE, '>', $file or die $!;
     close EMPTYFILE or die $!;    
 }
