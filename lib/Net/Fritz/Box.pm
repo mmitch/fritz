@@ -32,7 +32,7 @@ with 'Net::Fritz::IsNoError';
     $fritz->dump();
 
     my $fritz_ssl = Net::Fritz::Box->new(
-        upnp_url => 'https://fritz.box:49000'
+        upnp_url => 'https://fritz.box:49443'
     );
 
     my $fritz_auth = Net::Fritz::Box->new(
