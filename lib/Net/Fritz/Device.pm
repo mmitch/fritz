@@ -125,25 +125,25 @@ XML:
 
 =over 4
 
-=item deviceType
+=item * deviceType
 
-=item friendlyName
+=item * friendlyName
 
-=item manufacturer
+=item * manufacturer
 
-=item manufacturerURL
+=item * manufacturerURL
 
-=item modelDescription
+=item * modelDescription
 
-=item modelName
+=item * modelName
 
-=item modelNumber
+=item * modelNumber
 
-=item modelURL
+=item * modelURL
 
-=item UDN
+=item * UDN
 
-=item presentationURL
+=item * presentationURL
 
 =back
 

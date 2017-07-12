@@ -196,15 +196,15 @@ values:
 
 =over
 
-=item L</configfile>
+=item * L</configfile>
 
-=item L</upnp_url>
+=item * L</upnp_url>
 
-=item L</trdesc_path>
+=item * L</trdesc_path>
 
-=item L</username>
+=item * L</username>
 
-=item L</password>
+=item * L</password>
 
 =back
 
