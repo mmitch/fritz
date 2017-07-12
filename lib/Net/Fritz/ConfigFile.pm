@@ -8,6 +8,7 @@ package Net::Fritz::ConfigFile;
 
 
 use AppConfig;
+use File::Spec;
 
 use Moo;
 
@@ -19,8 +20,8 @@ use Moo;
 =head1 DESCRIPTION
 
 This class encapsulates the configuration file handling for
-L<Net::Fritz::Box>.  It should not be needed to interact with this
-class.  No user-serviceable parts inside!
+L<Net::Fritz::Box>.  It should not be needed to directly interact with
+this class.  No user-serviceable parts inside!
 
 This class is available since C<v0.0.9>.
 
@@ -34,22 +35,56 @@ These keys are recognized:
 
 =over
 
-=item L<upnp_url|Net::Fritz::Box/upnp_url>
+=item * L<upnp_url|Net::Fritz::Box/upnp_url>
 
-=item L<trdesc_path|Net::Fritz::Box/trdesc_path>
+=item * L<trdesc_path|Net::Fritz::Box/trdesc_path>
 
-=item L<username|Net::Fritz::Box/username>
+=item * L<username|Net::Fritz::Box/username>
 
-=item L<password|Net::Fritz::Box/password>
+=item * L<password|Net::Fritz::Box/password>
 
 =back
 
 (L<AppConfig> is used to read the configuration file, so some advanced
 tricks might be possible.)
 
-=head1 DEFAULT CONFIGURATION FILE LOCATION
+=head1 DEFAULT CONFIGURATION FILE LOCATIONS
 
-The default configuration file is searched C<~/.fritzrc>.
+If the given configuration filename expands to false, these default
+configuration file locations are tried instead (in order):
+
+=over 4
+
+=item 1. C<$XDG_CONFIG_HOME/fritzrc> (only if C<$XDG_CONFIG_HOME> is set)
+
+=item 2. C<~/.config/fritzrc>
+
+=item 3. C<~/.fritzrc>
+
+=back
+
+The first existing file will be used.
+
+=cut
+
+sub _find_default_configfile {
+    my $original = shift;
+
+    my $try;
+
+    if (exists $ENV{XDG_CONFIG_HOME}) {
+	$try = File::Spec->catfile( $ENV{XDG_CONFIG_HOME}, 'fritzrc' );
+	return $try if -e $try;
+    }
+
+    $try = File::Spec->catfile( $ENV{HOME}, '.config', 'fritzrc' );
+    return $try if -e $try;
+
+    $try = File::Spec->catfile( $ENV{HOME}, '.fritzrc' );
+    return $try if -e $try;
+
+    return $original;
+}
 
 =head1 ATTRIBUTES (read-only)
 
@@ -63,9 +98,9 @@ A C<~> at the beginning of the filename will be expanded to
 C<$ENV{HOME}>.
 
 If the filename expands to C<false> (C<0>, C<''> or the like), the
-L<default configuration file location|/DEFAULT CONFIGURATION FILE
-LOCATION> will be read.  If the file does not exist it is treated as
-an empty configuration file.
+L<default configuration file locations|/DEFAULT CONFIGURATION FILE
+LOCATIONS> will be tried.  If none of those files exists, an empty
+configuration file is substituted.
 
 =cut
 
@@ -75,9 +110,7 @@ has configfile    => ( is => 'ro' , coerce => sub {
 
     # expand empty filename to default ~/.fritzrc
     if (! $configfile) {
-	my $default_configfile = "$ENV{HOME}/.fritzrc";
-	return $configfile unless -e $default_configfile; # skip if ~/.fritzrc does not exist
-	$configfile = $default_configfile;
+	$configfile = _find_default_configfile($configfile);
     }
 
     # expand ~ to $HOME
@@ -133,7 +166,7 @@ default values:
 
 =over
 
-=item L</configfile>
+=item * L</configfile>
 
 =back
 

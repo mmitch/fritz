@@ -107,30 +107,13 @@ Default value: none
 
 Sets a configuration file to read the configuration from.
 
-A C<~> at the beginning of the filename will be expanded to
-C<$ENV{HOME}>.
-
-If the filename expands to C<false> (C<0>, C<''> or the like), the
-default filename of C<~/.fritzrc> will be used if it exists.
-
-The file format is simply C<key = value> (for more details see
-L<AppConfig>) per line with the following keys available:
-
-=over
-
-=item L</upnp_url>
-
-=item L</trdesc_path>
-
-=item L</username>
-
-=item L</password>
-
-=back
+For a description of the file format as well as default configfile
+locations that are automatically searched, see
+L<Net::Fritz::ConfigFile>.
 
 If an attribute is both defined by the configuration file and given as
-a parameter to L</new>, the parameter is taken and the value from the
-configuration file is ignored.
+a parameter to L</new>, the parameter overwrites the value from the
+configuration file.
 
 This attribute is available since C<v0.0.8>.
 
