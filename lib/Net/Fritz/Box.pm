@@ -31,8 +31,8 @@ with 'Net::Fritz::IsNoError';
     my $fritz = Net::Fritz::Box->new();
     $fritz->dump();
 
-    my $fritz_ssl = Net::Fritz::Box->new(
-        upnp_url => 'https://fritz.box:49443'
+    my $fritz_nossl = Net::Fritz::Box->new(
+        upnp_url => 'http://fritz.box:49000'
     );
 
     my $fritz_auth = Net::Fritz::Box->new(
@@ -49,7 +49,7 @@ L<Net::Fritz::Device>s.
 
 =head2 upnp_url
 
-Default value: C<http://fritz.box:49000>
+Default value: C<https://fritz.box:49443>
 
 Base URL for all operations.  This must point to your device. The
 default value expects a standard Fritz!Box installation with working
@@ -63,12 +63,13 @@ C<192.168.179.1> or C<169.254.1.1>, these adresses seem to be
 hardcoded for "emergency use" after a misconfiguration.
 
 An address starting with C<https://> enables secure communication over
-SSL.  The port will be different; the Fritz!Box default for SSL access
-is C<https://fritz.box:49443>
+SSL.  To disable SSL, use an address starting with C<http://>.  The
+port will be different; the Fritz!Box default for unsecured access is
+C<http://fritz.box:49000>
 
 =cut
 
-has upnp_url      => ( is => 'ro', default => 'http://fritz.box:49000' );
+has upnp_url      => ( is => 'ro', default => 'https://fritz.box:49443' );
 
 =head2 trdesc_path
 

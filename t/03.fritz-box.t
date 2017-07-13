@@ -19,12 +19,12 @@ subtest 'check new()' => sub {
     my $box = new_ok( 'Net::Fritz::Box' );
 
     # then
-    is( $box->error,       '',                       'Net::Fritz::Box->error'       );
-    is( $box->upnp_url,    'http://fritz.box:49000', 'Net::Fritz::Box->upnp_url'    );
-    is( $box->trdesc_path, '/tr64desc.xml',          'Net::Fritz::Box->trdesc_path' );
-    is( $box->username,    undef,                    'Net::Fritz::Box->username'    );
-    is( $box->password,    undef,                    'Net::Fritz::Box->password'    );
-    is( $box->configfile,  undef,                    'Net::Fritz::Box->configfile'  );
+    is( $box->error,       '',                        'Net::Fritz::Box->error'       );
+    is( $box->upnp_url,    'https://fritz.box:49443', 'Net::Fritz::Box->upnp_url'    );
+    is( $box->trdesc_path, '/tr64desc.xml',           'Net::Fritz::Box->trdesc_path' );
+    is( $box->username,    undef,                     'Net::Fritz::Box->username'    );
+    is( $box->password,    undef,                     'Net::Fritz::Box->password'    );
+    is( $box->configfile,  undef,                     'Net::Fritz::Box->configfile'  );
 };
 
 subtest 'check new() with parameters' => sub {
@@ -75,12 +75,12 @@ subtest 'empty configfile does not overwrite defaults' => sub {
 	);
 
     # then
-    is( $box->error,       '',                       'Net::Fritz::Box->error'       );
-    is( $box->upnp_url,    'http://fritz.box:49000', 'Net::Fritz::Box->upnp_url'    );
-    is( $box->trdesc_path, '/tr64desc.xml',          'Net::Fritz::Box->trdesc_path' );
-    is( $box->username,    undef,                    'Net::Fritz::Box->username'    );
-    is( $box->password,    undef,                    'Net::Fritz::Box->password'    );
-    is( $box->configfile,  't/empty.file',           'Net::Fritz::Box->configfile'  );
+    is( $box->error,       '',                        'Net::Fritz::Box->error'       );
+    is( $box->upnp_url,    'https://fritz.box:49443', 'Net::Fritz::Box->upnp_url'    );
+    is( $box->trdesc_path, '/tr64desc.xml',           'Net::Fritz::Box->trdesc_path' );
+    is( $box->username,    undef,                     'Net::Fritz::Box->username'    );
+    is( $box->password,    undef,                     'Net::Fritz::Box->password'    );
+    is( $box->configfile,  't/empty.file',            'Net::Fritz::Box->configfile'  );
 };
 
 subtest 'new() parameters overwrite configfile values' => sub {
@@ -119,7 +119,7 @@ subtest 'check discover() without Fritz!Box present' => sub {
 subtest 'check discover() with mocked Fritz!Box' => sub {
     # given
     my $box = new_ok( 'Net::Fritz::Box' );
-    $box->_ua->map('http://fritz.box:49000/tr64desc.xml', get_fake_device_response());
+    $box->_ua->map('https://fritz.box:49443/tr64desc.xml', get_fake_device_response());
 
     # when
     my $discovery = $box->discover();
