@@ -1,0 +1,11 @@
+<html>
+ <head>
+  <base href="{$base}">
+  <link href="{$css}" rel="stylesheet" type="text/css">
+  <title>{$title}</title>
+ </head>
+ <body>
+  {$toc}
+  {$body}
+ </body>
+</html>
