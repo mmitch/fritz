@@ -3,11 +3,12 @@ HTMLDIR    := /tmp/pod
 INDEXTITLE := Net::Fritz documentation index
 BASEURL    := https://mmitch.github.io/fritz/
 CSS        := pod.css
+CSSINPUT   := pod-export.css
 
-CSSFILE    := $(HTMLDIR)/$(CSS)
+CSSOUTPUT  := $(HTMLDIR)/$(CSS)
 CSSURL     := $(BASEURL)/$(CSS)
 
-.PHONY: all prepare export install-modules generate-directories generate-pod generate-css
+.PHONY: all prepare export install-modules generate-directories generate-pod export-css
 
 all: prepare export
 
@@ -19,10 +20,10 @@ install-modules:
 generate-directories:
 	mkdir -p "$(HTMLDIR)"
 
-export: generate-pod generate-css
+export: generate-pod export-css
 
 generate-pod:
 	pods2html --index "$(INDEXTITLE)" --css "$(CSSURL)" "$(PODDIR)" "$(HTMLDIR)"
 
-generate-css:
-	echo 'body { font: "Scource Sans Pro, Arial, Helvetica"; }' >> "$(CSSFILE)"
+export-css:
+	cp "$(CSSINPUT)" "$(CSSOUTPUT)"
