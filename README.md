@@ -85,6 +85,9 @@ https://metacpan.org/release/Net-Fritz
 more information
 ----------------
 
+Documentation from the current unreleased development version is
+exported to https://mmitch.github.io/fritz/
+
 An example of how to use this library as a dial helper and call log
 tool can be seen at https://github.com/mmitch/fritzdial
 

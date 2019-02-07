@@ -1,7 +1,7 @@
 PODDIR     := lib/
 HTMLDIR    := /tmp/pod
 INDEXTITLE := Net::Fritz documentation index
-BASEURL    := http://localhost/
+BASEURL    := https://mmitch.github.io/fritz/
 CSS        := pod.css
 
 CSSFILE    := $(HTMLDIR)/$(CSS)
