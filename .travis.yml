@@ -16,6 +16,17 @@ install:
 script:
   - dzil smoke
 
-# run coverage only once
+# run code coverage & generate POD (only once)
 after_success:
   - test $TRAVIS_PERL_VERSION = '5.22' && cpanm --quiet --notest --skip-satisfied Dist::Zilla::App::Command::cover Devel::Cover::Report::Codecov && dzil cover -test -report codecov
+  - test $TRAVIS_PERL_VERSION = '5.22' && make
+
+# export POD to gh-pages (only once)
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: /tmp/pod
+  on:
+    branch: travis-pod
+    perl: '5.22'
