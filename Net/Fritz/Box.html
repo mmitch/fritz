@@ -1,0 +1,254 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $fritz = Net::Fritz::Box->new();
+    $fritz->dump();
+
+    my $fritz_nossl = Net::Fritz::Box->new(
+        upnp_url => 'http://fritz.box:49000'
+    );
+
+    my $fritz_auth = Net::Fritz::Box->new(
+        username => 'admin',
+        password => 's3cr3t'
+    );</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only%2c%20defaults%20can%20be%20changed)">ATTRIBUTES (read-only, defaults can be changed)
+
+</A><UL>
+<LI><A HREF="#upnp_url">upnp_url
+
+</A><LI><A HREF="#trdesc_path">trdesc_path
+
+</A><LI><A HREF="#username">username
+
+</A><LI><A HREF="#password">password
+
+</A><LI><A HREF="#configfile">configfile
+
+</A><LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#discover">discover
+
+</A><LI><A HREF="#call(service_name%20action_name%20%5bargument_hash%5d)">call(<I>service_name</I> <I>action_name</I> [<I>argument_hash</I>])
+
+</A><LI><A HREF="#dump(indent)">dump(<I>indent</I>)
+
+</A><LI><A HREF="#errorcheck">errorcheck
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $fritz = Net::Fritz::Box-&gt;new();
+    $fritz-&gt;dump();
+
+    my $fritz_nossl = Net::Fritz::Box-&gt;new(
+        upnp_url =&gt; 'http://fritz.box:49000'
+    );
+
+    my $fritz_auth = Net::Fritz::Box-&gt;new(
+        username =&gt; 'admin',
+        password =&gt; 's3cr3t'
+    );</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class the global configuration state and provides discovery of
+<A HREF="../../../../../../Net/Fritz/Device.html">Net::Fritz::Device</A>s.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only%2c%20defaults%20can%20be%20changed)">ATTRIBUTES (read-only, defaults can be changed)
+
+</A></H1>
+<H2><A NAME="upnp_url">upnp_url
+
+</A></H2>
+
+<P>Default value: <CODE>https://fritz.box:49443</CODE>
+
+</P>
+<P>Base URL for all operations.  This must point to your device. The
+default value expects a standard Fritz!Box installation with working
+local DNS.
+
+</P>
+<P>If you can't do DNS lookups for your router, use an IP address
+instead.
+
+</P>
+<P>If you have a Fritz!Box and don't know its IP, you can try
+<CODE>192.168.179.1</CODE> or <CODE>169.254.1.1</CODE>, these adresses seem to be
+hardcoded for &quot;emergency use&quot; after a misconfiguration.
+
+</P>
+<P>An address starting with <CODE>https://</CODE> enables secure communication over
+SSL.  To disable SSL, use an address starting with <CODE>http://</CODE>.  The
+port will be different; the Fritz!Box default for unsecured access is
+<CODE>http://fritz.box:49000</CODE>
+
+</P><H2><A NAME="trdesc_path">trdesc_path
+
+</A></H2>
+
+<P>Default value: <CODE>/tr64desc.xml</CODE>
+
+</P>
+<P>The path below <A HREF="#upnp_url">/upnp_url</A> from where the TR064 service description
+is fetched.  There should be no need to change the default.
+
+</P><H2><A NAME="username">username
+
+</A></H2>
+
+<P>Default value: none
+
+</P>
+<P>Sets the username to use for authentication against a device.
+
+</P><H2><A NAME="password">password
+
+</A></H2>
+
+<P>Default value: none
+
+</P>
+<P>Sets the password to use for authentication against a device.
+
+</P><H2><A NAME="configfile">configfile
+
+</A></H2>
+
+<P>Default value: none
+
+</P>
+<P>Sets a configuration file to read the configuration from.
+
+</P>
+<P>For a description of the file format as well as default configfile
+locations that are automatically searched, see
+<A HREF="../../../../../../Net/Fritz/ConfigFile.html">Net::Fritz::ConfigFile</A>.
+
+</P>
+<P>If an attribute is both defined by the configuration file and given as
+a parameter to <A HREF="#new">/new</A>, the parameter overwrites the value from the
+configuration file.
+
+</P>
+<P>This attribute is available since <CODE>v0.0.8</CODE>.
+
+</P><H2><A NAME="error">error
+
+</A></H2>
+
+<P>See <A HREF="../../../../../../Net/Fritz/IsNoError.html#error">Net::Fritz::IsNoError/error</A>.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../../../../../Net/Fritz/Box.html">Net::Fritz::Box</A> object.  This is propably the first
+thing to do when using <A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A>.  Expects parameters in <CODE>key
+=&gt; value</CODE> form with the following keys to overwrite the default
+values:
+
+</P><DL><DT><A NAME="*%20%2fconfigfile">* <A HREF="#configfile">/configfile</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20%2fupnp_url">* <A HREF="#upnp_url">/upnp_url</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20%2ftrdesc_path">* <A HREF="#trdesc_path">/trdesc_path</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20%2fusername">* <A HREF="#username">/username</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20%2fpassword">* <A HREF="#password">/password</A>
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+<H2><A NAME="discover">discover
+
+</A></H2>
+
+<P>Tries to discover the TR064 device at the current <A HREF="#upnp_url">/upnp_url</A>.
+Returns a <A HREF="../../../../../../Net/Fritz/Device.html">Net::Fritz::Device</A> on success.  Accepts no parameters.
+
+</P><H2><A NAME="call(service_name%20action_name%20%5bargument_hash%5d)">call(<I>service_name</I> <I>action_name</I> [<I>argument_hash</I>])
+
+</A></H2>
+
+<P>Directly calls the <A HREF="../../../../../../Net/Fritz/Action.html">Net::Fritz::Action</A> named <I>action_name</I> of the
+<A HREF="../../../../../../Net/Fritz/Service.html">Net::Fritz::Service</A> matching the regular expression <I>service_name</I>.
+
+</P>
+<P>This is a convenience method that internally calls <A HREF="#discover">/discover</A>
+followed by
+<A HREF="../../../../../../Net/Fritz/Device.html#call(service_name%20action_name%20%5bargument_hash%5d)">Net::Fritz::Device::call</A> - see those methods for further
+details.
+
+</P>
+<P>The intermediate <A HREF="../../../../../../Net/Fritz/Device.html">Net::Fritz::Device</A> is cached, so that further
+calls can skip that initial SOAP request.
+
+</P>
+<P>This method is available since <CODE>v0.0.8</CODE>.
+
+</P><H2><A NAME="dump(indent)">dump(<I>indent</I>)
+
+</A></H2>
+
+<P>Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter <I>indent</I> is used for indentation of the output by
+prepending it to every line.
+
+</P><H2><A NAME="errorcheck">errorcheck
+
+</A></H2>
+
+<P>See <A HREF="../../../../../../Net/Fritz/IsNoError.html#errorcheck">Net::Fritz::IsNoError/errorcheck</A>.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../../../../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

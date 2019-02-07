@@ -1,0 +1,226 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $fritz    = Net::Fritz::Box->new();
+    my $device   = $fritz->discover();
+    my $service  = $device->get_service('DeviceInfo:1');
+
+    # call an action
+    my $response = $service->call('GetSecurityPort');
+
+    # show all data
+    $service->dump();</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#fritz">fritz
+
+</A><LI><A HREF="#xmltree">xmltree
+
+</A><LI><A HREF="#scpd">scpd
+
+</A><LI><A HREF="#action_hash">action_hash
+
+</A><LI><A HREF="#serviceType">serviceType
+
+</A><LI><A HREF="#serviceId">serviceId
+
+</A><LI><A HREF="#controlURL">controlURL
+
+</A><LI><A HREF="#eventSubURL">eventSubURL
+
+</A><LI><A HREF="#SCPDURL">SCPDURL
+
+</A><LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#call(action_name%20%5bargument_hash%5d)">call(<I>action_name</I> [<I>argument_hash</I>])
+
+</A><LI><A HREF="#dump(indent)">dump(<I>indent</I>)
+
+</A><LI><A HREF="#errorcheck">errorcheck
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $fritz    = Net::Fritz::Box-&gt;new();
+    my $device   = $fritz-&gt;discover();
+    my $service  = $device-&gt;get_service('DeviceInfo:1');
+
+    # call an action
+    my $response = $service-&gt;call('GetSecurityPort');
+
+    # show all data
+    $service-&gt;dump();</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class represents a TR064 service belonging to a
+<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A>.  A service consists of one or more
+<A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A>s that interact with the underlying device.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="fritz">fritz
+
+</A></H2>
+
+<P>A <A HREF="../../Net/Fritz/Box.html">Net::Fritz::Box</A> instance containing the current configuration
+information (device address, authentication etc.).
+
+</P><H2><A NAME="xmltree">xmltree
+
+</A></H2>
+
+<P>A complex hashref containing most information about this
+<A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>.  This is the parsed form of the TR064 XML
+which describes the service.  It contains nearly all information
+besides <A HREF="#fritz">/fritz</A> and <A HREF="#scpd">/scpd</A>.
+
+</P><H2><A NAME="scpd">scpd
+
+</A></H2>
+
+<P>A complex hashref containing all information about this
+<A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>.  This is the parsed form of the XML available
+at <A HREF="#SCPDURL">/SCPDURL</A> which describes the service and its
+<A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A>s.
+
+</P><H2><A NAME="action_hash">action_hash
+
+</A></H2>
+
+<P>A hashref containing all <A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A>s of this service
+indexed by their <A HREF="../../Net/Fritz/Action.html#name">Net::Fritz::Action/name</A>.
+
+</P><H2><A NAME="serviceType">serviceType
+
+</A></H2>
+
+<P>The <I>serviceType</I> (string) of this service which is used by
+<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A> to look up services.
+
+</P><H2><A NAME="serviceId">serviceId
+
+</A></H2>
+
+<P>The <I>serviceId</I> (string) of this service.
+
+</P><H2><A NAME="controlURL">controlURL
+
+</A></H2>
+
+<P>The <I>controlURL</I> (URL string) of this service which is needed to
+<A HREF="#call(action_name%20%5bargument_hash%5d)">call</A> any <A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A>s
+of this service.
+
+</P><H2><A NAME="eventSubURL">eventSubURL
+
+</A></H2>
+
+<P>The <I>eventSubURL</I> (URL string) of this service for subscribing to or
+unsubscribing from events.
+
+</P><H2><A NAME="SCPDURL">SCPDURL
+
+</A></H2>
+
+<P>The <I>SCPDURL</I> (URL string) of the SCPD file of this service where
+most of the other attributes are read from.
+
+</P><H2><A NAME="error">error
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#error">Net::Fritz::IsNoError/error</A>.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> object.  You propably don't have
+to call this method, it's mostly used internally.  Expects parameters
+in <CODE>key =&gt; value</CODE> form with the following keys:
+
+</P><DL><DT><A NAME="fritz"><I>fritz</I>
+
+</A></DT>
+<DD>
+<A HREF="../../Net/Fritz/Box.html">Net::Fritz::Box</A> configuration object
+
+</DD>
+<DT><A NAME="xmltree"><I>xmltree</I>
+
+</A></DT>
+<DD>
+service information in parsed XML format
+
+</DD>
+</DL>
+<H2><A NAME="call(action_name%20%5bargument_hash%5d)">call(<I>action_name</I> [<I>argument_hash</I>])
+
+</A></H2>
+
+<P>Calls the <A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A> named <I>action_name</I> of this service.
+Response data from the service call is wrapped as <A HREF="../../Net/Fritz/Data.html">Net::Fritz::Data</A>.
+If the action expects parameters, they must be provided via the
+<I>argument_hash</I> as key=&gt;value pairs.
+
+</P>
+<P>If no matching action is found, the parameters don't match the action
+or any other error occurs, a <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> is returned.
+
+</P><H2><A NAME="dump(indent)">dump(<I>indent</I>)
+
+</A></H2>
+
+<P>Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter <I>indent</I> is used for indentation of the output by
+prepending it to every line.
+
+</P>
+<P>Recursively descends into actions, so dumping a service also shows all
+its actions as well.
+
+</P><H2><A NAME="errorcheck">errorcheck
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#errorcheck">Net::Fritz::IsNoError/errorcheck</A>.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

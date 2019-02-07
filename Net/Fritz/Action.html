@@ -1,0 +1,158 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $fritz    = Net::Fritz::Box->new();
+    my $device   = $fritz->discover();
+    my $service  = $device->get_service('DeviceInfo:1');
+    my $action   = $device->action_hash('GetSecurityPort');
+
+    # show all data
+    $action->dump();</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#xmltree">xmltree
+
+</A><LI><A HREF="#name">name
+
+</A><LI><A HREF="#args_in">args_in
+
+</A><LI><A HREF="#args_out">args_out
+
+</A><LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#dump(indent)">dump(<I>indent</I>)
+
+</A><LI><A HREF="#errorcheck">errorcheck
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $fritz    = Net::Fritz::Box-&gt;new();
+    my $device   = $fritz-&gt;discover();
+    my $service  = $device-&gt;get_service('DeviceInfo:1');
+    my $action   = $device-&gt;action_hash('GetSecurityPort');
+
+    # show all data
+    $action-&gt;dump();</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class represents a TR064 action belonging to a
+<A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>.  An action is a rather boring object
+containing the input/output parameter names as well as the action
+name.  To call (execute) an action, use
+<A HREF="../../Net/Fritz/Service.html#call(action_name%20%5bargument_hash%5d)">Net::Fritz::Service::call</A>.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="xmltree">xmltree
+
+</A></H2>
+
+<P>A complex hashref containing most information about this
+<A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A>.  This is the parsed form of the part from the
+<A HREF="../../Net/Fritz/Service.html#scpd">Net::Fritz::Service/scpd</A> XML that describes this action.
+
+</P><H2><A NAME="name">name
+
+</A></H2>
+
+<P>The name of this action as a string.  This is used to identify the
+action in a
+<A HREF="../../Net/Fritz/Service.html#call(action_name%20%5bargument_hash%5d)">Net::Fritz::Service::call</A>.
+
+</P><H2><A NAME="args_in">args_in
+
+</A></H2>
+
+<P>An arrayref containing the names of all input parameters for this
+action.  These parameters must be present in a
+<A HREF="../../Net/Fritz/Service.html#call(action_name%20%5bargument_hash%5d)">Net::Fritz::Service::call</A>.
+
+</P><H2><A NAME="args_out">args_out
+
+</A></H2>
+
+<P>An arrayref containing the names of all output parameters of this
+action.  These parameters will be present in the
+<A HREF="../../Net/Fritz/Data.html#data">Net::Fritz::Data/data</A> response to a
+<A HREF="../../Net/Fritz/Service.html#call(action_name%20%5bargument_hash%5d)">Net::Fritz::Service::call</A>.
+
+</P><H2><A NAME="error">error
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#error">Net::Fritz::IsNoError/error</A>.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A> object.  You propably don't have
+to call this method, it's mostly used internally.  Expects parameters
+in <CODE>key =&gt; value</CODE> form with the following keys:
+
+</P><DL><DT><A NAME="xmltree"><I>xmltree</I>
+
+</A></DT>
+<DD>
+action information in parsed XML format
+
+</DD>
+</DL>
+
+<P>With only one parameter (in fact: any odd value of parameters), the
+first parameter is automatically mapped to <I>xmltree</I>.
+
+</P><H2><A NAME="dump(indent)">dump(<I>indent</I>)
+
+</A></H2>
+
+<P>Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter <I>indent</I> is used for indentation of the output by
+prepending it to every line.
+
+</P><H2><A NAME="errorcheck">errorcheck
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#errorcheck">Net::Fritz::IsNoError/errorcheck</A>.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

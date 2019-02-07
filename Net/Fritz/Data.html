@@ -1,0 +1,161 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $fritz    = Net::Fritz::Box->new();
+    my $device   = $fritz->discover();
+    my $service  = $device->find_service('DeviceInfo:1');
+    my $response = $service->call('GetSecurityPort');
+
+    # $response is Net::Fritz::Data
+    printf "SSL communication port is %d\n",
+           $response->data->{NewSecurityPort};
+
+
+    my $service_list = $device->find_service_names('DeviceInfo:1');
+
+    # service_list is Net::Fritz::Data
+    printf "%d services found\n",
+           scalar @{$service_list->data};</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#data">data
+
+</A><LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#get">get
+
+</A><LI><A HREF="#dump(indent)">dump(<I>indent</I>)
+
+</A><LI><A HREF="#errorcheck">errorcheck
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $fritz    = Net::Fritz::Box-&gt;new();
+    my $device   = $fritz-&gt;discover();
+    my $service  = $device-&gt;find_service('DeviceInfo:1');
+    my $response = $service-&gt;call('GetSecurityPort');
+
+    # $response is Net::Fritz::Data
+    printf &quot;SSL communication port is %d\n&quot;,
+           $response-&gt;data-&gt;{NewSecurityPort};
+
+
+    my $service_list = $device-&gt;find_service_names('DeviceInfo:1');
+
+    # service_list is Net::Fritz::Data
+    printf &quot;%d services found\n&quot;,
+           scalar @{$service_list-&gt;data};</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class wraps the return data from a <A HREF="../../../../../../Net/Fritz/Service.html">Net::Fritz::Service</A> call.
+This is only done for consistent error checks: <A HREF="../../../../../../Net/Fritz/Data.html">Net::Fritz::Data</A>
+does the role <A HREF="../../../../../../Net/Fritz/IsNoError.html">Net::Fritz::IsNoError</A>, so it is possible to check for
+errors during the service call with <CODE>$response-&gt;error</CODE> and
+<CODE>$response-&gt;errorcheck</CODE> (see <A HREF="../../../../../../Net/Fritz/Error.html">Net::Fritz::Error</A> for details).
+
+</P>
+<P>Apart from that the response data from the service call is passed
+through unaltered, so you have to know with which data type the
+services answers.
+
+</P>
+<P>This wrapper class is also used in some other methods that return
+things that need to be error-checkable, like
+<A HREF="../../../../../../Net/Fritz/Device.html#find_service_names(regexp)">find_service_names</A>.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="data">data
+
+</A></H2>
+
+<P>Returns the response data of the service call.  For lists and hashes,
+this will be a reference.
+
+</P><H2><A NAME="error">error
+
+</A></H2>
+
+<P>See <A HREF="../../../../../../Net/Fritz/IsNoError.html#error">Net::Fritz::IsNoError/error</A>.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../../../../../Net/Fritz/Data.html">Net::Fritz::Data</A> object.  You propably don't have to
+call this method, it's mostly used internally.  Expects parameters in
+<CODE>key =&gt; value</CODE> form with the following keys:
+
+</P><DL><DT><A NAME="data"><I>data</I>
+
+</A></DT>
+<DD>
+set the data to hold
+
+</DD>
+</DL>
+
+<P>With only one parameter (in fact: any odd value of parameters), the
+first parameter is automatically mapped to <I>data</I>.
+
+</P><H2><A NAME="get">get
+
+</A></H2>
+
+<P>Kind of an alias for <CODE>$response-</CODE>data&gt;: Returns the <A HREF="#data">data</A>
+attribute.
+
+</P><H2><A NAME="dump(indent)">dump(<I>indent</I>)
+
+</A></H2>
+
+<P>Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter <I>indent</I> is used for indentation of the output by
+prepending it to every line.
+
+</P><H2><A NAME="errorcheck">errorcheck
+
+</A></H2>
+
+<P>See <A HREF="../../../../../../Net/Fritz/IsNoError.html#errorcheck">Net::Fritz::IsNoError/errorcheck</A>.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../../../../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

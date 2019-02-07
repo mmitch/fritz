@@ -1,0 +1,230 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    use Net::Fritz::Box;
+
+    my $fritz = Net::Fritz::Box->new();
+    if ($fritz->error) {
+        die $fritz->error;
+    }
+
+    my $device = $fritz->discover();
+    $device->errorcheck;
+
+    my $service = $device->find_service('DeviceInfo:1');
+    $service->errorcheck;
+
+    my $response = $service->call('GetSecurityPort');
+    $response->errorcheck;
+
+    printf "SSL communication port is %d\n",
+           $response->data->{NewSecurityPort};
+
+    # dump all available devices and services
+    print Net::Fritz::Box->new()->discover()->dump();</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#INTERFACE">INTERFACE
+
+</A><LI><A HREF="#CONFIGURATION%20AND%20ENVIRONMENT">CONFIGURATION AND ENVIRONMENT
+
+</A><LI><A HREF="#BUGS%20AND%20LIMITATIONS">BUGS AND LIMITATIONS
+
+</A><UL>
+<LI><A HREF="#event%20subscriptions">event subscriptions
+
+</A><LI><A HREF="#TR-064%20protocol">TR-064 protocol
+
+</A></UL>
+<LI><A HREF="#AVAILABILITY">AVAILABILITY
+
+</A><LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    use Net::Fritz::Box;
+
+    my $fritz = Net::Fritz::Box-&gt;new();
+    if ($fritz-&gt;error) {
+        die $fritz-&gt;error;
+    }
+
+    my $device = $fritz-&gt;discover();
+    $device-&gt;errorcheck;
+
+    my $service = $device-&gt;find_service('DeviceInfo:1');
+    $service-&gt;errorcheck;
+
+    my $response = $service-&gt;call('GetSecurityPort');
+    $response-&gt;errorcheck;
+
+    printf &quot;SSL communication port is %d\n&quot;,
+           $response-&gt;data-&gt;{NewSecurityPort};
+
+    # dump all available devices and services
+    print Net::Fritz::Box-&gt;new()-&gt;discover()-&gt;dump();</PRE>
+
+<P>You also need to enable TR-064 on your Fritz!Box, see
+<A HREF="#CONFIGURATION%20AND%20ENVIRONMENT">/&quot;CONFIGURATION AND ENVIRONMENT&quot;</A>.
+
+</P><H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P><A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A> is a set of modules to communicate with an AVM Fritz!Box
+(and possibly other routers as well) via the TR-064 protocol.
+
+</P>
+<P>I wanted to initiate calls via commandline, but I only found GUI tools
+to do that or libraries in other languages than Perl, so I have built
+this library.
+
+</P>
+<P>Luckily, the TR-064 protocol announces all available services via XML.
+So this module does some HTTP or HTTPS requests to find the router,
+query it's services and then calls them via SOAP.  Parameter names and
+counts are verified against the service specification, but
+<A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A> itself knows nothing about the available services or
+what they do.
+
+</P><H1><A NAME="INTERFACE">INTERFACE
+
+</A></H1>
+
+<P><A HREF="../../../../../../Net/Fritz/Box.html">Net::Fritz::Box</A> is the main entry point and initializes a basic
+object with some configuration information (URL of the Fritz!Box,
+authentication data etc.).  Use the <CODE>discover()</CODE> method to get a
+
+</P>
+<P><A HREF="../../../../../../Net/Fritz/Device.html">Net::Fritz::Device</A> which represents your router.  A device may
+contain further <A HREF="../../../../../../Net/Fritz/Device.html">Net::Fritz::Device</A> subdevices, eg. a LAN or WAN
+interface.  But most importantly, a device should contain at least one
+
+</P>
+<P><A HREF="../../../../../../Net/Fritz/Service.html">Net::Fritz::Service</A> on which different methods can be <CODE>call()</CODE>ed
+to set or read parameters or do various things.  A method call will
+return
+
+</P>
+<P><A HREF="../../../../../../Net/Fritz/Data.html">Net::Fritz::Data</A> which is a simple wrapper about the data returned
+(normally a hash containing all return values from the called
+service).
+
+</P>
+<P><A HREF="../../../../../../Net/Fritz/Error.html">Net::Fritz::Error</A> is returned instead of the other objects whenever
+something goes wrong.
+
+</P>
+<P>Finally, there is <A HREF="../../../../../../Net/Fritz/IsNoError.html">Net::Fritz::IsNoError</A>, which is just a role to
+provide all valid (non-error) objects with <CODE>error</CODE> and
+<CODE>errorcheck()</CODE> so that you can query every <CODE>Net::Fritz::</CODE> object for
+its error state.
+
+</P><H1><A NAME="CONFIGURATION%20AND%20ENVIRONMENT">CONFIGURATION AND ENVIRONMENT
+
+</A></H1>
+
+<P>To set up your Fritz!Box, you have to enable the remote administration
+via TR-064 in the web administration interface.
+
+</P>
+<P>Nearly all services except <CODE>GetSecurityPort</CODE> from the example above
+need authentication.  The best way to achieve this is to add an extra
+user with its own password (again via the web administration
+interface).  The user needs the permission to change and edit the
+Fritz!Box configuration.  If you want to call the VoIP services, it
+needs that permission as well.  Then use the <I>username</I> and
+<I>password</I> parameters of <CODE>Net::Fritz::Box-</CODE>new()&gt;.
+
+</P><H1><A NAME="BUGS%20AND%20LIMITATIONS">BUGS AND LIMITATIONS
+
+</A></H1>
+
+<P>To report a bug, please use the github issue tracker:
+<A HREF="https://github.com/mmitch/fritz/issues">https://github.com/mmitch/fritz/issues</A>
+
+</P><H2><A NAME="event%20subscriptions">event subscriptions
+
+</A></H2>
+
+<P>Apart from exposing the <A HREF="../../../../../../Net/Fritz/Service.html#eventSubURL">eventSubURL</A>
+of a <A HREF="../../../../../../Net/Fritz/Service.html">Net::Fritz::Service</A> there is currently no support for event
+subscriptions.
+
+</P><H2><A NAME="TR-064%20protocol">TR-064 protocol
+
+</A></H2>
+
+<P><A HREF="../../../../../../Net/Fritz.html">Net::Fritz</A> implements parts of the TR-064 protocol, which could be
+separated in to a <CODE>Net::Protocol::TR064</CODE> distribution or something
+like that.  I have not yet done this because I don't know much about
+the TR-064 protocol, I just implemented everything I needed to get the
+Fritz!Box communication running.  If anybody comes along and
+identifies the code parts that belong to TR-064, I'm happy to move
+them out to another package.  Apart from the authentication scheme it
+should be pretty straight-forward to split the modules.
+
+</P>
+<P>There might also be some parts in here that look vaguely like UPnP...
+
+</P><H1><A NAME="AVAILABILITY">AVAILABILITY
+
+</A></H1>
+<DL><DT><A NAME="github%20repository">github repository
+
+</A></DT>
+<DD>
+<A HREF="git://github.com/mmitch/fritz.git">git://github.com/mmitch/fritz.git</A>
+
+</DD>
+<DT><A NAME="github%20browser">github browser
+
+</A></DT>
+<DD>
+<A HREF="https://github.com/mmitch/fritz">https://github.com/mmitch/fritz</A>
+
+</DD>
+<DT><A NAME="github%20issue%20tracker">github issue tracker
+
+</A></DT>
+<DD>
+<A HREF="https://github.com/mmitch/fritz/issues">https://github.com/mmitch/fritz/issues</A>
+
+</DD>
+</DL>
+
+<P>=head1 BUILD STATUS
+
+<p><a href="https://travis-ci.org/mmitch/fritz"><img src="https://travis-ci.org/mmitch/fritz.svg?branch=master" alt="Build Status"></a></p>
+
+</P>
+<P>=head1 TEST COVERAGE
+
+<p><a href="https://codecov.io/github/mmitch/fritz?branch=master"><img src="https://codecov.io/github/mmitch/fritz/coverage.svg?branch=master" alt="Coverage Status"></a></p>
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+<UL>
+<LI><A HREF="../../../../../../WebService/FritzBox.html">WebService::FritzBox</A> for communicating with a Fritz!Box without the
+TR-064 protocol (eg. to list current bandwidth)
+
+</LI>
+<LI><A HREF="http://avm.de/service/schnittstellen/">AVM interface documentation</A>
+
+</LI>
+</UL>
+
+ </body>
+</html>

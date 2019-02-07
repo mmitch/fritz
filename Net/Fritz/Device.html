@@ -1,0 +1,350 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $fritz    = Net::Fritz::Box->new();
+    my $device   = $fritz->discover();
+
+    # get services to call them later
+    my $service_a = $device->get_service('DeviceInfo:1');
+    my $service_b = $device->find_service('D.*Info:1');
+
+    # get a subdevice
+    my $subdevice = $device->find_device('LANDevice:1');
+
+    # this one can give multiple results
+    my $service_list = $device->find_service_names('DeviceInfo:1');
+    printf "%d services found\n",
+           scalar @{$service_list->data};
+
+    # show all data
+    $device->dump();</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#fritz">fritz
+
+</A><LI><A HREF="#xmltree">xmltree
+
+</A><LI><A HREF="#service_list">service_list
+
+</A><LI><A HREF="#device_list">device_list
+
+</A><LI><A HREF="#attributes">attributes
+
+</A><LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#get_service(name)">get_service(<I>name</I>)
+
+</A><LI><A HREF="#find_service(regexp)">find_service(<I>regexp</I>)
+
+</A><LI><A HREF="#find_service_names(regexp)">find_service_names(<I>regexp</I>)
+
+</A><LI><A HREF="#find_device(name)">find_device(<I>name</I>)
+
+</A><LI><A HREF="#call(service_name%20action_name%20%5bargument_hash%5d)">call(<I>service_name</I> <I>action_name</I> [<I>argument_hash</I>])
+
+</A><LI><A HREF="#dump(indent)">dump(<I>indent</I>)
+
+</A><LI><A HREF="#errorcheck">errorcheck
+
+</A></UL>
+<LI><A HREF="#BUGS%20AND%20LIMITATIONS">BUGS AND LIMITATIONS
+
+</A><LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $fritz    = Net::Fritz::Box-&gt;new();
+    my $device   = $fritz-&gt;discover();
+
+    # get services to call them later
+    my $service_a = $device-&gt;get_service('DeviceInfo:1');
+    my $service_b = $device-&gt;find_service('D.*Info:1');
+
+    # get a subdevice
+    my $subdevice = $device-&gt;find_device('LANDevice:1');
+
+    # this one can give multiple results
+    my $service_list = $device-&gt;find_service_names('DeviceInfo:1');
+    printf &quot;%d services found\n&quot;,
+           scalar @{$service_list-&gt;data};
+
+    # show all data
+    $device-&gt;dump();</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class represents a TR064 device that has been discovered.  A
+device gives access to other subdevices (<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A>) as
+well as <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>s which allow interaction with a
+<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A>.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="fritz">fritz
+
+</A></H2>
+
+<P>A <A HREF="../../Net/Fritz/Box.html">Net::Fritz::Box</A> instance containing the current configuration
+information (device address, authentication etc.).
+
+</P><H2><A NAME="xmltree">xmltree
+
+</A></H2>
+
+<P>A complex hashref containing all information about this
+<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A>.  This is the parsed form of the TR064 XML which
+describes the device, it's subdevices and <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>s.
+
+</P><H2><A NAME="service_list">service_list
+
+</A></H2>
+
+<P>An arrayref of all <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>s that are available on this
+device.
+
+</P><H2><A NAME="device_list">device_list
+
+</A></H2>
+
+<P>An arrayref of all subdevices (<A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A>) that are
+available on this device.
+
+</P><H2><A NAME="attributes">attributes
+
+</A></H2>
+
+<P>A hashref that contains the most important information from the XML
+device description.  This allows easier access than via <A HREF="#xmltree">/xmltree</A>.
+The available attributes are device-dependent.  The following
+attributes are made available as keys in the hashref if present in the
+XML:
+
+</P><DL><DT><A NAME="*%20deviceType">* deviceType
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20friendlyName">* friendlyName
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20manufacturer">* manufacturer
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20manufacturerURL">* manufacturerURL
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20modelDescription">* modelDescription
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20modelName">* modelName
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20modelNumber">* modelNumber
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20modelURL">* modelURL
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20UDN">* UDN
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20presentationURL">* presentationURL
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+<H2><A NAME="error">error
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#error">Net::Fritz::IsNoError/error</A>.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A> object.  You propably don't have
+to call this method, it's mostly used internally.  Expects parameters
+in <CODE>key =&gt; value</CODE> form with the following keys:
+
+</P><DL><DT><A NAME="fritz"><I>fritz</I>
+
+</A></DT>
+<DD>
+<A HREF="../../Net/Fritz/Box.html">Net::Fritz::Box</A> configuration object
+
+</DD>
+<DT><A NAME="xmltree"><I>xmltree</I>
+
+</A></DT>
+<DD>
+device information in parsed XML format
+
+</DD>
+</DL>
+<H2><A NAME="get_service(name)">get_service(<I>name</I>)
+
+</A></H2>
+
+<P>Returns the <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> whose
+<A HREF="../../Net/Fritz/Service.html#serviceType">serviceType</A> equals <I>name</I>.
+
+</P>
+<P>If no matching service is found, the subdevices are searched for the
+service in the order they are listed in the device XML, depth first.
+
+</P>
+<P>If no matching service is found, a <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> is returned.
+
+</P><H2><A NAME="find_service(regexp)">find_service(<I>regexp</I>)
+
+</A></H2>
+
+<P>Returns the <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> whose
+<A HREF="../../Net/Fritz/Service.html#serviceType">serviceType</A> matches <I>regexp</I>.
+
+</P>
+<P>If no matching service is found, the subdevices are searched for the
+service in the order they are listed in the device XML, depth first.
+
+</P>
+<P>If no matching service is found, a <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> is returned.
+
+</P><H2><A NAME="find_service_names(regexp)">find_service_names(<I>regexp</I>)
+
+</A></H2>
+
+<P>Returns all <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A>s whose
+<A HREF="../../Net/Fritz/Service.html#serviceType">serviceType</A> match <I>regexp</I>.
+
+</P>
+<P>Searches recursively through all subdevices in the order they are
+listed in the device XML, depth first.
+
+</P>
+<P>The resulting arrayref is wrapped in a <A HREF="../../Net/Fritz/Data.html">Net::Fritz::Data</A> to allow
+<A HREF="../../Net/Fritz/IsNoError.html">error checking</A>.  (Although no error should
+ever occur, an an empty list is returned if nothing matched.)
+
+</P><H2><A NAME="find_device(name)">find_device(<I>name</I>)
+
+</A></H2>
+
+<P>Returns the <A HREF="../../Net/Fritz/Device.html">Net::Fritz::Device</A> subdevice whose <I>deviceType</I> equals
+<I>name</I>.
+
+</P>
+<P>If no matching service is found, the subdevices are searched for the
+<I>deviceType</I> in the order they are listed in the device XML, depth
+first.
+
+</P>
+<P>If no matching device is found, a <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> is returned.
+
+</P><H2><A NAME="call(service_name%20action_name%20%5bargument_hash%5d)">call(<I>service_name</I> <I>action_name</I> [<I>argument_hash</I>])
+
+</A></H2>
+
+<P>Directly calls the <A HREF="../../Net/Fritz/Action.html">Net::Fritz::Action</A> named <I>action_name</I> of the
+<A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> matching the regular expression <I>service_name</I>.
+
+</P>
+<P>This is a convenience method that internally calls
+<A HREF="#find_service(regexp)">find_service()</A> followed by
+<A HREF="../../Net/Fritz/Service.html#call(action_name%20%5bargument_hash%5d)">Net::Fritz::Service::call</A> - see those methods for further details.
+
+</P>
+<P>The intermediate <A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> is cached, so that further
+calls to the same <I>service_name</I> only need to do one instead of two
+SOAP requests.
+
+</P>
+<P>This method is available since <CODE>v0.0.8</CODE>.
+
+</P><H2><A NAME="dump(indent)">dump(<I>indent</I>)
+
+</A></H2>
+
+<P>Returns some preformatted multiline information about the object.
+Useful for debugging purposes, printing or logging.  The optional
+parameter <I>indent</I> is used for indentation of the output by
+prepending it to every line.
+
+</P>
+<P>Recursively descends into subdevices and services, so dumping the root
+device of a <A HREF="../../Net/Fritz/Box.html#discover">Net::Fritz::Box/discover</A> should show everything that is
+available.
+
+</P><H2><A NAME="errorcheck">errorcheck
+
+</A></H2>
+
+<P>See <A HREF="../../Net/Fritz/IsNoError.html#errorcheck">Net::Fritz::IsNoError/errorcheck</A>.
+
+</P><H1><A NAME="BUGS%20AND%20LIMITATIONS">BUGS AND LIMITATIONS
+
+</A></H1>
+
+<P><B>TODO:</B> Method names are inconsistent: With services, <CODE>get_*</CODE> uses
+exact matching while <CODE>find_*</CODE> uses regexp matching.  But with
+devices, <A HREF="#find_device(name)">find_device()</A> uses exact matching.
+Change this to match the service methods and add the missing variants.
+
+</P>
+<P><B>TODO:</B> Rename <A HREF="#find_service_names(regexp)">find_service_names()</A> to
+something like <CODE>find_all_services()</CODE> as it's basically
+<A HREF="#find_service(regexp)">find_service()</A> with multiple results.  It
+does not return service names but services.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

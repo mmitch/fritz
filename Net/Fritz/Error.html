@@ -1,0 +1,130 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    $root_device = Net::Fritz::Box->new->discover;
+    $root_device->errorcheck;</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#error">error
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A><LI><A HREF="#errorcheck">errorcheck
+    
+</A><LI><A HREF="#dump">dump
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    $root_device = Net::Fritz::Box-&gt;new-&gt;discover;
+    $root_device-&gt;errorcheck;</PRE>
+
+<P>or
+
+</P>
+<PRE>    $root_device = Net::Fritz::Box-&gt;new-&gt;discover;
+    if ($root_device-&gt;error) {
+        die &quot;error: &quot; . $root_device-&gt;error;
+    }</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>Whenever any of the <A HREF="../../Net/Fritz.html">Net::Fritz</A> modules detects an error, it returns
+an <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> object.  All valid (non-error) objects also
+implement <CODE>error</CODE> and <CODE>errorcheck</CODE> via the role
+<A HREF="../../Net/Fritz/IsNoError.html">Net::Fritz::IsNoError</A>, so calling both methods always works for any
+<A HREF="../../Net/Fritz.html">Net::Fritz</A> object.
+
+</P>
+<P>If you want your code to just <CODE>die()</CODE> on any error, call
+<CODE>$obj-</CODE>errorcheck&gt; on every returned object (see first example
+above).
+
+</P>
+<P>If you just want to check for an error and handle it by yourself, call
+<CODE>$obj-&gt;error</CODE>.  All non-errors will return <CODE>0</CODE> (see second
+example above).
+
+</P>
+<P>You don't have to check for errors at all, but then you might run into
+problems when you want to invoke methods on an <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A>
+object that don't exist (because you expected to get eg. an
+<A HREF="../../Net/Fritz/Service.html">Net::Fritz::Service</A> object instead).
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="error">error
+
+</A></H2>
+
+<P>Contains the error message as a string.  Don't set this to anything
+resembling false or you will trick your tests.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../Net/Fritz/Error.html">Net::Fritz::Error</A> object.  You propably don't have to
+call this method, it's mostly used internally.  Expects parameters in
+<CODE>key =&gt; value</CODE> form with the following keys:
+
+</P><DL><DT><A NAME="error"><I>error</I>
+
+</A></DT>
+<DD>
+set the error message
+
+</DD>
+</DL>
+
+<P>With only one parameter (in fact: any odd value of parameters), the
+first parameter is automatically mapped to <I>error</I>.
+
+</P><H2><A NAME="errorcheck">errorcheck
+    
+</A></H2>
+
+<P>Immediately <CODE>die()</CODE>, printing the error text.
+
+</P><H2><A NAME="dump">dump
+
+</A></H2>
+
+<P>Returns some preformatted information about the object.  Useful for
+debugging purposes, printing or logging.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>

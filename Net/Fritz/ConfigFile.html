@@ -1,0 +1,179 @@
+<html>
+ <head>
+  <base href="https://mmitch.github.io/fritz/">
+  <link href="https://mmitch.github.io/fritz//pod.css" rel="stylesheet" type="text/css">
+  <title>    my $config = Net::Fritz::ConfigFile->new( 'some/dir/fritzrc' );
+    my $config_hashref = $config->configuration;</title>
+ </head>
+ <body>
+  <UL>
+<LI><A HREF="#SYNOPSIS">SYNOPSIS
+
+</A><LI><A HREF="#DESCRIPTION">DESCRIPTION
+
+</A><LI><A HREF="#CONFIGURATION%20FILE%20FORMAT">CONFIGURATION FILE FORMAT
+
+</A><LI><A HREF="#DEFAULT%20CONFIGURATION%20FILE%20LOCATIONS">DEFAULT CONFIGURATION FILE LOCATIONS
+
+</A><LI><A HREF="#ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A><UL>
+<LI><A HREF="#configfile">configfile
+
+</A><LI><A HREF="#configuration">configuration
+
+</A></UL>
+<LI><A HREF="#METHODS">METHODS
+
+</A><UL>
+<LI><A HREF="#new">new
+
+</A></UL>
+<LI><A HREF="#SEE%20ALSO">SEE ALSO
+
+</A></UL>
+<HR>
+
+  <H1><A NAME="SYNOPSIS">SYNOPSIS
+
+</A></H1>
+
+<PRE>    my $config = Net::Fritz::ConfigFile-&gt;new( 'some/dir/fritzrc' );
+    my $config_hashref = $config-&gt;configuration;</PRE>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+
+<P>This class encapsulates the configuration file handling for
+<A HREF="../../Net/Fritz/Box.html">Net::Fritz::Box</A>.  It should not be needed to directly interact with
+this class.  No user-serviceable parts inside!
+
+</P>
+<P>This class is available since <CODE>v0.0.9</CODE>.
+
+</P><H1><A NAME="CONFIGURATION%20FILE%20FORMAT">CONFIGURATION FILE FORMAT
+
+</A></H1>
+
+<P>The configuration format is basically a flat text file with <CODE>key =
+value</CODE> per line.  Empty lines as well as comments (prefixed by <CODE>#</CODE>)
+are supported.
+
+</P>
+<P>These keys are recognized:
+
+</P><DL><DT><A NAME="*%20upnp_url">* <A HREF="../../Net/Fritz/Box.html#upnp_url">upnp_url</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20trdesc_path">* <A HREF="../../Net/Fritz/Box.html#trdesc_path">trdesc_path</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20username">* <A HREF="../../Net/Fritz/Box.html#username">username</A>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20password">* <A HREF="../../Net/Fritz/Box.html#password">password</A>
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>(<A HREF="../../AppConfig.html">AppConfig</A> is used to read the configuration file, so some advanced
+tricks might be possible.)
+
+</P><H1><A NAME="DEFAULT%20CONFIGURATION%20FILE%20LOCATIONS">DEFAULT CONFIGURATION FILE LOCATIONS
+
+</A></H1>
+
+<P>If the given configuration filename expands to false, these default
+configuration file locations are tried instead (in order):
+
+</P><DL><DT><A NAME="1.%20%24XDG_CONFIG_HOME%2ffritzrc%20(only%20if%20%24XDG_CONFIG_HOME%20is%20set)">1. <CODE>$XDG_CONFIG_HOME/fritzrc</CODE> (only if <CODE>$XDG_CONFIG_HOME</CODE> is set)
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="2.%20~%2f.config%2ffritzrc">2. <CODE>~/.config/fritzrc</CODE>
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="3.%20~%2f.fritzrc">3. <CODE>~/.fritzrc</CODE>
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>The first existing file will be used.
+
+</P><H1><A NAME="ATTRIBUTES%20(read-only)">ATTRIBUTES (read-only)
+
+</A></H1>
+<H2><A NAME="configfile">configfile
+
+</A></H2>
+
+<P>Default value: none
+
+</P>
+<P>Sets a configuration file to read the configuration from.
+
+</P>
+<P>A <CODE>~</CODE> at the beginning of the filename will be expanded to
+<CODE>$ENV{HOME}</CODE>.
+
+</P>
+<P>If the filename expands to <CODE>false</CODE> (<CODE>0</CODE>, <CODE>''</CODE> or the like), the
+<A HREF="#DEFAULT%20CONFIGURATION%20FILE%20LOCATIONS">default configuration file locations</A> will be tried.  If none of those files exists, an empty
+configuration file is substituted.
+
+</P><H2><A NAME="configuration">configuration
+
+</A></H2>
+
+<P>Default value: none
+
+</P>
+<P>The configuration values from the configuration file as a hashref.
+
+</P>
+<P>Keys that were not present in the configuration file are not returned.
+
+</P><H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<H2><A NAME="new">new
+
+</A></H2>
+
+<P>Creates a new <A HREF="../../Net/Fritz/ConfigFile.html">Net::Fritz::ConfigFile</A> object.  Expects parameters in
+<CODE>key =&gt; value</CODE> form with the following keys to overwrite the
+default values:
+
+</P><DL><DT><A NAME="*%20%2fconfigfile">* <A HREF="#configfile">/configfile</A>
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>With only one parameter (in fact: any odd value of parameters), the
+first parameter is automatically mapped to <A HREF="#configfile">/configfile</A>.
+
+</P><H1><A NAME="SEE%20ALSO">SEE ALSO
+
+</A></H1>
+
+<P>See <A HREF="../../Net/Fritz.html">Net::Fritz</A> for general information about this package,
+especially <A HREF="../../Net/Fritz.html#INTERFACE">Net::Fritz/INTERFACE</A> for links to the other classes.
+
+</P>
+ </body>
+</html>
