@@ -132,7 +132,7 @@ if (1 == 0) {
     }
 }
 
-if (1 == 1) {
+if (1 == 0) {
     ## list call deflection information
     my $service = $d->find_service('X_AVM-DE_OnTel:');
     $service->errorcheck;
@@ -162,6 +162,23 @@ if (1 == 1) {
 }
 
 if (1 == 0) {
+    ## enable/disable call deflection
+    # note: this sometimes yields a 402 invalid argument error
+    # just run it again with the same parameters and it works?!
+    my $deflection_id = 0;
+    my $deflection_enable = 0;
+    
+    my $service = $d->find_service('X_AVM-DE_OnTel:');
+    $service->errorcheck;
+    my $response = $service->call('SetDeflectionEnable', 'NewDeflectionId' => $deflection_id, 'NewEnable' => $deflection_enable);
+    $response->errorcheck;
+    printf("deflection %d %s\n",
+	   $deflection_id,
+	   $deflection_enable ? 'enabled' : 'disabled',
+	);
+}
+
+if (1 == 1) {
     # get security port (boooring)
     my $service = $d->find_service('DeviceInfo:1');
     $service->errorcheck;
