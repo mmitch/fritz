@@ -133,6 +133,35 @@ if (1 == 0) {
 }
 
 if (1 == 1) {
+    ## list call deflection information
+    my $service = $d->find_service('X_AVM-DE_OnTel:');
+    $service->errorcheck;
+    my $response = $service->call('GetNumberOfDeflections');
+    $response->errorcheck;
+    my $deflection_count = $response->data->{NewNumberOfDeflections};
+    printf "number of deflections = %d\n", $deflection_count;
+    printf("%3s  %3s  %-15s  %-25s  %-25s  %-15s  %-15s  %-15s\n", 'id', 'act', 'type', 'number', 'deflectionNumber', 'mode', 'outgoing', 'phonebookId');
+    for my $deflection_id ( 0 .. $deflection_count - 1 ) {
+	$response = $service->call('GetDeflection', 'NewDeflectionId' => $deflection_id);
+	$response->errorcheck;
+	my $d = $response->data;
+	foreach my $key (qw(NewDeflectionId NewEnable NewNumber NewDeflectionToNumber NewMode NewOutgoing NewPhonebookID)) {
+	    $d->{$key} = '' unless defined $d->{$key};
+	}
+	printf("%3d  %3s  %-15s  %-25s  %-25s  %-15s  %-15s  %-15s\n",
+	       $deflection_id,
+	       $d->{NewEnable} ? 'yes' : 'no',
+	       $d->{NewType},
+	       $d->{NewNumber},
+	       $d->{NewDeflectionToNumber},
+	       $d->{NewMode},
+	       $d->{NewOutgoing},
+	       $d->{NewPhonebookID},
+	    );
+    }
+}
+
+if (1 == 0) {
     # get security port (boooring)
     my $service = $d->find_service('DeviceInfo:1');
     $service->errorcheck;
