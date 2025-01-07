@@ -1,5 +1,5 @@
-use strict;
-use warnings;
+use strictures;
+use warnings 'once';
 # Copyright (C) 2017  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v2 or later.
 
