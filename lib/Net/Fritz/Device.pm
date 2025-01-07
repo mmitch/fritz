@@ -151,7 +151,7 @@ XML:
 
 has attributes   => ( is => 'lazy', init_arg => undef );
 
-use constant ATTRIBUTES => qw(
+use constant _ATTRIBUTES => qw(
 deviceType
 friendlyName
 manufacturer
@@ -169,7 +169,7 @@ sub _build_attributes {
     my $xml  = $self->xmltree;
     my $attributes = {};
 
-    for my $attr (ATTRIBUTES) {
+    for my $attr (_ATTRIBUTES) {
 	if (exists $xml->{$attr}) {
 	    $attributes->{$attr} = $xml->{$attr}->[0];
 	}
